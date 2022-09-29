@@ -1,0 +1,58 @@
+.alertin{
+    animation: 1s fadein ease-out;
+}
+
+.alertout {
+    animation: 1s fadeout ease-out;
+
+}
+.resetAlertSuccess{
+    animation: .3s colorChangeSuccess ease-out;
+}
+.resetAlertError{
+    animation: .3s colorChangeError ease-out;
+}
+
+
+@keyframes fadein {
+    from{
+        
+        opacity: 0%;
+     
+    }
+    to{
+        
+        opacity: 100%;
+  
+    }
+    
+}
+
+@keyframes fadeout {
+    from{
+        opacity: 100%;
+    }
+    to{
+        opacity: 0%;
+    }
+    
+}
+
+@keyframes colorChangeSuccess{
+    from{
+        color:#d1e7dd;
+        
+    }
+    to{
+        color:#43765b
+    }
+}
+@keyframes colorChangeError{
+    from{
+        color:#d1e7dd;
+        
+    }
+    to{
+        color:#99333f
+    }
+}
