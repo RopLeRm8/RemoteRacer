@@ -1,33 +1,38 @@
 import React, { useRef, useState } from "react";
-import { Form, Card, Button, Alert } from "react-bootstrap";
+import { Form, Card, Button, Alert, Modal } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthLogic";
 import { useNavigate } from "react-router-dom";
 import * as Icons from "react-bootstrap-icons";
+import { sendEmail } from "../providers/EmailProvider";
 
 export default function SignUp() {
   const emailRef = useRef();
   const passRef = useRef();
   const passFirmRef = useRef();
+  const formValue = useRef();
+  const codeToCheck = useRef();
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [code, SetCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [isHidden, setIsHidden] = useState(true);
   const [isHiddenConf, setIsHiddenConf] = useState(true);
-
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const [showPanel, setShowPanel] = useState(false);
+  const [codeError, setCodeError] = useState(null);
+  const [codeSuccess, setCodeSuccess] = useState(null);
 
   const { signUp } = useAuth();
 
   const navigate = useNavigate();
 
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
   const strongRegex = new RegExp(
     "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,})"
   );
 
-  function generateString(length) {
+  function generateCode(length) {
     let result = " ";
     const charactersLength = characters.length;
     for (let i = 0; i < length; i++) {
@@ -36,7 +41,37 @@ export default function SignUp() {
 
     return result;
   }
-
+  function handleSubmitCode(e) {
+    e.preventDefault();
+  }
+  function SubmitCode() {
+    console.log(codeToCheck.current.value);
+    console.log(document.getElementById("message").value);
+    if (
+      " " + codeToCheck.current.value ===
+      document.getElementById("message").value
+    ) {
+      setCodeError(null);
+      setCodeSuccess("Verify Success");
+      setTimeout(() => {
+        setShowPanel(false);
+        setLoading(true);
+        signUp(
+          emailRef.current.value,
+          passRef.current.value,
+          setError,
+          setSuccess,
+          setLoading
+        );
+        setCodeSuccess(null);
+        setCodeError(null);
+      }, 2000);
+    } else {
+      setCodeError("Wrong code! Try again");
+      setCodeSuccess(null);
+      setLoading(false);
+    }
+  }
   async function handleSubmit(e) {
     e.preventDefault();
     if (!emailRef?.current.value?.length)
@@ -54,21 +89,23 @@ export default function SignUp() {
         "Error! Please notice. Password must contain: special symbols, numbers, upper letters"
       );
     }
-    SetCode(generateString(7).toUpperCase());
-
+    document.getElementById("message").value = generateCode(7).toUpperCase();
+    sendEmail(formValue.current);
     setError("");
-    setLoading(true);
-    signUp(
-      emailRef.current.value,
-      passRef.current.value,
-      setError,
-      setSuccess,
-      setLoading
-    );
+    setShowPanel(true);
   }
+
   return (
     <Card className="shadow">
       <Card.Body>
+        <Form ref={formValue} style={{ display: "none" }}>
+          <label>Name</label>
+          <input type="text" name="user_name" id="user_name" />
+          <label>Email</label>
+          <input type="email" name="user_email" id="user_email" />
+          <label>Message</label>
+          <textarea name="message" id="message" />
+        </Form>
         <h2 className="text-center mb-4">Sign Up</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         {success && <Alert variant="success">{success}</Alert>}
@@ -76,7 +113,12 @@ export default function SignUp() {
         <Form onSubmit={handleSubmit}>
           <Form.Group id="email" className="mb-3">
             <Form.Label>Email</Form.Label>
-            <Form.Control type="email" required ref={emailRef} />
+            <Form.Control
+              type="email"
+              required
+              ref={emailRef}
+              name="user_email"
+            />
           </Form.Group>
 
           <Form.Group id="password" className="mb-3">
@@ -151,6 +193,54 @@ export default function SignUp() {
           Log In
         </button>
       </div>
+      <Modal
+        centered
+        show={showPanel}
+        onHide={() => {
+          setShowPanel(false);
+          setCodeError(null);
+          setCodeSuccess(null);
+        }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Email verification</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          {emailRef?.current?.value && (
+            <span>
+              We've sent the code to the {emailRef?.current?.value}, please
+              enter the code you've received <Icons.SendCheck />
+            </span>
+          )}
+
+          <Form onSubmit={handleSubmitCode}>
+            <Form.Group className="mb-3 mt-3" controlId="formBasicEmail">
+              <Form.Label>
+                <h5>Enter the code:</h5>
+              </Form.Label>
+              <Form.Control type="email" ref={codeToCheck} />
+            </Form.Group>
+          </Form>
+          {codeError && (
+            <Alert className="resetAlertError" variant="danger">
+              <Icons.EnvelopeExclamation className="me-2" />
+              {codeError}
+            </Alert>
+          )}
+          {codeSuccess && (
+            <Alert className="resetAlertError" variant="success">
+              <Icons.Check2 className="me-2" />
+              {codeSuccess}
+            </Alert>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={SubmitCode}>
+            Submit
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Card>
   );
 }

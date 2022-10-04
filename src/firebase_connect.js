@@ -1,6 +1,7 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
-import { GoogleAuthProvider, signInWithPopup } from '@firebase/auth'
+import { GoogleAuthProvider, signInWithPopup,GithubAuthProvider  } from '@firebase/auth'
+
 
 const app = firebase.initializeApp({
 
@@ -17,13 +18,24 @@ const app = firebase.initializeApp({
 export const auth = app.auth()
 
 const provider = new GoogleAuthProvider();
+const gitprovider = new GithubAuthProvider();
+// Google authentication
 export const googleauth = () =>{
     signInWithPopup(auth, provider)
     .then(() => {
-     }).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
+     }).catch(() => {
+    //  const errorCode = authErrorToTitleCase(error.code);
     });
 }
+// git Authentication
+export const gitauth = () =>{
+  signInWithPopup(auth, gitprovider)
+  .then(() => {
+  }).catch(() => {
+  //  const errorCode = authErrorToTitleCase(error.code);
+  //  console.log(errorCode)
+  });
+}
+
 
 export default app

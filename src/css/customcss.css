@@ -1,16 +1,20 @@
 .alertin{
-    animation: 1s fadein ease-out;
+
+
+    animation: .7s fadein ease-out;
+    
+    
 }
 
 .alertout {
-    animation: 1s fadeout ease-out;
+    animation: .7s fadeout ease-out;
 
 }
 .resetAlertSuccess{
-    animation: .3s colorChangeSuccess ease-out;
+    animation: .2s colorChangeSuccess ease-in;
 }
 .resetAlertError{
-    animation: .3s colorChangeError ease-out;
+    animation: .2s colorChangeError ease-in;
 }
 
 
@@ -40,19 +44,27 @@
 
 @keyframes colorChangeSuccess{
     from{
-        color:#d1e7dd;
+        color:white;
         
     }
     to{
-        color:#43765b
+        color:#43765b;
     }
 }
 @keyframes colorChangeError{
     from{
-        color:#d1e7dd;
+        color:white;
         
     }
     to{
-        color:#99333f
+        color:#99333f;
     }
+}
+strong{
+    font-family: 'Slabo 27px';
+    font-size:22px;
+}
+.rounded{
+    background-color: #585454;
+    font-size:23px;
 }

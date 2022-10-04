@@ -6,7 +6,7 @@ import { useAuth } from "../contexts/AuthLogic";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { authErrorToTitleCase } from "../helpers";
 import "../css/customcss.css";
-import { googleauth } from "../firebase_connect";
+import { googleauth, gitauth } from "../firebase_connect";
 
 export default function LoginPage() {
   const emailRef = useRef();
@@ -123,13 +123,19 @@ export default function LoginPage() {
               Sign in
             </Button>
           )}
-          <div className="d-flex justify-content-center mt-2">
-            <button className="btn btn-danger" onClick={googleauth}>
-              Sign in with google
-              <Icons.Google className="ms-2" />
-            </button>
-          </div>
         </Form>
+        <div className="d-flex justify-content-center mt-2">
+          <button className="btn btn-danger" onClick={googleauth}>
+            Sign in with <span style={{ fontWeight: "700" }}>Google</span>
+            <Icons.Google className="ms-2" />
+          </button>
+        </div>
+        <div className="d-flex justify-content-center mt-2  ">
+          <button className="btn btn-dark" onClick={gitauth}>
+            Sign in with <span style={{ fontWeight: "700" }}>GitHub</span>
+            <Icons.Github className="ms-2" />
+          </button>
+        </div>
       </Card.Body>
       <div className="mb-2 d-flex justify-content-center align-items-baseline">
         <span>Forgot the password?</span>
@@ -159,10 +165,13 @@ export default function LoginPage() {
           <Modal.Title>Password Reset</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Enter your email and we will send you a verification link
-          <Form onSubmit={handleSubmitButtonResetButton}>
+          Enter your email and we will send you a verification link{" "}
+          <Icons.SendCheck />
+          <Form onSubmit={handleSubmitButtonResetButton} className="mt-2">
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
+              <Form.Label>
+                <span style={{ fontWeight: "700" }}>Email address</span>
+              </Form.Label>
               <Form.Control
                 type="email"
                 placeholder="Enter email"
@@ -170,14 +179,14 @@ export default function LoginPage() {
               />
             </Form.Group>
           </Form>
-          {resetError && (
-            <Alert className="resetAlertSuccess" variant="danger">
-              {resetError}
+          {resetSuccess && (
+            <Alert className="resetAlertSuccess" variant="success">
+              {resetSuccess} <Icons.JournalText />
             </Alert>
           )}
-          {resetSuccess && (
-            <Alert className="resetAlertError" variant="success">
-              {resetSuccess}
+          {resetError && (
+            <Alert className="resetAlertError" variant="danger">
+              {resetError} <Icons.ShieldFillExclamation />
             </Alert>
           )}
         </Modal.Body>

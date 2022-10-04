@@ -8,6 +8,8 @@ import Centered from "../components/Centered";
 import Dashboard from "../components/Dashboard";
 import "../css/customcss.css";
 import { useEffect, createRef } from "react";
+import * as Icons from "react-bootstrap-icons";
+import WebFont from "webfontloader";
 
 export default function RouteProvider() {
   const auth = getAuth();
@@ -25,7 +27,7 @@ export default function RouteProvider() {
       setTimeout(() => {
         const elm = alertRef.current;
         elm.parentNode.removeChild(elm);
-      }, 1000);
+      }, 700);
     }, 5000);
   }, [alertRef]);
 
@@ -34,6 +36,14 @@ export default function RouteProvider() {
       window.location.reload();
       localStorage.setItem("firstTime", "false");
     }
+  }, []);
+
+  useEffect(() => {
+    WebFont.load({
+      google: {
+        families: ["Slabo 27px"],
+      },
+    });
   }, []);
 
   if (authError)
@@ -69,21 +79,20 @@ export default function RouteProvider() {
 
           <div className="container bootstrap snippets bootdey" id="nega">
             <div
-              className="d-flex alert alert-success alert-white rounded align-items-baseline mt-3 alertin"
+              className="d-flex alert justify-content-center rounded mt-3 alertin"
               ref={alertRef}
             >
-              <strong>Success!</strong>
-              <span className="ms-2">You've entered the account! </span>
+              <strong className="text-center me-2 text-white">
+                Login success
+              </strong>
 
-              <div className="icon">
-                <i className="fa fa-check"></i>
-              </div>
+              <Icons.PersonCheckFill className="mt-1 text-white" />
             </div>
           </div>
         </div>
       ) : (
         <Routes>
-          <Route index element={<Navigate to="/register" />} />
+          <Route index element={<Navigate to="/login" />} />
           <Route path="dashboard" element={<Navigate to="/" />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
