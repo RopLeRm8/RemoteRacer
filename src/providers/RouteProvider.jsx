@@ -6,12 +6,13 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { Alert } from "react-bootstrap";
 import Centered from "../components/Centered";
 import Dashboard from "../components/Dashboard";
-import "../css/customcss.css";
+import "../css/LoginPage.css";
 import { useEffect, createRef } from "react";
 import * as Icons from "react-bootstrap-icons";
-import WebFont from "webfontloader";
+import { RefreshFonts } from "./FontProvider";
 
 export default function RouteProvider() {
+  RefreshFonts();
   const auth = getAuth();
   const [authUser, authLoading, authError] = useAuthState(auth);
 
@@ -36,14 +37,6 @@ export default function RouteProvider() {
       window.location.reload();
       localStorage.setItem("firstTime", "false");
     }
-  }, []);
-
-  useEffect(() => {
-    WebFont.load({
-      google: {
-        families: ["Slabo 27px"],
-      },
-    });
   }, []);
 
   if (authError)

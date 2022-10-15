@@ -5,8 +5,8 @@ import * as Icons from "react-bootstrap-icons";
 import { useAuth } from "../contexts/AuthLogic";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { authErrorToTitleCase } from "../helpers";
-import "../css/customcss.css";
-import { googleauth, gitauth } from "../firebase_connect";
+import "../css/LoginPage.css";
+import { googleauth, gitauth } from "../providers/FirebaseProvider";
 
 export default function LoginPage() {
   const emailRef = useRef();

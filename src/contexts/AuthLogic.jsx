@@ -5,7 +5,7 @@ import React, {
   createContext,
   useRef,
 } from "react";
-import { auth } from "../firebase_connect";
+import { auth } from "../providers/FirebaseProvider";
 
 const AuthContext = createContext();
 

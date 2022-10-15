@@ -89,7 +89,9 @@ export default function SignUp() {
         "Error! Please notice. Password must contain: special symbols, numbers, upper letters"
       );
     }
+    document.getElementById("user_email").value = emailRef.current.value;
     document.getElementById("message").value = generateCode(7).toUpperCase();
+
     sendEmail(formValue.current);
     setError("");
     setShowPanel(true);
