@@ -1,12 +1,11 @@
-import { render } from "@testing-library/react";
 import React from "react";
 import { useEffect, useRef } from "react";
-import backVideo1 from "../content/racingcars.mp4";
+import backVideo1 from "../assets/racingcars.mp4";
 import "../css/BackGroundVideos.css";
 
 export default function BackGroundVideos() {
   let vidRef = useRef();
-  const randomsrc = [{ backVideo1 }];
+  //const randomsrc = [{ backVideo1 }];
   useEffect(() => {
     const interval = setInterval(() => {
       vidRef.current.src = backVideo1;

@@ -1,9 +1,26 @@
 import React, { useRef, useState } from "react";
-import { Form, Card, Button, Alert, Modal } from "react-bootstrap";
+import { Form, Card } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthLogic";
 import { useNavigate } from "react-router-dom";
-import * as Icons from "react-bootstrap-icons";
 import { sendEmail } from "../providers/EmailProvider";
+import {
+  Button,
+  CssVarsProvider,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/joy";
+import HowToRegRoundedIcon from "@mui/icons-material/HowToRegRounded";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import EmailIcon from "@mui/icons-material/Email";
+import CheckIcon from "@mui/icons-material/Check";
+import { OpenInNew } from "@mui/icons-material";
+import Modal from "@mui/joy/Modal";
+import ModalDialog from "@mui/joy/ModalDialog";
+import Alert from "@mui/joy/Alert";
+import ReportIcon from "@mui/icons-material/Report";
+import Box from "@mui/joy/Box";
 
 export default function SignUp() {
   const emailRef = useRef();
@@ -20,6 +37,7 @@ export default function SignUp() {
   const [showPanel, setShowPanel] = useState(false);
   const [codeError, setCodeError] = useState(null);
   const [codeSuccess, setCodeSuccess] = useState(null);
+  const [PreferMode, setPreferMode] = useState("dark");
 
   const { signUp } = useAuth();
 
@@ -45,8 +63,6 @@ export default function SignUp() {
     e.preventDefault();
   }
   function SubmitCode() {
-    console.log(codeToCheck.current.value);
-    console.log(document.getElementById("message").value);
     if (
       " " + codeToCheck.current.value ===
       document.getElementById("message").value
@@ -98,8 +114,9 @@ export default function SignUp() {
   }
 
   return (
-    <Card className="shadow">
-      <Card.Body>
+    <Card className="shadow secondaryElms">
+      <CssVarsProvider></CssVarsProvider>
+      <Card.Body className="m-4">
         <Form ref={formValue} style={{ display: "none" }}>
           <label>Name</label>
           <input type="text" name="user_name" id="user_name" />
@@ -108,9 +125,66 @@ export default function SignUp() {
           <label>Message</label>
           <textarea name="message" id="message" />
         </Form>
-        <h2 className="text-center mb-4">Sign Up</h2>
-        {error && <Alert variant="danger">{error}</Alert>}
-        {success && <Alert variant="success">{success}</Alert>}
+
+        <Typography level="h2" className="text-center mb-4">
+          הרשמה
+        </Typography>
+
+        {error && (
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              width: "100%",
+              flexDirection: "column",
+            }}
+            className="mb-3"
+          >
+            <Alert
+              sx={{ alignItems: "flex-start" }}
+              startDecorator={
+                <ReportIcon sx={{ mt: "7px", mx: "4px", fontSize: "35px" }} />
+              }
+              variant="solid"
+              color="danger"
+            >
+              <div>
+                <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
+                  Error!
+                </Typography>
+                <Typography fontSize="sm" sx={{ opacity: 0.8, color: "white" }}>
+                  {error}
+                </Typography>
+              </div>
+            </Alert>
+          </Box>
+        )}
+        {success && (
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              width: "100%",
+              flexDirection: "column",
+            }}
+            className="mb-3"
+          >
+            <Alert
+              sx={{ alignItems: "flex-start" }}
+              startDecorator={
+                <CheckIcon sx={{ mt: "7px", mx: "4px", fontSize: "30px" }} />
+              }
+              variant="solid"
+              color="success"
+            >
+              <div>
+                <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
+                  Success!
+                </Typography>
+              </div>
+            </Alert>
+          </Box>
+        )}
 
         <Form onSubmit={handleSubmit}>
           <Form.Group id="email" className="mb-3">
@@ -134,15 +208,18 @@ export default function SignUp() {
                 className="me-3"
               />
 
-              <button
-                className="btn btn-outline-dark"
+              <IconButton
+                color="primary"
+                variant="plain"
                 onClick={(e) => {
                   e.preventDefault();
                   setIsHidden(!isHidden);
                 }}
               >
-                {isHidden ? <Icons.Eye /> : <Icons.EyeSlash />}
-              </button>
+                <Tooltip title={isHidden ? "Show" : "Hide"} variant="solid">
+                  {isHidden ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </Tooltip>
+              </IconButton>
             </div>
           </Form.Group>
 
@@ -155,64 +232,85 @@ export default function SignUp() {
                 ref={passFirmRef}
                 className="me-3"
               />
-              <button
-                className="btn btn-outline-dark "
+              <IconButton
+                variant="plain"
                 onClick={(e) => {
                   e.preventDefault();
                   setIsHiddenConf(!isHiddenConf);
                 }}
               >
-                {isHiddenConf ? <Icons.Eye /> : <Icons.EyeSlash />}
-              </button>
+                <Tooltip title={isHiddenConf ? "Show" : "Hide"} variant="solid">
+                  {isHiddenConf ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </Tooltip>
+              </IconButton>
             </div>
           </Form.Group>
 
           {loading ? (
-            <button className="btn btn-primary w-100 mt-3" type="button">
-              <span
-                className="spinner-border spinner-border-sm"
-                role="status"
-              ></span>
-            </button>
+            <Button
+              color="success"
+              variant="soft"
+              type="submit"
+              loading
+              className="w-100 mt-3"
+            >
+              <span className="me-2">להירשם</span>
+            </Button>
           ) : (
             <Button
-              id="submbutt"
-              disabled={loading}
+              color="success"
+              startDecorator={<HowToRegRoundedIcon />}
+              variant="soft"
               type="submit"
               className="w-100 mt-3"
             >
-              Sign up
+              <span className="me-2">להירשם</span>
             </Button>
           )}
         </Form>
       </Card.Body>
-      <div className="mb-2 d-flex justify-content-center align-items-baseline">
+      <div className="mb-5 d-flex justify-content-center">
         <span>Already have an account?</span>
-        <button
-          className="btn btn-light ms-2"
+        <Button
+          size="sm"
+          color="primary"
+          variant="soft"
+          className="ms-2"
           onClick={() => navigate("/login")}
+          startDecorator={<OpenInNew />}
         >
           Log In
-        </button>
+        </Button>
       </div>
       <Modal
-        centered
-        show={showPanel}
-        onHide={() => {
+        open={showPanel}
+        onClose={() => {
           setShowPanel(false);
           setCodeError(null);
           setCodeSuccess(null);
         }}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Email verification</Modal.Title>
-        </Modal.Header>
+        <ModalDialog
+          className="alertin"
+          variant="soft"
+          sx={{
+            bgcolor: "#1c1c1c",
+            color: "white",
+            outlineColor: "green",
+            maxWidth: 500,
+            borderRadius: "md",
+            p: 5,
+            boxShadow: "lg",
+          }}
+        >
+          <Typography level="h3" style={{ color: "white" }}>
+            Email verification
+          </Typography>
 
-        <Modal.Body>
           {emailRef?.current?.value && (
             <span>
               We've sent the code to the {emailRef?.current?.value}, please
-              enter the code you've received <Icons.SendCheck />
+              enter the code you've received <EmailIcon />
             </span>
           )}
 
@@ -221,27 +319,69 @@ export default function SignUp() {
               <Form.Label>
                 <h5>Enter the code:</h5>
               </Form.Label>
-              <Form.Control type="email" ref={codeToCheck} />
+              <Form.Control ref={codeToCheck} />
             </Form.Group>
           </Form>
           {codeError && (
-            <Alert className="resetAlertError" variant="danger">
-              <Icons.EnvelopeExclamation className="me-2" />
-              {codeError}
-            </Alert>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                width: "100%",
+                flexDirection: "column",
+              }}
+              className="mb-3"
+            >
+              <Alert
+                sx={{ alignItems: "flex-start" }}
+                startDecorator={
+                  <ReportIcon sx={{ mt: "7px", mx: "4px", fontSize: "35px" }} />
+                }
+                variant="solid"
+                color="danger"
+              >
+                <div>
+                  <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
+                    Error!
+                  </Typography>
+                  <Typography
+                    fontSize="sm"
+                    sx={{ opacity: 0.8, color: "white" }}
+                  >
+                    {codeError}
+                  </Typography>
+                </div>
+              </Alert>
+            </Box>
           )}
           {codeSuccess && (
-            <Alert className="resetAlertError" variant="success">
-              <Icons.Check2 className="me-2" />
-              {codeSuccess}
-            </Alert>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                width: "100%",
+                flexDirection: "column",
+              }}
+              className="mb-3"
+            >
+              <Alert
+                sx={{ alignItems: "flex-start" }}
+                startDecorator={
+                  <CheckIcon sx={{ mx: "4px", fontSize: "25px" }} />
+                }
+                variant="soft"
+                color="success"
+              >
+                <div>
+                  <Typography fontWeight="lg">Success!</Typography>
+                </div>
+              </Alert>
+            </Box>
           )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={SubmitCode}>
+          <Button variant="outlined" onClick={SubmitCode}>
             Submit
           </Button>
-        </Modal.Footer>
+        </ModalDialog>
       </Modal>
     </Card>
   );

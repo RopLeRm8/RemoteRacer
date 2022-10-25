@@ -1,12 +1,32 @@
 import React, { useState, useRef } from "react";
-import { Form, Card, Button, Alert, Modal } from "react-bootstrap";
+import { Form, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import * as Icons from "react-bootstrap-icons";
 import { useAuth } from "../contexts/AuthLogic";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { authErrorToTitleCase } from "../helpers";
 import "../css/LoginPage.css";
 import { googleauth, gitauth } from "../providers/FirebaseProvider";
+import LoginIcon from "@mui/icons-material/Login";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import {
+  CssVarsProvider,
+  IconButton,
+  Tooltip,
+  Typography,
+  Alert,
+  Box,
+  Button,
+  Modal,
+  ModalDialog,
+} from "@mui/joy";
+import EmailIcon from "@mui/icons-material/Email";
+import CheckIcon from "@mui/icons-material/Check";
+import { OpenInNew } from "@mui/icons-material";
+import GoogleIcon from "@mui/icons-material/Google";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import ReportIcon from "@mui/icons-material/Report";
 
 export default function LoginPage() {
   const emailRef = useRef();
@@ -71,11 +91,67 @@ export default function LoginPage() {
   };
 
   return (
-    <Card className="shadow">
-      <Card.Body>
-        <h2 className="text-center mb-4">Sign In</h2>
-        {error && <Alert variant="danger">{error}</Alert>}
-        {success && <Alert variant="success">{success}</Alert>}
+    <Card className="shadow d-flex">
+      <CssVarsProvider />
+      <Card.Body className="m-4">
+        <Typography level="h2" className="text-center mb-4">
+          כניסה
+        </Typography>
+        {error && (
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              width: "100%",
+              flexDirection: "column",
+            }}
+            className="mb-3"
+          >
+            <Alert
+              sx={{ alignItems: "flex-start" }}
+              startDecorator={
+                <ReportIcon sx={{ mt: "7px", mx: "4px", fontSize: "35px" }} />
+              }
+              variant="solid"
+              color="danger"
+            >
+              <div>
+                <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
+                  Error!
+                </Typography>
+                <Typography fontSize="sm" sx={{ opacity: 0.8, color: "white" }}>
+                  {error}
+                </Typography>
+              </div>
+            </Alert>
+          </Box>
+        )}
+        {success && (
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              width: "100%",
+              flexDirection: "column",
+            }}
+            className="mb-3"
+          >
+            <Alert
+              sx={{ alignItems: "flex-start" }}
+              startDecorator={
+                <CheckIcon sx={{ mt: "7px", mx: "4px", fontSize: "30px" }} />
+              }
+              variant="solid"
+              color="success"
+            >
+              <div>
+                <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
+                  Success!
+                </Typography>
+              </div>
+            </Alert>
+          </Box>
+        )}
 
         <Form onSubmit={handleSubmit}>
           <Form.Group id="email" className="mb-3">
@@ -94,53 +170,77 @@ export default function LoginPage() {
                 className="me-3"
               />
 
-              <button
-                className="btn btn-outline-dark"
+              <IconButton
+                variant="plain"
                 onClick={(e) => {
                   e.preventDefault();
                   setIsHidden(!isHidden);
                 }}
               >
-                {isHidden ? <Icons.Eye /> : <Icons.EyeSlash />}
-              </button>
+                <Tooltip title={isHidden ? "Show" : "Hide"} variant="solid">
+                  {isHidden ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </Tooltip>
+              </IconButton>
             </div>
           </Form.Group>
 
           {loading ? (
-            <button className="btn btn-primary w-100 mt-3" type="button">
-              <span
-                className="spinner-border spinner-border-sm"
-                role="status"
-              ></span>
-            </button>
-          ) : (
             <Button
-              id="submbutt"
-              disabled={loading}
+              color="success"
+              variant="soft"
+              loading
               type="submit"
               className="w-100 mt-3"
             >
-              Sign in
+              <span className="me-2">להיכנס</span>
+            </Button>
+          ) : (
+            <Button
+              startDecorator={<LoginIcon />}
+              color="success"
+              variant="soft"
+              type="submit"
+              className="w-100 mt-4"
+            >
+              <span className="me-2">להיכנס</span>
             </Button>
           )}
         </Form>
-        <div className="d-flex justify-content-center mt-2">
-          <button className="btn btn-danger" onClick={googleauth}>
-            Sign in with <span style={{ fontWeight: "700" }}>Google</span>
-            <Icons.Google className="ms-2" />
-          </button>
+        <div className="d-flex justify-content-center mt-4">
+          <Button
+            color="danger"
+            variant="soft"
+            onClick={googleauth}
+            className="w-75"
+          >
+            <GoogleIcon className="me-1" />
+            <span style={{ fontWeight: "700" }} className="me-1">
+              Google
+            </span>{" "}
+            לכניסה עם
+          </Button>
         </div>
         <div className="d-flex justify-content-center mt-2  ">
-          <button className="btn btn-dark" onClick={gitauth}>
-            Sign in with <span style={{ fontWeight: "700" }}>GitHub</span>
-            <Icons.Github className="ms-2" />
-          </button>
+          <Button
+            color="neutral"
+            variant="soft"
+            onClick={gitauth}
+            className="w-75"
+          >
+            <GitHubIcon className="me-1" />
+            <span style={{ fontWeight: "700" }} className="me-1">
+              GitHub
+            </span>{" "}
+            לכניסה עם
+          </Button>
         </div>
       </Card.Body>
-      <div className="mb-2 d-flex justify-content-center align-items-baseline">
+      <div className="mb-2 d-flex justify-content-center">
         <span>Forgot the password?</span>
         <Button
-          variant="light"
+          size="sm"
+          startDecorator={<OpenInNew />}
+          variant="soft"
           className="ms-2"
           onClick={() => {
             setShowPanel(true);
@@ -149,10 +249,12 @@ export default function LoginPage() {
           Reset it here
         </Button>
       </div>
-      <div className="mb-2 d-flex justify-content-center align-items-baseline">
+      <div className="mb-5 d-flex justify-content-center mt-1">
         <span>Don't have an account?</span>
         <Button
-          variant="light"
+          size="sm"
+          startDecorator={<OpenInNew />}
+          variant="soft"
           className="ms-2"
           onClick={() => navigate("/register")}
         >
@@ -160,17 +262,46 @@ export default function LoginPage() {
         </Button>
       </div>
 
-      <Modal centered show={showPanel} onHide={() => closePanel()}>
-        <Modal.Header closeButton>
-          <Modal.Title>Password Reset</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      <Modal
+        open={showPanel}
+        onClose={() => closePanel()}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-desc"
+      >
+        <ModalDialog
+          className="alertin"
+          variant="soft"
+          sx={{
+            bgcolor: "#1c1c1c",
+            color: "white",
+            outlineColor: "green",
+            maxWidth: 500,
+            borderRadius: "md",
+            p: 5,
+            boxShadow: "lg",
+          }}
+        >
+          {/* <ModalClose
+            variant="outlined"
+            sx={{
+              top: "calc(-1/4 * var(--IconButton-size))",
+              right: "calc(-1/4 * var(--IconButton-size))",
+              boxShadow: "0 2px 12px 0 rgba(0 0 0 / 0.2)",
+              borderRadius: "50%",
+              bgcolor: "background.body",
+            }}
+          /> */}
+          <Typography level="h3" style={{ color: "white" }}>
+            Password Reset
+          </Typography>
           Enter your email and we will send you a verification link{" "}
-          <Icons.SendCheck />
+          <EmailIcon />
           <Form onSubmit={handleSubmitButtonResetButton} className="mt-2">
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>
-                <span style={{ fontWeight: "700" }}>Email address</span>
+                <Typography level="h5" style={{ color: "white" }}>
+                  Email address:
+                </Typography>
               </Form.Label>
               <Form.Control
                 type="email"
@@ -180,33 +311,85 @@ export default function LoginPage() {
             </Form.Group>
           </Form>
           {resetSuccess && (
-            <Alert className="resetAlertSuccess" variant="success">
-              {resetSuccess} <Icons.JournalText />
-            </Alert>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                width: "100%",
+                flexDirection: "column",
+              }}
+              className="mb-3"
+            >
+              <Alert
+                sx={{ alignItems: "flex-start" }}
+                startDecorator={
+                  <CheckIcon sx={{ mx: "4px", fontSize: "25px" }} />
+                }
+                variant="soft"
+                color="success"
+              >
+                <div>
+                  <Typography fontWeight="lg">Success!</Typography>
+                  <Typography fontSize="sm" sx={{ opacity: 0.8 }}>
+                    {resetSuccess}
+                  </Typography>
+                </div>
+              </Alert>
+            </Box>
           )}
           {resetError && (
-            <Alert className="resetAlertError" variant="danger">
-              {resetError} <Icons.ShieldFillExclamation />
-            </Alert>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                width: "100%",
+                flexDirection: "column",
+              }}
+              className="mb-3"
+            >
+              <Alert
+                sx={{ alignItems: "flex-start" }}
+                startDecorator={
+                  <ReportIcon sx={{ mt: "7px", mx: "4px", fontSize: "35px" }} />
+                }
+                variant="solid"
+                color="danger"
+              >
+                <div>
+                  <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
+                    Error!
+                  </Typography>
+                  <Typography
+                    fontSize="sm"
+                    sx={{ opacity: 0.8, color: "white" }}
+                  >
+                    {resetError}
+                  </Typography>
+                </div>
+              </Alert>
+            </Box>
           )}
-        </Modal.Body>
-        <Modal.Footer>
           {resetLoading ? (
-            <button className="btn btn-primary mt-3" type="button">
-              <span
-                className="spinner-border spinner-border-sm"
-                role="status"
-              ></span>
-            </button>
+            <Button
+              startDecorator={<KeyboardArrowUpIcon />}
+              variant="outlined"
+              loading
+              onClick={() => ResetPassword(emailVerifi)}
+              className="d-flex justify-content-end mb-1"
+            >
+              Submit
+            </Button>
           ) : (
             <Button
-              variant="primary"
+              className="d-flex justify-content-end mb-1"
+              startDecorator={<KeyboardArrowUpIcon />}
+              variant="outlined"
               onClick={() => ResetPassword(emailVerifi)}
             >
               Submit
             </Button>
           )}
-        </Modal.Footer>
+        </ModalDialog>
       </Modal>
     </Card>
   );

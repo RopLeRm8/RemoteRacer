@@ -2,5 +2,6 @@
   #videocontainer video {
     /* Make video to at least 100% wide and tall */
     filter:blur(6px);
+    background-color: black;
 
   }

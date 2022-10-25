@@ -9,10 +9,13 @@ import Dashboard from "../components/Dashboard";
 import "../css/LoginPage.css";
 import { useEffect, createRef } from "react";
 import * as Icons from "react-bootstrap-icons";
-import { RefreshFonts } from "./FontProvider";
+import { useLoadFonts } from "./FontProvider";
+import CircularProgress from "@mui/joy/CircularProgress";
+import { CssVarsProvider, Typography } from "@mui/joy";
+import "../css/RouteProvider.css";
 
 export default function RouteProvider() {
-  RefreshFonts();
+  useLoadFonts();
   const auth = getAuth();
   const [authUser, authLoading, authError] = useAuthState(auth);
 
@@ -50,15 +53,23 @@ export default function RouteProvider() {
 
   if (authLoading)
     return (
-      <Centered>
-        <div className="progress">
-          <div
-            className="progress-bar bg-primary progress-bar-striped progress-bar-animated"
-            role="progressbar"
-            style={{ width: "100%" }}
-          ></div>
-        </div>
-      </Centered>
+      <CssVarsProvider>
+        <center>
+          <CircularProgress
+            className="d-flex align-items-center justify-content-center"
+            sx={{
+              "--CircularProgress-size": "150px",
+              "--CircularProgress-track-thickness": "5px",
+              "--CircularProgress-progress-thickness": "8px",
+              marginTop: "22rem",
+            }}
+          >
+            {" "}
+            <Typography level="h6">Loading</Typography>
+            <span className="loading"></span>{" "}
+          </CircularProgress>
+        </center>
+      </CssVarsProvider>
     );
 
   return (

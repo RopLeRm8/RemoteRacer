@@ -1,58 +1,188 @@
-import React from "react";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import logo from "../content/racing.png";
-import { RefreshFonts } from "../providers/FontProvider";
-import "../css/NavBar.css";
-import { Button } from "react-bootstrap";
-import { getAuth } from "firebase/auth";
-import Dashboard from "../components/Dashboard";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import * as Icons from "react-bootstrap-icons";
+import React, { useState } from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import TimeToLeaveIcon from "@mui/icons-material/TimeToLeave";
+import { createTheme, ThemeProvider } from "@mui/material";
+import { auth } from "../providers/FirebaseProvider";
 
-export default function NavBar() {
-  const auth = getAuth();
-  RefreshFonts();
+const pages = ["LeaderBoard", "Customization", "About us"];
+const settings = ["Profile", "Logout"];
+
+function Navbar() {
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = (setting) => {
+    setting && setting === "Logout" && auth.signOut();
+
+    return setAnchorElUser(null);
+  };
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: "dark",
+      primary: {
+        main: "#1976d2",
+      },
+    },
+  });
+
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" id="nav">
-      <Container>
-        <Navbar.Brand>
-          <img
-            alt=""
-            src={logo}
-            width="40"
-            height="40"
-            className="d-inline-block align-top"
-          />
-          <span className="mainLabel ms-3">RemoteRacer</span>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto">
-            <Icons.PeopleFill className="mt-2" />
-            <Nav.Link className="labels">LeaderBoard</Nav.Link>
-          </Nav>
-          <Nav>
-            <Icons.PaletteFill className="mt-3" />
-            <Nav.Link className="mt-2 labels">Customize</Nav.Link>
-            <Icons.QuestionCircleFill className="mt-3" />
-            <Nav.Link className="mt-2 labels">About us</Nav.Link>
-            <Nav.Link>
-              <Button
-                onClick={() => {
-                  localStorage.setItem("firstTime", "false");
-                  auth.signOut();
-                }}
-                className="btn btn-danger labels"
+    <ThemeProvider theme={darkTheme}>
+      <AppBar position="static">
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
+            <TimeToLeaveIcon
+              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            />
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="/"
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 500,
+                letterSpacing: ".05rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              StreetRacer
+            </Typography>
+
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
               >
-                <Icons.PersonDashFill className="me-2" />
-                Sign out
-              </Button>
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
+                }}
+              >
+                {pages.map((page) => (
+                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">{page}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+            <TimeToLeaveIcon
+              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+            />
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href=""
+              sx={{
+                mr: 2,
+                display: { xs: "flex", md: "none" },
+                flexGrow: 1,
+                fontFamily: "monospace",
+                fontWeight: 500,
+                letterSpacing: ".1rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              StreetRacer
+            </Typography>
+            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+              {pages.map((page) => (
+                <Button
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page}
+                </Button>
+              ))}
+            </Box>
+
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    alt="Remy Sharp"
+                    src="/static/images/avatar/2.jpg"
+                    sx={{ color: "white" }}
+                  />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem
+                    key={setting}
+                    onClick={() => handleCloseUserMenu(setting)}
+                  >
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </ThemeProvider>
   );
 }
+export default Navbar;
