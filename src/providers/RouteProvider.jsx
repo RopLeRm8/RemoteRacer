@@ -3,37 +3,22 @@ import RegisterPage from "../components/RegisterPage";
 import LoginPage from "../components/LoginPage";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Alert } from "react-bootstrap";
 import Centered from "../components/Centered";
 import Dashboard from "../components/Dashboard";
+import Profile from "../components/Profile";
 import "../css/LoginPage.css";
-import { useEffect, createRef } from "react";
-import * as Icons from "react-bootstrap-icons";
+import { useEffect, useState } from "react";
 import { useLoadFonts } from "./FontProvider";
 import CircularProgress from "@mui/joy/CircularProgress";
 import { CssVarsProvider, Typography } from "@mui/joy";
 import "../css/RouteProvider.css";
+import { Snackbar, Alert } from "@mui/material";
 
 export default function RouteProvider() {
   useLoadFonts();
   const auth = getAuth();
   const [authUser, authLoading, authError] = useAuthState(auth);
-
-  const alertRef = createRef();
-
-  useEffect(() => {
-    if (!alertRef.current) return;
-
-    setTimeout(() => {
-      alertRef.current.classList.remove("alertin");
-      alertRef.current.classList.add("alertout");
-
-      setTimeout(() => {
-        const elm = alertRef.current;
-        elm.parentNode.removeChild(elm);
-      }, 700);
-    }, 5000);
-  }, [alertRef]);
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     if (localStorage.getItem("firstTime") === "true") {
@@ -77,26 +62,29 @@ export default function RouteProvider() {
       {authUser ? (
         <div>
           <Routes>
+            <Route path="profile" element={<Profile />} />
             <Route path="*" element={<Navigate to="/dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
           </Routes>
 
-          <div className="container bootstrap snippets bootdey" id="nega">
-            <div
-              className="d-flex alert justify-content-center rounded mt-3 alertin"
-              ref={alertRef}
+          <Snackbar
+            open={open}
+            autoHideDuration={6000}
+            onClose={() => setOpen(false)}
+          >
+            <Alert
+              severity="success"
+              sx={{ width: "100%" }}
+              onClose={() => setOpen(false)}
             >
-              <strong className="text-center me-2 text-white">
-                Login success
-              </strong>
-
-              <Icons.PersonCheckFill className="mt-1 text-white" />
-            </div>
-          </div>
+              Login Success!
+            </Alert>
+          </Snackbar>
         </div>
       ) : (
         <Routes>
           <Route index element={<Navigate to="/login" />} />
+          <Route path="profile" element={<Navigate to="/" />} />
           <Route path="dashboard" element={<Navigate to="/" />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />

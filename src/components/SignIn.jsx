@@ -8,7 +8,7 @@ import "../css/LoginPage.css";
 import { googleauth, gitauth } from "../providers/FirebaseProvider";
 import LoginIcon from "@mui/icons-material/Login";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";  
 import {
   CssVarsProvider,
   IconButton,
@@ -41,7 +41,7 @@ export default function LoginPage() {
   const [resetSuccess, setResetSuccess] = useState(null);
   const [resetError, setResetError] = useState(null);
   const [resetLoading, setResetLoading] = useState(false);
-
+  
   const auth = getAuth();
 
   function ResetPassword(userEmail) {
@@ -49,7 +49,7 @@ export default function LoginPage() {
     return sendPasswordResetEmail(auth, userEmail.current.value)
       .then(() => {
         setResetSuccess(
-          "Successfully sent an email, check your email box and follow the instructions"
+          "המייל נשלח בהצחלה, אנא בדוק את תיבת הדואר שלך ותעקוב אחרי ההוראות"
         );
         setResetError(null);
       })
@@ -77,7 +77,7 @@ export default function LoginPage() {
 
     login(emailRef?.current.value, passRef?.current.value)
       .then(() => {
-        setSuccess("Successfully signed in");
+        setSuccess("כניסה מוצלחת");
         localStorage.setItem("firstTime", "true");
       })
       .catch(({ code }) =>
@@ -117,7 +117,7 @@ export default function LoginPage() {
             >
               <div>
                 <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
-                  Error!
+                  !שגיאה
                 </Typography>
                 <Typography fontSize="sm" sx={{ opacity: 0.8, color: "white" }}>
                   {error}
@@ -146,7 +146,7 @@ export default function LoginPage() {
             >
               <div>
                 <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
-                  Success!
+                  !הצלחה
                 </Typography>
               </div>
             </Alert>
@@ -154,20 +154,19 @@ export default function LoginPage() {
         )}
 
         <Form onSubmit={handleSubmit}>
-          <Form.Group id="email" className="mb-3">
-            <Form.Label>Email</Form.Label>
+          <Form.Group id="email" className="mb-3" dir="rtl">
+            <Form.Label>כתובת מייל</Form.Label>
             <Form.Control type="email" required ref={emailRef} />
           </Form.Group>
 
-          <Form.Group id="password">
-            <Form.Label>Password</Form.Label>
+          <Form.Group id="password" dir="rtl">
+            <Form.Label>סיסמא</Form.Label>
 
             <div className="d-flex align-items-center">
               <Form.Control
                 type={isHidden ? "password" : "text"}
                 required
                 ref={passRef}
-                className="me-3"
               />
 
               <IconButton
@@ -177,7 +176,7 @@ export default function LoginPage() {
                   setIsHidden(!isHidden);
                 }}
               >
-                <Tooltip title={isHidden ? "Show" : "Hide"} variant="solid">
+                <Tooltip title={isHidden ? "הראה" : "החבא"} variant="solid">
                   {isHidden ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </Tooltip>
               </IconButton>
@@ -236,30 +235,31 @@ export default function LoginPage() {
         </div>
       </Card.Body>
       <div className="mb-2 d-flex justify-content-center">
-        <span>Forgot the password?</span>
         <Button
           size="sm"
           startDecorator={<OpenInNew />}
           variant="soft"
-          className="ms-2"
+          className="me-2"
           onClick={() => {
             setShowPanel(true);
           }}
         >
-          Reset it here
+          שחזר כאן
         </Button>
+
+        <span>?שכחת סיסמא</span>
       </div>
       <div className="mb-5 d-flex justify-content-center mt-1">
-        <span>Don't have an account?</span>
         <Button
           size="sm"
           startDecorator={<OpenInNew />}
           variant="soft"
-          className="ms-2"
+          className="me-3"
           onClick={() => navigate("/register")}
         >
-          Sign Up Here
+          הירשם כאן
         </Button>
+        <span>?אין משתמש</span>
       </div>
 
       <Modal
@@ -292,20 +292,20 @@ export default function LoginPage() {
             }}
           /> */}
           <Typography level="h3" style={{ color: "white" }}>
-            Password Reset
+            שחזור סיסמא
           </Typography>
-          Enter your email and we will send you a verification link{" "}
-          <EmailIcon />
+          <EmailIcon className="me-1" />
+          הכנס את הכתובת מייל שלך ונשלח לך הודעה עם הוראות
           <Form onSubmit={handleSubmitButtonResetButton} className="mt-2">
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>
                 <Typography level="h5" style={{ color: "white" }}>
-                  Email address:
+                  :כתובת מייל
                 </Typography>
               </Form.Label>
               <Form.Control
                 type="email"
-                placeholder="Enter email"
+                placeholder="כתובת מייל"
                 ref={emailVerifi}
               />
             </Form.Group>
@@ -329,7 +329,7 @@ export default function LoginPage() {
                 color="success"
               >
                 <div>
-                  <Typography fontWeight="lg">Success!</Typography>
+                  <Typography fontWeight="lg">!הצלחה</Typography>
                   <Typography fontSize="sm" sx={{ opacity: 0.8 }}>
                     {resetSuccess}
                   </Typography>
@@ -357,7 +357,7 @@ export default function LoginPage() {
               >
                 <div>
                   <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
-                    Error!
+                    !שגיאה
                   </Typography>
                   <Typography
                     fontSize="sm"
@@ -377,7 +377,7 @@ export default function LoginPage() {
               onClick={() => ResetPassword(emailVerifi)}
               className="d-flex justify-content-end mb-1"
             >
-              Submit
+              הגשה
             </Button>
           ) : (
             <Button
@@ -386,7 +386,7 @@ export default function LoginPage() {
               variant="outlined"
               onClick={() => ResetPassword(emailVerifi)}
             >
-              Submit
+              הגש
             </Button>
           )}
         </ModalDialog>

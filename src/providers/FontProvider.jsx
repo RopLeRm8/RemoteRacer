@@ -5,7 +5,7 @@ export function useLoadFonts() {
   useEffect(() => {
     WebFont.load({
       google: {
-        families: ["Slabo 27px", "Ubuntu", "Montserrat"],
+        families: ["Slabo 27px", "Ubuntu", "Montserrat", "Noto Sans Hebrew"],
       },
     });
   }, []);

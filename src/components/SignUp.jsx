@@ -68,7 +68,7 @@ export default function SignUp() {
       document.getElementById("message").value
     ) {
       setCodeError(null);
-      setCodeSuccess("Verify Success");
+      setCodeSuccess("תהליך אימות עבר בהצחלה");
       setTimeout(() => {
         setShowPanel(false);
         setLoading(true);
@@ -83,7 +83,7 @@ export default function SignUp() {
         setCodeError(null);
       }, 2000);
     } else {
-      setCodeError("Wrong code! Try again");
+      setCodeError("הקוד שגוי, נסה שוב");
       setCodeSuccess(null);
       setLoading(false);
     }
@@ -91,18 +91,18 @@ export default function SignUp() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (!emailRef?.current.value?.length)
-      return setError("Please enter a valid email address");
+      return setError("אנא אכנס מייל לגיטימי");
 
     if (passRef.current.value !== passFirmRef.current.value) {
-      return setError("Password don't match!");
+      return setError("!הסיסמאות לא זהות");
     }
 
     if (passRef.current.value.length < 6) {
-      return setError("The password must contain atleast 6 symbols!");
+      return setError("!סיסמא צריכה להכיל 6 תווים לפחות");
     }
     if (!strongRegex.test(passRef.current.value)) {
       return setError(
-        "Error! Please notice. Password must contain: special symbols, numbers, upper letters"
+        "שם לב: הסיסמא צריכה להכיל תווים מיוחדים, מספרים, ואותיות גדולות"
       );
     }
     document.getElementById("user_email").value = emailRef.current.value;
@@ -150,7 +150,7 @@ export default function SignUp() {
             >
               <div>
                 <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
-                  Error!
+                  !שגיאה
                 </Typography>
                 <Typography fontSize="sm" sx={{ opacity: 0.8, color: "white" }}>
                   {error}
@@ -179,7 +179,7 @@ export default function SignUp() {
             >
               <div>
                 <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
-                  Success!
+                  !הצחלה
                 </Typography>
               </div>
             </Alert>
@@ -187,8 +187,8 @@ export default function SignUp() {
         )}
 
         <Form onSubmit={handleSubmit}>
-          <Form.Group id="email" className="mb-3">
-            <Form.Label>Email</Form.Label>
+          <Form.Group id="email" className="mb-3" dir="rtl">
+            <Form.Label>כתובת מייל</Form.Label>
             <Form.Control
               type="email"
               required
@@ -197,15 +197,14 @@ export default function SignUp() {
             />
           </Form.Group>
 
-          <Form.Group id="password" className="mb-3">
-            <Form.Label>Password</Form.Label>
+          <Form.Group id="password" className="mb-3" dir="rtl">
+            <Form.Label>סיסמא</Form.Label>
 
             <div className="d-flex align-items-center">
               <Form.Control
                 type={isHidden ? "password" : "text"}
                 required
                 ref={passRef}
-                className="me-3"
               />
 
               <IconButton
@@ -216,21 +215,20 @@ export default function SignUp() {
                   setIsHidden(!isHidden);
                 }}
               >
-                <Tooltip title={isHidden ? "Show" : "Hide"} variant="solid">
+                <Tooltip title={isHidden ? "הראה" : "החבא"} variant="solid">
                   {isHidden ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </Tooltip>
               </IconButton>
             </div>
           </Form.Group>
 
-          <Form.Group id="pass-firm">
-            <Form.Label>Confirm Password</Form.Label>
+          <Form.Group id="pass-firm" dir="rtl">
+            <Form.Label>אישור סיסמא</Form.Label>
             <div className="d-flex align-items-center">
               <Form.Control
                 type={isHiddenConf ? "password" : "text"}
                 required
                 ref={passFirmRef}
-                className="me-3"
               />
               <IconButton
                 variant="plain"
@@ -239,7 +237,7 @@ export default function SignUp() {
                   setIsHiddenConf(!isHiddenConf);
                 }}
               >
-                <Tooltip title={isHiddenConf ? "Show" : "Hide"} variant="solid">
+                <Tooltip title={isHiddenConf ? "הראה" : "החבא"} variant="solid">
                   {isHiddenConf ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </Tooltip>
               </IconButton>
@@ -270,17 +268,17 @@ export default function SignUp() {
         </Form>
       </Card.Body>
       <div className="mb-5 d-flex justify-content-center">
-        <span>Already have an account?</span>
         <Button
           size="sm"
           color="primary"
           variant="soft"
-          className="ms-2"
+          className="me-2"
           onClick={() => navigate("/login")}
           startDecorator={<OpenInNew />}
         >
-          Log In
+          כנס כאן
         </Button>
+        <span className="mt-1">?קיים לך כבר משתמש</span>
       </div>
       <Modal
         open={showPanel}
@@ -304,20 +302,21 @@ export default function SignUp() {
           }}
         >
           <Typography level="h3" style={{ color: "white" }}>
-            Email verification
+            אימות מייל
           </Typography>
 
           {emailRef?.current?.value && (
             <span>
               We've sent the code to the {emailRef?.current?.value}, please
-              enter the code you've received <EmailIcon />
+              enter the code you've received {""}
+              <EmailIcon />
             </span>
           )}
 
           <Form onSubmit={handleSubmitCode}>
             <Form.Group className="mb-3 mt-3" controlId="formBasicEmail">
               <Form.Label>
-                <h5>Enter the code:</h5>
+                <h5>:הכנס את הקוד</h5>
               </Form.Label>
               <Form.Control ref={codeToCheck} />
             </Form.Group>
@@ -342,7 +341,7 @@ export default function SignUp() {
               >
                 <div>
                   <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
-                    Error!
+                    שגיאה
                   </Typography>
                   <Typography
                     fontSize="sm"
@@ -373,13 +372,16 @@ export default function SignUp() {
                 color="success"
               >
                 <div>
-                  <Typography fontWeight="lg">Success!</Typography>
+                  <Typography fontWeight="lg">!הצחלה</Typography>
+                  <Typography fontSize="sm" sx={{ opacity: 0.8 }}>
+                    {codeSuccess}
+                  </Typography>
                 </div>
               </Alert>
             </Box>
           )}
           <Button variant="outlined" onClick={SubmitCode}>
-            Submit
+            הגשה
           </Button>
         </ModalDialog>
       </Modal>
