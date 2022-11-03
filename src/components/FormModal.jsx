@@ -6,31 +6,53 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useCallback } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { getAuth, updateProfile } from "@firebase/auth";
+import ImageIcon from "@mui/icons-material/Image";
+import { Typography } from "@mui/joy";
 
-export default function FormDialog() {
-  const [open, setOpen] = useState(false);
-  const imageInput = useRef();
-  const dialogRef = useRef();
+export default function FormDialog({ open, setOpen, setupdateLoading }) {
+  const [imageName, setimageName] = useState("");
+  const [image, setImage] = useState(null);
+  const [user] = useAuthState(getAuth());
+  const [error, setError] = useState("");
 
-  const handleClose = useCallback(() => {
-    console.log(imageInput.current.files[0]);
-    dialogRef.current.open = false;
+  const handleClose = useCallback((validateCheck) => {
+    setupdateLoading(false);
+    validateCheck &&
+      updateProfile(user, {
+        photoURL: image,
+      }).then(
+        () => {},
+        (err) => {}
+      );
+    setOpen(false);
+    setimageName("");
+    setImage(null);
   });
+  const changeHandler = (val) => {
+    if (val.target.files[0]?.size > 200000) {
+      setError("הקובץ גדול מדי!");
+    } else {
+      setimageName(val.target.files[0].name);
+      setImage(URL.createObjectURL(val.target.files[0]));
+      setError("");
+    }
+  };
 
   return (
     <div>
       <Dialog
-        open={true}
         onClose={() => setOpen(false)}
         dir="rtl"
         sx={{ fontFamily: "Noto Sans Hebrew" }}
-        ref={dialogRef}
+        open={open}
       >
         <DialogTitle>העלאת תמונה חדשה</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <Typography className="mb-2">
             לחץ מתחת בכדי להעלות תמונה חדשה שתשתמש לפרופיל שלך
-          </DialogContentText>
+          </Typography>
           <Button variant="contained" component="label">
             העלאה
             <input
@@ -38,14 +60,18 @@ export default function FormDialog() {
               accept="image/*"
               multiple
               type="file"
-              ref={imageInput}
+              onChange={changeHandler}
             />
           </Button>
+          <span className="me-4 ms-4" style={{ fontSize: 15 }}>
+            {imageName}
+          </span>
+          <img src={image} width="200px" className="mt-2" />
+          {error}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>סגירה</Button>
-
-          <Button onClick={handleClose}>אשר</Button>
+          <Button onClick={() => handleClose(false)}>סגירה</Button>
+          {imageName && <Button onClick={() => handleClose(true)}>אשר</Button>}
         </DialogActions>
       </Dialog>
     </div>

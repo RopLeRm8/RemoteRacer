@@ -9,18 +9,19 @@ import {
   IconButton,
   Tooltip,
   Typography,
+  Divider,
 } from "@mui/joy";
 import HowToRegRoundedIcon from "@mui/icons-material/HowToRegRounded";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import EmailIcon from "@mui/icons-material/Email";
 import CheckIcon from "@mui/icons-material/Check";
-import { OpenInNew } from "@mui/icons-material";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import Alert from "@mui/joy/Alert";
 import ReportIcon from "@mui/icons-material/Report";
 import Box from "@mui/joy/Box";
+import LoginIcon from "@mui/icons-material/Login";
 
 export default function SignUp() {
   const emailRef = useRef();
@@ -37,7 +38,6 @@ export default function SignUp() {
   const [showPanel, setShowPanel] = useState(false);
   const [codeError, setCodeError] = useState(null);
   const [codeSuccess, setCodeSuccess] = useState(null);
-  const [PreferMode, setPreferMode] = useState("dark");
 
   const { signUp } = useAuth();
 
@@ -114,7 +114,7 @@ export default function SignUp() {
   }
 
   return (
-    <Card className="shadow secondaryElms">
+    <Card className="" style={{ border: "0px" }}>
       <CssVarsProvider></CssVarsProvider>
       <Card.Body className="m-4">
         <Form ref={formValue} style={{ display: "none" }}>
@@ -126,7 +126,7 @@ export default function SignUp() {
           <textarea name="message" id="message" />
         </Form>
 
-        <Typography level="h2" className="text-center mb-4">
+        <Typography level="h2" className="text-end mb-4">
           הרשמה
         </Typography>
 
@@ -166,6 +166,7 @@ export default function SignUp() {
               gap: 2,
               width: "100%",
               flexDirection: "column",
+              borderRadius: 4,
             }}
             className="mb-3"
           >
@@ -188,23 +189,35 @@ export default function SignUp() {
 
         <Form onSubmit={handleSubmit}>
           <Form.Group id="email" className="mb-3" dir="rtl">
-            <Form.Label>כתובת מייל</Form.Label>
+            <Form.Label>
+              <Typography sx={{ fontSize: 18 }}>כתובת מייל </Typography>
+              <Typography sx={{ opacity: "80%", fontSize: 13 }}>
+                מייל זה ישמש אותך לתמיד ללא אפשרות לשנותו
+              </Typography>
+            </Form.Label>
             <Form.Control
               type="email"
               required
               ref={emailRef}
               name="user_email"
+              style={{ borderRadius: 4 }}
             />
           </Form.Group>
 
           <Form.Group id="password" className="mb-3" dir="rtl">
-            <Form.Label>סיסמא</Form.Label>
+            <Form.Label>
+              <Typography sx={{ fontSize: 18 }}>סיסמא </Typography>
+              <Typography sx={{ opacity: "80%", fontSize: 13 }}>
+                סיסמא לבחירתך, נא שים לב שהסיסמא חייבת להיות חזקה
+              </Typography>
+            </Form.Label>
 
             <div className="d-flex align-items-center">
               <Form.Control
                 type={isHidden ? "password" : "text"}
                 required
                 ref={passRef}
+                style={{ borderRadius: 4 }}
               />
 
               <IconButton
@@ -223,12 +236,18 @@ export default function SignUp() {
           </Form.Group>
 
           <Form.Group id="pass-firm" dir="rtl">
-            <Form.Label>אישור סיסמא</Form.Label>
+            <Form.Label>
+              <Typography sx={{ fontSize: 18 }}>אישור סיסמא </Typography>
+              <Typography sx={{ opacity: "80%", fontSize: 13 }}>
+                סיסמא שהוקלדה לפני
+              </Typography>
+            </Form.Label>
             <div className="d-flex align-items-center">
               <Form.Control
                 type={isHiddenConf ? "password" : "text"}
                 required
                 ref={passFirmRef}
+                style={{ borderRadius: 4 }}
               />
               <IconButton
                 variant="plain"
@@ -247,10 +266,11 @@ export default function SignUp() {
           {loading ? (
             <Button
               color="success"
-              variant="soft"
+              variant="outlined"
               type="submit"
               loading
               className="w-100 mt-3"
+              sx={{ borderRadius: 4 }}
             >
               <span className="me-2">להירשם</span>
             </Button>
@@ -258,27 +278,38 @@ export default function SignUp() {
             <Button
               color="success"
               startDecorator={<HowToRegRoundedIcon />}
-              variant="soft"
+              variant="outlined"
               type="submit"
-              className="w-100 mt-3"
+              className="w-100 mt-4"
+              sx={{ borderRadius: 4 }}
             >
               <span className="me-2">להירשם</span>
             </Button>
           )}
         </Form>
       </Card.Body>
-      <div className="mb-5 d-flex justify-content-center">
+      <Divider
+        sx={{
+          color: "black",
+          px: 5,
+          mb: 5,
+          fontFamily: "Noto Sans Hebrew",
+          fontSize: 20,
+        }}
+      >
+        או
+      </Divider>
+      <div className="mb-4 d-flex justify-content-center">
         <Button
-          size="sm"
-          color="primary"
-          variant="soft"
-          className="me-2"
+          color="warning"
+          variant="outlined"
+          className="w-100 mx-5"
           onClick={() => navigate("/login")}
-          startDecorator={<OpenInNew />}
+          startDecorator={<LoginIcon />}
+          sx={{ borderRadius: 4 }}
         >
-          כנס כאן
+          כניסה עם משתמש קיים
         </Button>
-        <span className="mt-1">?קיים לך כבר משתמש</span>
       </div>
       <Modal
         open={showPanel}
@@ -301,7 +332,7 @@ export default function SignUp() {
             boxShadow: "lg",
           }}
         >
-          <Typography level="h3" style={{ color: "white" }}>
+          <Typography level="h3" style={{ color: "white" }} dir="rtl">
             אימות מייל
           </Typography>
 
@@ -314,7 +345,11 @@ export default function SignUp() {
           )}
 
           <Form onSubmit={handleSubmitCode}>
-            <Form.Group className="mb-3 mt-3" controlId="formBasicEmail">
+            <Form.Group
+              className="mb-3 mt-3"
+              controlId="formBasicEmail"
+              dir="rtl"
+            >
               <Form.Label>
                 <h5>:הכנס את הקוד</h5>
               </Form.Label>

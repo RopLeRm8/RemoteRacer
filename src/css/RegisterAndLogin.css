@@ -1,0 +1,10 @@
+@keyframes slideright{
+    from{
+        left:10%;
+    }
+    to{
+        left:initial;
+    }
+}
+.slideright{
+}

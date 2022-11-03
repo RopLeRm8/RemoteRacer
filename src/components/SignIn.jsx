@@ -8,7 +8,7 @@ import "../css/LoginPage.css";
 import { googleauth, gitauth } from "../providers/FirebaseProvider";
 import LoginIcon from "@mui/icons-material/Login";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";  
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
   CssVarsProvider,
   IconButton,
@@ -41,7 +41,7 @@ export default function LoginPage() {
   const [resetSuccess, setResetSuccess] = useState(null);
   const [resetError, setResetError] = useState(null);
   const [resetLoading, setResetLoading] = useState(false);
-  
+
   const auth = getAuth();
 
   function ResetPassword(userEmail) {
@@ -291,16 +291,16 @@ export default function LoginPage() {
               bgcolor: "background.body",
             }}
           /> */}
-          <Typography level="h3" style={{ color: "white" }}>
+          <Typography level="h3" style={{ color: "white" }} dir="rtl">
             שחזור סיסמא
           </Typography>
           <EmailIcon className="me-1" />
           הכנס את הכתובת מייל שלך ונשלח לך הודעה עם הוראות
           <Form onSubmit={handleSubmitButtonResetButton} className="mt-2">
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3" controlId="formBasicEmail" dir="rtl">
               <Form.Label>
                 <Typography level="h5" style={{ color: "white" }}>
-                  :כתובת מייל
+                  כתובת מייל :
                 </Typography>
               </Form.Label>
               <Form.Control

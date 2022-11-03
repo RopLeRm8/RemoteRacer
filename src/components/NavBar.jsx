@@ -23,6 +23,7 @@ import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import BrushIcon from "@mui/icons-material/Brush";
 import InfoIcon from "@mui/icons-material/Info";
 import Zoom from "@mui/material/Zoom";
+import { Badge } from "@mui/joy";
 
 const pages = [
   [
@@ -139,7 +140,8 @@ function Navbar() {
               >
                 {pages.map((page) => (
                   <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                    <IconButton>{page[1]} </IconButton>
+                    <Typography textAlign="center">{page[0]}</Typography>
                   </MenuItem>
                 ))}
               </Menu>

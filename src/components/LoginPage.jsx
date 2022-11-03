@@ -6,7 +6,7 @@ export default function LoginPage() {
   return (
     <AuthProvider>
       <Container
-        className="mt-3 d-flex align-items-center justify-content-center"
+        className="mt-5 d-flex align-items-center justify-content-end"
         style={{ minHeight: "85vh" }}
       >
         <div className="w-100" style={{ maxWidth: "500px" }}>

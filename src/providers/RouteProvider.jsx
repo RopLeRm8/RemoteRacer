@@ -9,8 +9,7 @@ import Profile from "../components/Profile";
 import "../css/LoginPage.css";
 import { useEffect, useState } from "react";
 import { useLoadFonts } from "./FontProvider";
-import CircularProgress from "@mui/joy/CircularProgress";
-import { CssVarsProvider, Typography } from "@mui/joy";
+import { CircularProgress, CssVarsProvider, Typography } from "@mui/joy";
 import "../css/RouteProvider.css";
 import { Snackbar, Alert } from "@mui/material";
 
