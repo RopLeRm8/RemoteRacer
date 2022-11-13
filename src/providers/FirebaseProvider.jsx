@@ -5,18 +5,23 @@ import {
   signInWithPopup,
   GithubAuthProvider,
 } from "@firebase/auth";
+import { getStorage } from "firebase/storage";
+import { getDatabase } from "firebase/database";
 
 const app = firebase.initializeApp({
   apiKey: "AIzaSyAfSIj-unNx7i5pAk6iX4yQoVcQBbgW_s0",
   authDomain: "react-project-321f9.firebaseapp.com",
-  databaseURL: process.env.REACT_FIREBASE_URL,
+  databaseURL:
+    "https://react-project-321f9-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: process.env.REACT_FIREBASE_ID,
-  storageBucket: process.env.REACT_FIREBASE_STORAGE,
+  storageBucket: "react-project-321f9.appspot.com",
   messagingSenderId: process.env.REACT_FIREBASE_MSGID,
   appId: process.env.REACT_FIREBASE_appID,
   measurementId: "G-KN069SZKMH",
 });
 export const auth = app.auth();
+export const storage = getStorage(app);
+export const db = getDatabase(app);
 
 const provider = new GoogleAuthProvider();
 const gitprovider = new GithubAuthProvider();

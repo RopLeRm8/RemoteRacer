@@ -5,7 +5,8 @@ import React, {
   createContext,
   useRef,
 } from "react";
-import { auth } from "../providers/FirebaseProvider";
+import { auth, db } from "../providers/FirebaseProvider";
+import { ref, child, get, set } from "firebase/database";
 
 const AuthContext = createContext();
 
@@ -50,11 +51,33 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const unsubber = auth.onAuthStateChanged((user) => {
       if (!user) return;
-
       setCurrentUser(user);
+      const userRef = ref(db, `users/${user.uid}`);
+      const query = ref(db);
+      const userRefDB = `users/${user.uid}`;
+
+      get(child(query, userRefDB)).then((snapshot) => {
+        if (snapshot.exists && snapshot.val()) return;
+        set(userRef, {
+          achievements: {
+            place1: false,
+            place2: false,
+            place3: false,
+            firstSetup: false,
+            playFirstGame: false,
+            scoreMoreThan100: false,
+          },
+          data: {
+            name: user.displayName,
+            mail: user.email,
+            photoURL: user.photoURL,
+          },
+        });
+      });
     });
     return unsubber;
   }, []);
+
   useEffect(() => {
     if (!alertRef.current) return;
 

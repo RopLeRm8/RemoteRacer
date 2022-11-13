@@ -1,9 +1,10 @@
 import NavBar from "./NavBar";
 import background from "../assets/background.png";
+import { Box } from "@mui/joy";
 export default function Dashboard() {
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         backgroundPosition: "center",
         backgroundImage: `url(${background})`,
         backgroundSize: "cover",
@@ -14,6 +15,6 @@ export default function Dashboard() {
       }}
     >
       <NavBar />
-    </div>
+    </Box>
   );
 }

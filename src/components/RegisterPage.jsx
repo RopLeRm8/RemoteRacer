@@ -24,14 +24,14 @@ export default function LoginPage() {
               justifyContent: "center",
             }}
           >
-            <Grid item xs={0} sx={{ marginTop: 18, width: "500px" }}>
+            <Grid item xs={0} sx={{ marginTop: 20, width: "500px" }}>
               <Fade in={true}>
                 <Box>
                   <SignUp />
                 </Box>
               </Fade>
             </Grid>
-            <Slide direction="down" in={true}>
+            <Slide direction="right" in={true}>
               <Box sx={{ position: "absolute", top: 50, mr: 8 }}>
                 <img src={logo} width="140" height="140" alt="" id="logo" />
               </Box>
@@ -42,7 +42,7 @@ export default function LoginPage() {
               sx={{
                 backgroundColor: "black",
                 mx: 8,
-                mt: 25,
+                mt: 30,
                 "@media screen and (max-width: 90em)": {
                   display: "none",
                 },

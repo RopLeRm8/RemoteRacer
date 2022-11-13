@@ -12,10 +12,9 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import TimeToLeaveIcon from "@mui/icons-material/TimeToLeave";
-import { createTheme, ThemeProvider } from "@mui/material";
+import { createTheme, Fade, ThemeProvider } from "@mui/material";
 import { auth } from "../providers/FirebaseProvider";
 import { useLoadFonts } from "../providers/FontProvider";
-import "../css/NavBar.css";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "@firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +22,8 @@ import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import BrushIcon from "@mui/icons-material/Brush";
 import InfoIcon from "@mui/icons-material/Info";
 import Zoom from "@mui/material/Zoom";
-import { Badge } from "@mui/joy";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const pages = [
   [
@@ -45,7 +45,10 @@ const pages = [
     "מידע על האתר והמייסדים שלו",
   ],
 ];
-const settings = ["פרופיל", "יציאה"];
+const settings = [
+  ["פרופיל", <AccountBoxIcon key="accountBox" />],
+  ["יציאה", <LogoutIcon key="Logout" />],
+];
 
 function Navbar() {
   useLoadFonts();
@@ -85,157 +88,163 @@ function Navbar() {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <AppBar position="static" id="nav">
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            <TimeToLeaveIcon
-              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-            />
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/dashboard"
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "Montserrat",
-                fontWeight: 500,
-                letterSpacing: ".05rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              RemoteRacer
-            </Typography>
-
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
+      <Fade in={true}>
+        <AppBar position="static">
+          <Container maxWidth="xl">
+            <Toolbar disableGutters>
+              <TimeToLeaveIcon
+                sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+              />
+              <Typography
+                variant="h6"
+                noWrap
+                component="a"
+                href="/dashboard"
                 sx={{
-                  display: { xs: "block", md: "none" },
+                  mr: 2,
+                  display: { xs: "none", md: "flex" },
+                  fontFamily: "Montserrat",
+                  fontWeight: 500,
+                  letterSpacing: ".05rem",
+                  color: "inherit",
+                  textDecoration: "none",
                 }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <IconButton>{page[1]} </IconButton>
-                    <Typography textAlign="center">{page[0]}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-            <TimeToLeaveIcon
-              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-            />
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href=""
-              sx={{
-                fontFamily: "Noto Sans Hebrew",
-                mr: 2,
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
-                fontWeight: 500,
-                letterSpacing: ".1rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              RemoteRacer
-            </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Tooltip
-                  title={page[3]}
-                  key={page[3]}
-                  followCursor
-                  TransitionComponent={Zoom}
-                  enterDelay={500}
-                >
-                  <Button
-                    key={page}
-                    endIcon={page[1]}
-                    onClick={handleCloseNavMenu}
-                    sx={{
-                      "&:hover": {
-                        color: page[2],
-                      },
-                      fontFamily: "Noto Sans Hebrew",
-                      my: 2,
-                      mx: 1.5,
-                      color: "white",
-                      fontSize: 16,
-                    }}
-                  >
-                    {page[0]}
-                  </Button>
-                </Tooltip>
-              ))}
-            </Box>
+                RemoteRacer
+              </Typography>
 
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="לפתוח הגדרות">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar
-                    alt="Remy Sharp"
-                    src={user.photoURL}
-                    sx={{ color: "white" }}
-                  />
+              <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleOpenNavMenu}
+                  color="inherit"
+                >
+                  <MenuIcon />
                 </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                  sx={{
+                    display: { xs: "block", md: "none" },
+                  }}
+                >
+                  {pages.map((page) => (
+                    <MenuItem key={page} onClick={handleCloseNavMenu}>
+                      <IconButton>{page[1]} </IconButton>
+                      <Typography textAlign="center">{page[0]}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+              <TimeToLeaveIcon
+                sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+              />
+              <Typography
+                variant="h6"
+                noWrap
+                component="a"
+                href=""
+                sx={{
+                  fontFamily: "Noto Sans Hebrew",
+                  mr: 2,
+                  display: { xs: "flex", md: "none" },
+                  flexGrow: 1,
+                  fontWeight: 500,
+                  letterSpacing: ".1rem",
+                  color: "inherit",
+                  textDecoration: "none",
                 }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem
-                    key={setting}
-                    onClick={() => handleCloseUserMenu(setting)}
+                RemoteRacer
+              </Typography>
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                {pages.map((page) => (
+                  <Tooltip
+                    title={page[3]}
+                    key={page[3]}
+                    TransitionComponent={Zoom}
+                    enterDelay={500}
                   >
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
+                    <Button
+                      key={page}
+                      endIcon={page[1]}
+                      onClick={handleCloseNavMenu}
+                      sx={{
+                        "&:hover": {
+                          color: page[2],
+                        },
+                        fontFamily: "Noto Sans Hebrew",
+                        my: 2,
+                        mx: 1.5,
+                        color: "white",
+                        fontSize: 16,
+                      }}
+                    >
+                      {page[0]}
+                    </Button>
+                  </Tooltip>
                 ))}
-              </Menu>
-            </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
+              </Box>
+
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="לפתוח הגדרות">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={user?.photoURL}
+                      sx={{ color: "white" }}
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem
+                      key={setting[0]}
+                      onClick={() => handleCloseUserMenu(setting[0])}
+                    >
+                      <Typography textAlign="center" sx={{ ml: 2 }}>
+                        {setting[0]}
+                      </Typography>
+                      <IconButton sx={{ ml: setting[0] === "יציאה" ? 1 : 0 }}>
+                        {setting[1]}{" "}
+                      </IconButton>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+            </Toolbar>
+          </Container>
+        </AppBar>
+      </Fade>
     </ThemeProvider>
   );
 }

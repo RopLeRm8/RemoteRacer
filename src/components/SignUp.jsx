@@ -22,6 +22,9 @@ import Alert from "@mui/joy/Alert";
 import ReportIcon from "@mui/icons-material/Report";
 import Box from "@mui/joy/Box";
 import LoginIcon from "@mui/icons-material/Login";
+import logo from "../assets/logo.gif";
+import { Slide, Fade } from "@mui/material";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 export default function SignUp() {
   const emailRef = useRef();
@@ -29,6 +32,7 @@ export default function SignUp() {
   const passFirmRef = useRef();
   const formValue = useRef();
   const codeToCheck = useRef();
+  const gifAnimCont = useRef();
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -38,6 +42,7 @@ export default function SignUp() {
   const [showPanel, setShowPanel] = useState(false);
   const [codeError, setCodeError] = useState(null);
   const [codeSuccess, setCodeSuccess] = useState(null);
+  const [gifAnim, setgifAnim] = useState(false);
 
   const { signUp } = useAuth();
 
@@ -114,9 +119,9 @@ export default function SignUp() {
   }
 
   return (
-    <Card className="" style={{ border: "0px" }}>
+    <Card style={{ border: "0px" }}>
       <CssVarsProvider></CssVarsProvider>
-      <Card.Body className="m-4">
+      <Card.Body className="mx-4 mt-3">
         <Form ref={formValue} style={{ display: "none" }}>
           <label>Name</label>
           <input type="text" name="user_name" id="user_name" />
@@ -126,7 +131,7 @@ export default function SignUp() {
           <textarea name="message" id="message" />
         </Form>
 
-        <Typography level="h2" className="text-end mb-4">
+        <Typography level="h2" sx={{ textAlign: "end", mb: 2.5 }}>
           הרשמה
         </Typography>
 
@@ -137,8 +142,8 @@ export default function SignUp() {
               gap: 2,
               width: "100%",
               flexDirection: "column",
+              mb: 3,
             }}
-            className="mb-3"
           >
             <Alert
               sx={{ alignItems: "flex-start" }}
@@ -148,14 +153,14 @@ export default function SignUp() {
               variant="solid"
               color="danger"
             >
-              <div>
+              <Box>
                 <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
                   !שגיאה
                 </Typography>
                 <Typography fontSize="sm" sx={{ opacity: 0.8, color: "white" }}>
                   {error}
                 </Typography>
-              </div>
+              </Box>
             </Alert>
           </Box>
         )}
@@ -167,8 +172,8 @@ export default function SignUp() {
               width: "100%",
               flexDirection: "column",
               borderRadius: 4,
+              mb: 3,
             }}
-            className="mb-3"
           >
             <Alert
               sx={{ alignItems: "flex-start" }}
@@ -178,11 +183,11 @@ export default function SignUp() {
               variant="solid"
               color="success"
             >
-              <div>
+              <Box>
                 <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
                   !הצחלה
                 </Typography>
-              </div>
+              </Box>
             </Alert>
           </Box>
         )}
@@ -212,7 +217,7 @@ export default function SignUp() {
               </Typography>
             </Form.Label>
 
-            <div className="d-flex align-items-center">
+            <Box sx={{ display: "flex", alignItems: "center" }}>
               <Form.Control
                 type={isHidden ? "password" : "text"}
                 required
@@ -232,7 +237,7 @@ export default function SignUp() {
                   {isHidden ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </Tooltip>
               </IconButton>
-            </div>
+            </Box>
           </Form.Group>
 
           <Form.Group id="pass-firm" dir="rtl">
@@ -242,7 +247,7 @@ export default function SignUp() {
                 סיסמא שהוקלדה לפני
               </Typography>
             </Form.Label>
-            <div className="d-flex align-items-center">
+            <Box sx={{ display: "flex", alignItems: "center" }}>
               <Form.Control
                 type={isHiddenConf ? "password" : "text"}
                 required
@@ -260,7 +265,7 @@ export default function SignUp() {
                   {isHiddenConf ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </Tooltip>
               </IconButton>
-            </div>
+            </Box>
           </Form.Group>
 
           {loading ? (
@@ -269,21 +274,35 @@ export default function SignUp() {
               variant="outlined"
               type="submit"
               loading
-              className="w-100 mt-3"
-              sx={{ borderRadius: 4 }}
-            >
-              <span className="me-2">להירשם</span>
-            </Button>
+              sx={{ borderRadius: 4, width: 380, mt: 4 }}
+            />
           ) : (
             <Button
+              ref={gifAnimCont}
               color="success"
               startDecorator={<HowToRegRoundedIcon />}
               variant="outlined"
               type="submit"
-              className="w-100 mt-4"
-              sx={{ borderRadius: 4 }}
+              sx={{ borderRadius: 4, width: 380, mt: 4 }}
+              onMouseEnter={() => {
+                setgifAnim(true);
+              }}
+              onMouseLeave={() => {
+                setgifAnim(false);
+              }}
             >
-              <span className="me-2">להירשם</span>
+              {gifAnim && (
+                <Slide
+                  direction="right"
+                  in={true}
+                  container={gifAnimCont.current}
+                >
+                  <Box sx={{ mr: 1 }}>
+                    <img src={logo} width="30" height="30" alt="" id="logo" />
+                  </Box>
+                </Slide>
+              )}
+              <Typography sx={{ mr: 2 }}>להירשם</Typography>
             </Button>
           )}
         </Form>
@@ -292,25 +311,24 @@ export default function SignUp() {
         sx={{
           color: "black",
           px: 5,
-          mb: 5,
+          mb: 2,
           fontFamily: "Noto Sans Hebrew",
           fontSize: 20,
         }}
       >
         או
       </Divider>
-      <div className="mb-4 d-flex justify-content-center">
+      <Box sx={{ mb: 4, display: "flex", justifyContent: "center" }}>
         <Button
           color="warning"
           variant="outlined"
-          className="w-100 mx-5"
           onClick={() => navigate("/login")}
           startDecorator={<LoginIcon />}
-          sx={{ borderRadius: 4 }}
+          sx={{ borderRadius: 4, width: 380 }}
         >
           כניסה עם משתמש קיים
         </Button>
-      </div>
+      </Box>
       <Modal
         open={showPanel}
         onClose={() => {
@@ -319,106 +337,127 @@ export default function SignUp() {
           setCodeSuccess(null);
         }}
       >
-        <ModalDialog
-          className="alertin"
-          variant="soft"
-          sx={{
-            bgcolor: "#1c1c1c",
-            color: "white",
-            outlineColor: "green",
-            maxWidth: 500,
-            borderRadius: "md",
-            p: 5,
-            boxShadow: "lg",
-          }}
-        >
-          <Typography level="h3" style={{ color: "white" }} dir="rtl">
-            אימות מייל
-          </Typography>
+        <Fade in={true}>
+          <ModalDialog
+            variant="outlined"
+            sx={{
+              color: "#1c1c1c",
+              outlineColor: "white",
+              p: 5,
+              boxShadow: "lg",
+              borderRadius: 4,
+            }}
+          >
+            <Typography level="h3" dir="rtl">
+              אימות מייל
+            </Typography>
 
-          {emailRef?.current?.value && (
-            <span>
-              We've sent the code to the {emailRef?.current?.value}, please
-              enter the code you've received {""}
-              <EmailIcon />
-            </span>
-          )}
+            {emailRef?.current?.value && (
+              <Typography dir="rtl">
+                שלחנו קוד אל {emailRef?.current?.value}, אנא בדוק את תיבת הדואר
+                בכדי להמשיך באימות דרך ההוראות
+                <EmailIcon />
+              </Typography>
+            )}
 
-          <Form onSubmit={handleSubmitCode}>
-            <Form.Group
-              className="mb-3 mt-3"
-              controlId="formBasicEmail"
-              dir="rtl"
-            >
-              <Form.Label>
-                <h5>:הכנס את הקוד</h5>
-              </Form.Label>
-              <Form.Control ref={codeToCheck} />
-            </Form.Group>
-          </Form>
-          {codeError && (
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                width: "100%",
-                flexDirection: "column",
-              }}
-              className="mb-3"
-            >
-              <Alert
-                sx={{ alignItems: "flex-start" }}
-                startDecorator={
-                  <ReportIcon sx={{ mt: "7px", mx: "4px", fontSize: "35px" }} />
-                }
-                variant="solid"
-                color="danger"
+            <Form onSubmit={handleSubmitCode}>
+              <Form.Group
+                className="mb-3 mt-3"
+                controlId="formBasicEmail"
+                dir="rtl"
               >
-                <div>
-                  <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
-                    שגיאה
-                  </Typography>
-                  <Typography
-                    fontSize="sm"
-                    sx={{ opacity: 0.8, color: "white" }}
-                  >
-                    {codeError}
-                  </Typography>
-                </div>
-              </Alert>
-            </Box>
-          )}
-          {codeSuccess && (
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                width: "100%",
-                flexDirection: "column",
-              }}
-              className="mb-3"
-            >
-              <Alert
-                sx={{ alignItems: "flex-start" }}
-                startDecorator={
-                  <CheckIcon sx={{ mx: "4px", fontSize: "25px" }} />
-                }
-                variant="soft"
-                color="success"
+                <Form.Label>
+                  <Typography>:הכנס את הקוד</Typography>
+                </Form.Label>
+                <Form.Control ref={codeToCheck} />
+              </Form.Group>
+            </Form>
+            {codeError && (
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  width: "100%",
+                  flexDirection: "column",
+                  mb: 3,
+                }}
               >
-                <div>
-                  <Typography fontWeight="lg">!הצחלה</Typography>
-                  <Typography fontSize="sm" sx={{ opacity: 0.8 }}>
-                    {codeSuccess}
-                  </Typography>
-                </div>
-              </Alert>
-            </Box>
-          )}
-          <Button variant="outlined" onClick={SubmitCode}>
-            הגשה
-          </Button>
-        </ModalDialog>
+                <Alert
+                  sx={{ alignItems: "flex-start" }}
+                  startDecorator={
+                    <ReportIcon
+                      sx={{ mt: "7px", mx: "4px", fontSize: "35px" }}
+                    />
+                  }
+                  variant="solid"
+                  color="danger"
+                >
+                  <Box>
+                    <Typography
+                      fontWeight="lg"
+                      mt={0.25}
+                      sx={{ color: "white" }}
+                    >
+                      שגיאה
+                    </Typography>
+                    <Typography
+                      fontSize="sm"
+                      sx={{ opacity: 0.8, color: "white" }}
+                    >
+                      {codeError}
+                    </Typography>
+                  </Box>
+                </Alert>
+              </Box>
+            )}
+            {codeSuccess && (
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  width: "100%",
+                  flexDirection: "column",
+                  mb: 3,
+                }}
+              >
+                <Alert
+                  sx={{ alignItems: "flex-start" }}
+                  startDecorator={
+                    <CheckIcon sx={{ mx: "4px", fontSize: "25px" }} />
+                  }
+                  variant="soft"
+                  color="success"
+                >
+                  <Box>
+                    <Typography fontWeight="lg">!הצחלה</Typography>
+                    <Typography fontSize="sm" sx={{ opacity: 0.8 }}>
+                      {codeSuccess}
+                    </Typography>
+                  </Box>
+                </Alert>
+              </Box>
+            )}
+            <Button
+              sx={{
+                width: "100%",
+              }}
+              startDecorator={<ArrowUpwardIcon />}
+              variant="soft"
+              color="info"
+              onClick={SubmitCode}
+            >
+              <Typography
+                sx={{
+                  fontFamily: "Noto Sans Hebrew",
+                  fontSize: 15,
+                  mr: 3,
+                }}
+              >
+                הגשה
+              </Typography>
+            </Button>
+          </ModalDialog>
+        </Fade>
       </Modal>
     </Card>
   );

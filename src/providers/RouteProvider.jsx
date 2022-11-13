@@ -9,9 +9,9 @@ import Profile from "../components/Profile";
 import "../css/LoginPage.css";
 import { useEffect, useState } from "react";
 import { useLoadFonts } from "./FontProvider";
-import { CircularProgress, CssVarsProvider, Typography } from "@mui/joy";
 import "../css/RouteProvider.css";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, LinearProgress } from "@mui/material";
+import Box from "@mui/joy/Box";
 
 export default function RouteProvider() {
   useLoadFonts();
@@ -30,36 +30,25 @@ export default function RouteProvider() {
     return (
       <Centered>
         <Alert variant="danger" className="text-center">
-          Unknown authentication error
+          בעית התחברות!
         </Alert>
       </Centered>
     );
 
   if (authLoading)
     return (
-      <CssVarsProvider>
-        <center>
-          <CircularProgress
-            className="d-flex align-items-center justify-content-center"
-            sx={{
-              "--CircularProgress-size": "150px",
-              "--CircularProgress-track-thickness": "5px",
-              "--CircularProgress-progress-thickness": "8px",
-              marginTop: "22rem",
-            }}
-          >
-            {" "}
-            <Typography level="h6">Loading</Typography>
-            <span className="loading"></span>{" "}
-          </CircularProgress>
-        </center>
-      </CssVarsProvider>
+      <LinearProgress
+        sx={{
+          "--LinearProgress-thickness": "26px",
+          "--LinearProgress-progressThickness": "20px",
+        }}
+      />
     );
 
   return (
     <BrowserRouter>
       {authUser ? (
-        <div>
+        <Box>
           <Routes>
             <Route path="profile" element={<Profile />} />
             <Route path="*" element={<Navigate to="/dashboard" />} />
@@ -76,10 +65,10 @@ export default function RouteProvider() {
               sx={{ width: "100%" }}
               onClose={() => setOpen(false)}
             >
-              Login Success!
+              !כניסה מוצלחת
             </Alert>
           </Snackbar>
-        </div>
+        </Box>
       ) : (
         <Routes>
           <Route index element={<Navigate to="/login" />} />

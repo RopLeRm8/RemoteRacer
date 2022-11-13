@@ -19,19 +19,24 @@ import {
   Button,
   Modal,
   ModalDialog,
+  Divider,
 } from "@mui/joy";
 import EmailIcon from "@mui/icons-material/Email";
 import CheckIcon from "@mui/icons-material/Check";
-import { OpenInNew } from "@mui/icons-material";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import LockResetIcon from "@mui/icons-material/LockReset";
 import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ReportIcon from "@mui/icons-material/Report";
+import logo from "../assets/logo.gif";
+import { Fade, Slide } from "@mui/material";
 
 export default function LoginPage() {
   const emailRef = useRef();
   const passRef = useRef();
   const emailVerifi = useRef();
+  const gifAnimCont = useRef();
 
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -41,6 +46,7 @@ export default function LoginPage() {
   const [resetSuccess, setResetSuccess] = useState(null);
   const [resetError, setResetError] = useState(null);
   const [resetLoading, setResetLoading] = useState(false);
+  const [gifAnim, setgifAnim] = useState(false);
 
   const auth = getAuth();
 
@@ -76,7 +82,7 @@ export default function LoginPage() {
     setSuccess("");
 
     login(emailRef?.current.value, passRef?.current.value)
-      .then(() => {
+      .then((user) => {
         setSuccess("כניסה מוצלחת");
         localStorage.setItem("firstTime", "true");
       })
@@ -91,10 +97,10 @@ export default function LoginPage() {
   };
 
   return (
-    <Card className="shadow d-flex">
+    <Card style={{ border: "0px" }}>
       <CssVarsProvider />
-      <Card.Body className="m-4">
-        <Typography level="h2" className="text-center mb-4">
+      <Card.Body className="mx-4 mt-3">
+        <Typography level="h2" sx={{ textAlign: "end", mb: 2.5 }}>
           כניסה
         </Typography>
         {error && (
@@ -104,8 +110,8 @@ export default function LoginPage() {
               gap: 2,
               width: "100%",
               flexDirection: "column",
+              mb: 3,
             }}
-            className="mb-3"
           >
             <Alert
               sx={{ alignItems: "flex-start" }}
@@ -115,14 +121,14 @@ export default function LoginPage() {
               variant="solid"
               color="danger"
             >
-              <div>
+              <Box>
                 <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
                   !שגיאה
                 </Typography>
                 <Typography fontSize="sm" sx={{ opacity: 0.8, color: "white" }}>
                   {error}
                 </Typography>
-              </div>
+              </Box>
             </Alert>
           </Box>
         )}
@@ -133,8 +139,8 @@ export default function LoginPage() {
               gap: 2,
               width: "100%",
               flexDirection: "column",
+              mb: 3,
             }}
-            className="mb-3"
           >
             <Alert
               sx={{ alignItems: "flex-start" }}
@@ -144,29 +150,48 @@ export default function LoginPage() {
               variant="solid"
               color="success"
             >
-              <div>
+              <Box>
                 <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
                   !הצלחה
                 </Typography>
-              </div>
+              </Box>
             </Alert>
           </Box>
         )}
 
         <Form onSubmit={handleSubmit}>
           <Form.Group id="email" className="mb-3" dir="rtl">
-            <Form.Label>כתובת מייל</Form.Label>
-            <Form.Control type="email" required ref={emailRef} />
+            <Form.Label>
+              <Typography sx={{ fontSize: 18 }}>כתובת מייל </Typography>
+              <Typography sx={{ opacity: "80%", fontSize: 13 }}>
+                מייל זה ישמש אותך לתמיד ללא אפשרות לשנותו
+              </Typography>
+            </Form.Label>
+            <Form.Control
+              type="email"
+              required
+              ref={emailRef}
+              style={{ borderRadius: 4 }}
+            />
           </Form.Group>
 
           <Form.Group id="password" dir="rtl">
-            <Form.Label>סיסמא</Form.Label>
+            <Form.Label>
+              {" "}
+              <Form.Label>
+                <Typography sx={{ fontSize: 18 }}>סיסמא</Typography>
+                <Typography sx={{ opacity: "80%", fontSize: 13 }}>
+                  סיסמא אשר שייכת למשתמש שקשור למייל מלמעלה
+                </Typography>
+              </Form.Label>
+            </Form.Label>
 
-            <div className="d-flex align-items-center">
+            <Box sx={{ display: "flex", alignItems: "center" }}>
               <Form.Control
                 type={isHidden ? "password" : "text"}
                 required
                 ref={passRef}
+                style={{ borderRadius: 4 }}
               />
 
               <IconButton
@@ -180,87 +205,135 @@ export default function LoginPage() {
                   {isHidden ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </Tooltip>
               </IconButton>
-            </div>
+            </Box>
           </Form.Group>
 
           {loading ? (
             <Button
               color="success"
-              variant="soft"
+              variant="outlined"
               loading
               type="submit"
-              className="w-100 mt-3"
-            >
-              <span className="me-2">להיכנס</span>
-            </Button>
+              sx={{ width: 380, mt: 4, borderRadius: 4 }}
+            />
           ) : (
             <Button
+              ref={gifAnimCont}
               startDecorator={<LoginIcon />}
               color="success"
-              variant="soft"
+              variant="outlined"
               type="submit"
-              className="w-100 mt-4"
+              sx={{
+                width: 380,
+                mt: 4,
+                borderRadius: 4,
+              }}
+              onMouseEnter={() => {
+                setgifAnim(true);
+              }}
+              onMouseLeave={() => {
+                setgifAnim(false);
+              }}
             >
-              <span className="me-2">להיכנס</span>
+              {gifAnim && (
+                <Slide
+                  direction="right"
+                  in={true}
+                  container={gifAnimCont.current}
+                >
+                  <Box sx={{ mr: 0.7 }}>
+                    <img src={logo} width="30" height="30" alt="" id="logo" />
+                  </Box>
+                </Slide>
+              )}
+              <Typography sx={{ mr: 2 }}>להיכנס</Typography>
             </Button>
           )}
         </Form>
-        <div className="d-flex justify-content-center mt-4">
-          <Button
-            color="danger"
-            variant="soft"
-            onClick={googleauth}
-            className="w-75"
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <Divider
+            sx={{
+              color: "black",
+              width: 300,
+              fontFamily: "Noto Sans Hebrew",
+              fontSize: 20,
+            }}
           >
-            <GoogleIcon className="me-1" />
-            <span style={{ fontWeight: "700" }} className="me-1">
-              Google
-            </span>{" "}
-            לכניסה עם
-          </Button>
-        </div>
-        <div className="d-flex justify-content-center mt-2  ">
-          <Button
-            color="neutral"
-            variant="soft"
-            onClick={gitauth}
-            className="w-75"
+            <Button
+              color="danger"
+              variant="outlined"
+              onClick={googleauth}
+              sx={{ borderRadius: 4 }}
+            >
+              <GoogleIcon sx={{ mr: 1 }} />
+              <Typography sx={{ fontWeight: "500", mr: 1 }}>
+                Google
+              </Typography>{" "}
+              לכניסה עם
+            </Button>
+          </Divider>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+          <Divider
+            sx={{
+              color: "black",
+              width: 300,
+              fontFamily: "Noto Sans Hebrew",
+              fontSize: 20,
+            }}
           >
-            <GitHubIcon className="me-1" />
-            <span style={{ fontWeight: "700" }} className="me-1">
-              GitHub
-            </span>{" "}
-            לכניסה עם
-          </Button>
-        </div>
+            <Button
+              color="neutral"
+              variant="outlined"
+              onClick={gitauth}
+              sx={{ borderRadius: 4 }}
+            >
+              <GitHubIcon sx={{ mr: 1 }} />
+              <Typography sx={{ fontWeight: "500", mr: 1 }}>
+                GitHub
+              </Typography>{" "}
+              לכניסה עם
+            </Button>
+          </Divider>
+        </Box>
       </Card.Body>
-      <div className="mb-2 d-flex justify-content-center">
+      <Divider
+        sx={{
+          color: "black",
+          px: 5,
+          mb: 3,
+          fontFamily: "Noto Sans Hebrew",
+          fontSize: 20,
+        }}
+      >
+        או
+      </Divider>
+      <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
         <Button
           size="sm"
-          startDecorator={<OpenInNew />}
-          variant="soft"
-          className="me-2"
+          startDecorator={<LockResetIcon />}
+          variant="outlined"
+          color="warning"
+          sx={{ borderRadius: 4, width: 370, height: 39, mb: 1 }}
           onClick={() => {
             setShowPanel(true);
           }}
         >
-          שחזר כאן
+          תהליך שחזור סיסמא
         </Button>
-
-        <span>?שכחת סיסמא</span>
-      </div>
-      <div className="mb-5 d-flex justify-content-center mt-1">
+      </Box>
+      <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
         <Button
           size="sm"
-          startDecorator={<OpenInNew />}
-          variant="soft"
-          className="me-3"
+          startDecorator={<HowToRegIcon />}
+          variant="outlined"
+          color="warning"
+          sx={{ borderRadius: 4, width: 370, height: 38, mb: 1 }}
           onClick={() => navigate("/register")}
         >
           הירשם כאן
         </Button>
-        <span>?אין משתמש</span>
-      </div>
+      </Box>
 
       <Modal
         open={showPanel}
@@ -268,20 +341,19 @@ export default function LoginPage() {
         aria-labelledby="modal-title"
         aria-describedby="modal-desc"
       >
-        <ModalDialog
-          className="alertin"
-          variant="soft"
-          sx={{
-            bgcolor: "#1c1c1c",
-            color: "white",
-            outlineColor: "green",
-            maxWidth: 500,
-            borderRadius: "md",
-            p: 5,
-            boxShadow: "lg",
-          }}
-        >
-          {/* <ModalClose
+        <Fade in={true}>
+          <ModalDialog
+            variant="outlined"
+            size="lg"
+            sx={{
+              color: "#1c1c1c",
+              outlineColor: "white",
+              p: 5,
+              boxShadow: "lg",
+              borderRadius: 4,
+            }}
+          >
+            {/* <ModalClose
             variant="outlined"
             sx={{
               top: "calc(-1/4 * var(--IconButton-size))",
@@ -291,105 +363,126 @@ export default function LoginPage() {
               bgcolor: "background.body",
             }}
           /> */}
-          <Typography level="h3" style={{ color: "white" }} dir="rtl">
-            שחזור סיסמא
-          </Typography>
-          <EmailIcon className="me-1" />
-          הכנס את הכתובת מייל שלך ונשלח לך הודעה עם הוראות
-          <Form onSubmit={handleSubmitButtonResetButton} className="mt-2">
-            <Form.Group className="mb-3" controlId="formBasicEmail" dir="rtl">
-              <Form.Label>
-                <Typography level="h5" style={{ color: "white" }}>
-                  כתובת מייל :
-                </Typography>
-              </Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="כתובת מייל"
-                ref={emailVerifi}
-              />
-            </Form.Group>
-          </Form>
-          {resetSuccess && (
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                width: "100%",
-                flexDirection: "column",
-              }}
-              className="mb-3"
-            >
-              <Alert
-                sx={{ alignItems: "flex-start" }}
-                startDecorator={
-                  <CheckIcon sx={{ mx: "4px", fontSize: "25px" }} />
-                }
-                variant="soft"
-                color="success"
-              >
-                <div>
-                  <Typography fontWeight="lg">!הצלחה</Typography>
-                  <Typography fontSize="sm" sx={{ opacity: 0.8 }}>
-                    {resetSuccess}
+            <Typography level="h3" sx={{ mb: 1 }} dir="rtl">
+              שחזור סיסמא
+            </Typography>
+
+            <Typography endDecorator={<EmailIcon />} dir="rtl">
+              הכנס את הכתובת מייל שלך ונשלח לך הודעה עם הוראות
+            </Typography>
+
+            <Form onSubmit={handleSubmitButtonResetButton} className="mt-2">
+              <Form.Group className="mb-3" controlId="formBasicEmail" dir="rtl">
+                <Form.Label>
+                  <Typography level="h5">כתובת מייל :</Typography>
+                  <Typography sx={{ opacity: "80%" }}>
+                    מייל שאליו ישלח קישור
                   </Typography>
-                </div>
-              </Alert>
-            </Box>
-          )}
-          {resetError && (
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                width: "100%",
-                flexDirection: "column",
-              }}
-              className="mb-3"
-            >
-              <Alert
-                sx={{ alignItems: "flex-start" }}
-                startDecorator={
-                  <ReportIcon sx={{ mt: "7px", mx: "4px", fontSize: "35px" }} />
-                }
+                </Form.Label>
+                <Form.Control
+                  type="email"
+                  ref={emailVerifi}
+                  style={{ borderRadius: 4 }}
+                />
+              </Form.Group>
+            </Form>
+            {resetSuccess && (
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  width: "100%",
+                  flexDirection: "column",
+                  mb: 3,
+                }}
+              >
+                <Alert
+                  sx={{ alignItems: "flex-start" }}
+                  startDecorator={
+                    <CheckIcon sx={{ mx: "4px", fontSize: "25px" }} />
+                  }
+                  variant="solid"
+                  color="success"
+                >
+                  <Box>
+                    <Typography fontWeight="lg" sx={{ color: "white" }}>
+                      !הצלחה
+                    </Typography>
+                    <Typography fontSize="sm" sx={{ color: "white" }}>
+                      {resetSuccess}
+                    </Typography>
+                  </Box>
+                </Alert>
+              </Box>
+            )}
+            {resetError && (
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  width: "100%",
+                  flexDirection: "column",
+                  mb: 3,
+                }}
+              >
+                <Alert
+                  sx={{ alignItems: "flex-start" }}
+                  startDecorator={
+                    <ReportIcon
+                      sx={{ mt: "7px", mx: "4px", fontSize: "35px" }}
+                    />
+                  }
+                  variant="solid"
+                  color="danger"
+                >
+                  <Box>
+                    <Typography
+                      fontWeight="lg"
+                      mt={0.25}
+                      sx={{ color: "white" }}
+                    >
+                      !שגיאה
+                    </Typography>
+                    <Typography fontSize="sm" sx={{ color: "white" }}>
+                      {resetError}
+                    </Typography>
+                  </Box>
+                </Alert>
+              </Box>
+            )}
+            {resetLoading ? (
+              <Button
+                startDecorator={<ArrowUpwardIcon />}
                 variant="solid"
-                color="danger"
+                color="info"
+                loading
+                sx={{
+                  width: "100%",
+                }}
+              />
+            ) : (
+              <Button
+                sx={{
+                  width: "100%",
+                }}
+                startDecorator={<ArrowUpwardIcon />}
+                variant="soft"
+                color="info"
+                onClick={() => ResetPassword(emailVerifi)}
               >
-                <div>
-                  <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
-                    !שגיאה
-                  </Typography>
-                  <Typography
-                    fontSize="sm"
-                    sx={{ opacity: 0.8, color: "white" }}
-                  >
-                    {resetError}
-                  </Typography>
-                </div>
-              </Alert>
-            </Box>
-          )}
-          {resetLoading ? (
-            <Button
-              startDecorator={<KeyboardArrowUpIcon />}
-              variant="outlined"
-              loading
-              onClick={() => ResetPassword(emailVerifi)}
-              className="d-flex justify-content-end mb-1"
-            >
-              הגשה
-            </Button>
-          ) : (
-            <Button
-              className="d-flex justify-content-end mb-1"
-              startDecorator={<KeyboardArrowUpIcon />}
-              variant="outlined"
-              onClick={() => ResetPassword(emailVerifi)}
-            >
-              הגש
-            </Button>
-          )}
-        </ModalDialog>
+                <Typography
+                  sx={{
+                    fontFamily: "Noto Sans Hebrew",
+                    fontSize: 15,
+                    mr: 3,
+                  }}
+                >
+                  הגשה
+                </Typography>
+              </Button>
+            )}
+          </ModalDialog>
+        </Fade>
       </Modal>
     </Card>
   );
