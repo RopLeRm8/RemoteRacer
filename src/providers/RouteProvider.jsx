@@ -10,8 +10,9 @@ import "../css/LoginPage.css";
 import { useEffect, useState } from "react";
 import { useLoadFonts } from "./FontProvider";
 import "../css/RouteProvider.css";
-import { Snackbar, Alert, LinearProgress } from "@mui/material";
+import { Snackbar, Alert, Backdrop } from "@mui/material";
 import Box from "@mui/joy/Box";
+import loading from "../assets/loading.gif";
 
 export default function RouteProvider() {
   useLoadFonts();
@@ -37,12 +38,12 @@ export default function RouteProvider() {
 
   if (authLoading)
     return (
-      <LinearProgress
-        sx={{
-          "--LinearProgress-thickness": "26px",
-          "--LinearProgress-progressThickness": "20px",
-        }}
-      />
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={true}
+      >
+        <img src={loading} width="256" height="256" alt="" />
+      </Backdrop>
     );
 
   return (
@@ -59,8 +60,10 @@ export default function RouteProvider() {
             open={open}
             autoHideDuration={6000}
             onClose={() => setOpen(false)}
+            sx={{ display: "flex", justifyContent: "end" }}
           >
             <Alert
+              dir="rtl"
               severity="success"
               sx={{ width: "100%" }}
               onClose={() => setOpen(false)}

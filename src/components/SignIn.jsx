@@ -97,7 +97,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Card style={{ border: "0px" }}>
+    <Card style={{ border: 0 }}>
       <CssVarsProvider />
       <Card.Body className="mx-4 mt-3">
         <Typography level="h2" sx={{ textAlign: "end", mb: 2.5 }}>
@@ -171,7 +171,7 @@ export default function LoginPage() {
               type="email"
               required
               ref={emailRef}
-              style={{ borderRadius: 4 }}
+              style={{ borderRadius: 4, borderColor: error && "red" }}
             />
           </Form.Group>
 
@@ -191,7 +191,7 @@ export default function LoginPage() {
                 type={isHidden ? "password" : "text"}
                 required
                 ref={passRef}
-                style={{ borderRadius: 4 }}
+                style={{ borderRadius: 4, borderColor: error && "red" }}
               />
 
               <IconButton
@@ -217,37 +217,43 @@ export default function LoginPage() {
               sx={{ width: 380, mt: 4, borderRadius: 4 }}
             />
           ) : (
-            <Button
-              ref={gifAnimCont}
-              startDecorator={<LoginIcon />}
-              color="success"
-              variant="outlined"
-              type="submit"
-              sx={{
-                width: 380,
-                mt: 4,
-                borderRadius: 4,
-              }}
-              onMouseEnter={() => {
-                setgifAnim(true);
-              }}
-              onMouseLeave={() => {
-                setgifAnim(false);
-              }}
-            >
-              {gifAnim && (
-                <Slide
-                  direction="right"
-                  in={true}
-                  container={gifAnimCont.current}
-                >
-                  <Box sx={{ mr: 0.7 }}>
-                    <img src={logo} width="30" height="30" alt="" id="logo" />
-                  </Box>
-                </Slide>
-              )}
-              <Typography sx={{ mr: 2 }}>להיכנס</Typography>
-            </Button>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Button
+                ref={gifAnimCont}
+                startDecorator={<LoginIcon />}
+                color="success"
+                variant="outlined"
+                type="submit"
+                className="buttAnim"
+                sx={{
+                  border: 0,
+                  width: 380,
+                  mt: 4,
+                  "@media screen and (max-width: 90em)": {
+                    width: 330,
+                  },
+                }}
+                onMouseEnter={() => {
+                  setgifAnim(true);
+                }}
+                onMouseLeave={() => {
+                  setgifAnim(false);
+                }}
+              >
+                {gifAnim && (
+                  <Slide
+                    direction="right"
+                    in={true}
+                    container={gifAnimCont.current}
+                  >
+                    <Box sx={{ mr: 0.7 }}>
+                      <img src={logo} width="30" height="30" alt="" id="logo" />
+                    </Box>
+                  </Slide>
+                )}
+                <Typography sx={{ mr: 2 }}>להיכנס</Typography>
+              </Button>
+            </Box>
           )}
         </Form>
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
@@ -263,7 +269,8 @@ export default function LoginPage() {
               color="danger"
               variant="outlined"
               onClick={googleauth}
-              sx={{ borderRadius: 4 }}
+              className="googlebuttAnim"
+              sx={{ border: 0 }}
             >
               <GoogleIcon sx={{ mr: 1 }} />
               <Typography sx={{ fontWeight: "500", mr: 1 }}>
@@ -286,7 +293,8 @@ export default function LoginPage() {
               color="neutral"
               variant="outlined"
               onClick={gitauth}
-              sx={{ borderRadius: 4 }}
+              className="gitbuttAnim"
+              sx={{ border: 0 }}
             >
               <GitHubIcon sx={{ mr: 1 }} />
               <Typography sx={{ fontWeight: "500", mr: 1 }}>
@@ -314,7 +322,16 @@ export default function LoginPage() {
           startDecorator={<LockResetIcon />}
           variant="outlined"
           color="warning"
-          sx={{ borderRadius: 4, width: 370, height: 39, mb: 1 }}
+          className="secbuttAnim"
+          sx={{
+            border: 0,
+            width: 370,
+            height: 39,
+            mb: 1,
+            "@media screen and (max-width: 90em)": {
+              width: 330,
+            },
+          }}
           onClick={() => {
             setShowPanel(true);
           }}
@@ -328,7 +345,16 @@ export default function LoginPage() {
           startDecorator={<HowToRegIcon />}
           variant="outlined"
           color="warning"
-          sx={{ borderRadius: 4, width: 370, height: 38, mb: 1 }}
+          className="secbuttAnim"
+          sx={{
+            border: 0,
+            width: 370,
+            height: 38,
+            mb: 1,
+            "@media screen and (max-width: 90em)": {
+              width: 330,
+            },
+          }}
           onClick={() => navigate("/register")}
         >
           הירשם כאן

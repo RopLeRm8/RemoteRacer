@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
+import Box from "@mui/joy/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -11,8 +11,10 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import TimeToLeaveIcon from "@mui/icons-material/TimeToLeave";
-import { createTheme, Fade, ThemeProvider } from "@mui/material";
+import logo from "../assets/logo.svg";
+import logoblack from "../assets/logoblack.svg";
+
+import { createTheme, Fade, ThemeProvider, Slider, Stack } from "@mui/material";
 import { auth } from "../providers/FirebaseProvider";
 import { useLoadFonts } from "../providers/FontProvider";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -24,6 +26,10 @@ import InfoIcon from "@mui/icons-material/Info";
 import Zoom from "@mui/material/Zoom";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import LogoutIcon from "@mui/icons-material/Logout";
+import hoverlogo from "../assets/hoverlogo.gif";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import { useMemo } from "react";
 
 const pages = [
   [
@@ -54,6 +60,7 @@ function Navbar() {
   useLoadFonts();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [mode, setMode] = useState("dark");
 
   const [user] = useAuthState(getAuth());
 
@@ -77,44 +84,51 @@ function Navbar() {
     return setAnchorElUser(null);
   };
 
-  const darkTheme = createTheme({
-    palette: {
-      mode: "dark",
-      primary: {
-        main: "#1976d2",
-      },
-    },
-  });
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode]
+  );
 
+  const colorMode = useMemo(
+    () => ({
+      switchColor: (_, val) => {
+        setMode(val === 0 ? "dark" : "light");
+      },
+    }),
+    []
+  );
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <Fade in={true}>
-        <AppBar position="static">
+        <AppBar position="static" sx={{ bgcolor: "background.default" }}>
           <Container maxWidth="xl">
             <Toolbar disableGutters>
-              <TimeToLeaveIcon
-                sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-              />
-              <Typography
-                variant="h6"
-                noWrap
-                component="a"
-                href="/dashboard"
-                sx={{
-                  mr: 2,
-                  display: { xs: "none", md: "flex" },
-                  fontFamily: "Montserrat",
-                  fontWeight: 500,
-                  letterSpacing: ".05rem",
-                  color: "inherit",
-                  textDecoration: "none",
-                }}
-              >
-                RemoteRacer
-              </Typography>
+              <a href="/">
+                <Box
+                  sx={{
+                    display: { xs: "none", md: "flex" },
+                    width: "12%",
+                    maxHeight: "100px",
+                    mr: 5,
+                    mt: 1,
+                  }}
+                >
+                  <img
+                    src={mode === "light" ? logoblack : logo}
+                    width="96"
+                    height="96"
+                  />
+                </Box>
+              </a>
 
-              <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+              <Box sx={{ flexGrow: 2.5, display: { xs: "flex", md: "none" } }}>
                 <IconButton
+                  sx={{ color: "text.primary" }}
                   size="large"
                   aria-label="account of current user"
                   aria-controls="menu-appbar"
@@ -150,31 +164,32 @@ function Navbar() {
                   ))}
                 </Menu>
               </Box>
-              <TimeToLeaveIcon
-                sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-              />
-              <Typography
-                variant="h6"
-                noWrap
-                component="a"
-                href=""
+
+              <Box
                 sx={{
-                  fontFamily: "Noto Sans Hebrew",
-                  mr: 2,
                   display: { xs: "flex", md: "none" },
-                  flexGrow: 1,
-                  fontWeight: 500,
-                  letterSpacing: ".1rem",
-                  color: "inherit",
-                  textDecoration: "none",
+                  mr: -2,
+                  flexGrow: 0.9,
                 }}
               >
-                RemoteRacer
-              </Typography>
+                <a href="/">
+                  <img
+                    src={mode === "light" ? logoblack : logo}
+                    width="96"
+                    height="96"
+                  />
+                </a>
+              </Box>
+
               <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                 {pages.map((page) => (
                   <Tooltip
-                    title={page[3]}
+                    arrow
+                    title={
+                      <Typography style={{ fontSize: 16 }}>
+                        {page[3]}
+                      </Typography>
+                    }
                     key={page[3]}
                     TransitionComponent={Zoom}
                     enterDelay={500}
@@ -189,9 +204,9 @@ function Navbar() {
                         },
                         fontFamily: "Noto Sans Hebrew",
                         my: 2,
-                        mx: 1.5,
-                        color: "white",
-                        fontSize: 16,
+                        mx: 2.5,
+                        color: "text.primary",
+                        fontSize: 18,
                       }}
                     >
                       {page[0]}
@@ -199,19 +214,40 @@ function Navbar() {
                   </Tooltip>
                 ))}
               </Box>
-
+              <Stack
+                spacing={2}
+                direction="row"
+                alignItems="center"
+                sx={{
+                  flexGrow: { md: 0.8, xs: 0.5, sm: 0.3, lg: 0.03 },
+                  mx: { md: 10, sm: 6 },
+                }}
+              >
+                <DarkModeOutlinedIcon
+                  sx={{ color: mode === "dark" ? "white" : "black" }}
+                />
+                <Slider
+                  color={mode === "dark" ? "info" : "warning"}
+                  min={0}
+                  max={1}
+                  onChange={colorMode.switchColor}
+                />
+                <LightModeOutlinedIcon
+                  sx={{ color: mode === "dark" ? "white" : "black" }}
+                />
+              </Stack>
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="לפתוח הגדרות">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
                       alt="Remy Sharp"
                       src={user?.photoURL}
-                      sx={{ color: "white" }}
+                      sx={{ color: "white", width: 50, height: 50 }}
                     />
                   </IconButton>
                 </Tooltip>
                 <Menu
-                  sx={{ mt: "45px" }}
+                  sx={{ mt: "55px" }}
                   id="menu-appbar"
                   anchorEl={anchorElUser}
                   anchorOrigin={{

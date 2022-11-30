@@ -25,6 +25,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import logo from "../assets/logo.gif";
 import { Slide, Fade } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function SignUp() {
   const emailRef = useRef();
@@ -33,6 +34,7 @@ export default function SignUp() {
   const formValue = useRef();
   const codeToCheck = useRef();
   const gifAnimCont = useRef();
+  const captcharef = useRef();
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -43,6 +45,7 @@ export default function SignUp() {
   const [codeError, setCodeError] = useState(null);
   const [codeSuccess, setCodeSuccess] = useState(null);
   const [gifAnim, setgifAnim] = useState(false);
+  const [captchaFinished, setcaptchaFinished] = useState(true);
 
   const { signUp } = useAuth();
 
@@ -50,7 +53,7 @@ export default function SignUp() {
 
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
+  const sitekey = "6LdtZQwjAAAAAKNmmvSfw7SdiiiMMeq3Ls4q7_zn";
   const strongRegex = new RegExp(
     "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,})"
   );
@@ -95,6 +98,7 @@ export default function SignUp() {
   }
   async function handleSubmit(e) {
     e.preventDefault();
+
     if (!emailRef?.current.value?.length)
       return setError("אנא אכנס מייל לגיטימי");
 
@@ -109,6 +113,10 @@ export default function SignUp() {
       return setError(
         "שם לב: הסיסמא צריכה להכיל תווים מיוחדים, מספרים, ואותיות גדולות"
       );
+    }
+    if (!captcharef.current.getValue()) {
+      setcaptchaFinished(false);
+      return setError("לא עברת את תהליך הCAPTCHA!");
     }
     document.getElementById("user_email").value = emailRef.current.value;
     document.getElementById("message").value = generateCode(7).toUpperCase();
@@ -157,7 +165,11 @@ export default function SignUp() {
                 <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
                   !שגיאה
                 </Typography>
-                <Typography fontSize="sm" sx={{ opacity: 0.8, color: "white" }}>
+                <Typography
+                  dir="rtl"
+                  fontSize="sm"
+                  sx={{ opacity: 0.8, color: "white" }}
+                >
                   {error}
                 </Typography>
               </Box>
@@ -205,10 +217,9 @@ export default function SignUp() {
               required
               ref={emailRef}
               name="user_email"
-              style={{ borderRadius: 4 }}
+              style={{ borderRadius: 4, borderColor: error && "red" }}
             />
           </Form.Group>
-
           <Form.Group id="password" className="mb-3" dir="rtl">
             <Form.Label>
               <Typography sx={{ fontSize: 18 }}>סיסמא </Typography>
@@ -222,7 +233,7 @@ export default function SignUp() {
                 type={isHidden ? "password" : "text"}
                 required
                 ref={passRef}
-                style={{ borderRadius: 4 }}
+                style={{ borderRadius: 4, borderColor: error && "red" }}
               />
 
               <IconButton
@@ -239,7 +250,6 @@ export default function SignUp() {
               </IconButton>
             </Box>
           </Form.Group>
-
           <Form.Group id="pass-firm" dir="rtl">
             <Form.Label>
               <Typography sx={{ fontSize: 18 }}>אישור סיסמא </Typography>
@@ -252,7 +262,7 @@ export default function SignUp() {
                 type={isHiddenConf ? "password" : "text"}
                 required
                 ref={passFirmRef}
-                style={{ borderRadius: 4 }}
+                style={{ borderRadius: 4, borderColor: error && "red" }}
               />
               <IconButton
                 variant="plain"
@@ -266,6 +276,17 @@ export default function SignUp() {
                 </Tooltip>
               </IconButton>
             </Box>
+            <Box sx={{ my: 3, display: "flex", justifyContent: "center" }}>
+              <ReCAPTCHA
+                ref={captcharef}
+                hl={("en", "iw")}
+                sitekey={sitekey}
+                style={{
+                  width: "380px",
+                  display: captchaFinished ? "none" : "block",
+                }}
+              />
+            </Box>
           </Form.Group>
 
           {loading ? (
@@ -274,36 +295,46 @@ export default function SignUp() {
               variant="outlined"
               type="submit"
               loading
-              sx={{ borderRadius: 4, width: 380, mt: 4 }}
+              sx={{ border: 0, width: 380, mt: 4 }}
             />
           ) : (
-            <Button
-              ref={gifAnimCont}
-              color="success"
-              startDecorator={<HowToRegRoundedIcon />}
-              variant="outlined"
-              type="submit"
-              sx={{ borderRadius: 4, width: 380, mt: 4 }}
-              onMouseEnter={() => {
-                setgifAnim(true);
-              }}
-              onMouseLeave={() => {
-                setgifAnim(false);
-              }}
-            >
-              {gifAnim && (
-                <Slide
-                  direction="right"
-                  in={true}
-                  container={gifAnimCont.current}
-                >
-                  <Box sx={{ mr: 1 }}>
-                    <img src={logo} width="30" height="30" alt="" id="logo" />
-                  </Box>
-                </Slide>
-              )}
-              <Typography sx={{ mr: 2 }}>להירשם</Typography>
-            </Button>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Button
+                ref={gifAnimCont}
+                color="success"
+                startDecorator={<HowToRegRoundedIcon />}
+                variant="outlined"
+                type="submit"
+                className="buttAnim"
+                sx={{
+                  border: 0,
+
+                  width: 380,
+                  "@media screen and (max-width: 90em)": {
+                    width: 330,
+                  },
+                }}
+                onMouseEnter={() => {
+                  setgifAnim(true);
+                }}
+                onMouseLeave={() => {
+                  setgifAnim(false);
+                }}
+              >
+                {gifAnim && (
+                  <Slide
+                    direction="right"
+                    in={true}
+                    container={gifAnimCont.current}
+                  >
+                    <Box sx={{ mr: 1 }}>
+                      <img src={logo} width="30" height="30" alt="" id="logo" />
+                    </Box>
+                  </Slide>
+                )}
+                <Typography sx={{ mr: 2 }}>להירשם</Typography>
+              </Button>
+            </Box>
           )}
         </Form>
       </Card.Body>
@@ -324,7 +355,16 @@ export default function SignUp() {
           variant="outlined"
           onClick={() => navigate("/login")}
           startDecorator={<LoginIcon />}
-          sx={{ borderRadius: 4, width: 380 }}
+          className="secbuttAnim"
+          sx={{
+            border: 0,
+            "@media screen and (max-width: 90em)": {
+              width: 330,
+              borderRadius: 4,
+            },
+            borderRadius: 4,
+            width: 380,
+          }}
         >
           כניסה עם משתמש קיים
         </Button>

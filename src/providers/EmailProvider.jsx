@@ -6,6 +6,7 @@ const pKey = "MtStPxdqA9vC0UXk_";
 
 export const sendEmail = (formValue) => {
   emailjs.sendForm(serviceID, tempID, formValue, pKey).then(
+    // TODO: Replace with working one
     () => {},
     () => {}
   );

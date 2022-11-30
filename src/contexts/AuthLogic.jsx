@@ -6,9 +6,17 @@ import React, {
   useRef,
 } from "react";
 import { auth, db } from "../providers/FirebaseProvider";
-import { ref, child, get, set } from "firebase/database";
+import { ref, child, get, set, update } from "firebase/database";
 
 const AuthContext = createContext();
+const daysOfWeek = [
+  "יום ראשון",
+  "יום שני",
+  "יום שלישי",
+  "יום רביעי",
+  "יום חמישי",
+  "יום שישי",
+];
 
 export function useAuth() {
   return useContext(AuthContext);
@@ -53,11 +61,34 @@ export function AuthProvider({ children }) {
       if (!user) return;
       setCurrentUser(user);
       const userRef = ref(db, `users/${user.uid}`);
+      const userRefData = ref(db, `users/${user.uid}/data`);
       const query = ref(db);
       const userRefDB = `users/${user.uid}`;
+      const nowDate = new Date(Date.now());
+      const mins =
+        nowDate.getMinutes() < 10
+          ? "0" + nowDate.getMinutes().toString()
+          : nowDate.getMinutes().toString();
+      const dateInfo =
+        nowDate.getDate().toString() +
+        "." +
+        (nowDate.getMonth() + 1).toString() +
+        " (" +
+        nowDate.getHours().toString() +
+        ":" +
+        mins +
+        ")" +
+        ", " +
+        daysOfWeek[nowDate.getDay()];
 
       get(child(query, userRefDB)).then((snapshot) => {
-        if (snapshot.exists && snapshot.val()) return;
+        if (snapshot.exists && snapshot.val()) {
+          update(userRefData, {
+            lastTime: snapshot.val().data.newTime,
+            newTime: dateInfo,
+          });
+          return;
+        }
         set(userRef, {
           achievements: {
             place1: false,
@@ -71,6 +102,7 @@ export function AuthProvider({ children }) {
             name: user.displayName,
             mail: user.email,
             photoURL: user.photoURL,
+            newTime: dateInfo,
           },
         });
       });

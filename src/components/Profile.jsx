@@ -1,236 +1,332 @@
 import { getAuth } from "@firebase/auth";
-import { Avatar, CssVarsProvider, Badge, Tooltip, Grid, Stack } from "@mui/joy";
-import { Box } from "@mui/material";
+import { CssVarsProvider, Stack } from "@mui/joy";
+import { Box, Fade, Rating, Slide, Grid } from "@mui/material";
 import Typography from "@mui/joy/Typography";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Navbar from "./NavBar";
-import UploadIcon from "@mui/icons-material/Upload";
-import { useCallback } from "react";
-import { useState } from "react";
-import FormDialog from "./FormModal";
-import Button from "@mui/material/Button";
-import { useEffect, useRef } from "react";
-import place1 from "../assets/place1.png";
-import place2 from "../assets/place2.png";
-import place3 from "../assets/place3.png";
-import firstSetup from "../assets/firstSetup.png";
-import playFirstGame from "../assets/playFirstGame.png";
-import scoreMoreThan100 from "../assets/scoreMoreThan100.png";
-import LinearProgress from "@mui/material/LinearProgress";
-import { ref, child, get } from "firebase/database";
+import { useCallback, useState, useEffect, useRef } from "react";
+import dices from "../assets/dices.png";
+import points from "../assets/points.png";
+import { ref, child, get, update, onValue } from "firebase/database";
 import { db } from "../providers/FirebaseProvider";
+import Medals from "./Medals";
+import ProfileInfo from "./ProfileInfo";
+import blackback from "../assets/blackback.png";
+import blackback2 from "../assets/blackback2.png";
+import "../css/Profile.css";
 
+const rateToText = [
+  "לא אהבתי כלל",
+  "אהבתי ברמה קטנה",
+  "בינוני",
+  "אהבתי",
+  "אהבתי מאוד",
+];
+const query = ref(db);
 export default function Profile() {
-  const [medalsList, setmedalsList] = useState([
-    [place1, "תשיג מקום ראשון בטבלת לידרים", false, "place1"],
-    [place2, "תשיג מקום שני בטבלת לידרים", false, "place2"],
-    [place3, "תשיג מקום שלישי בטבלת לידרים", false, "place3"],
-    [firstSetup, "שינוי ראשוני של תמונת פרופיל", false, "firstSetup"],
-    [playFirstGame, "תשחק משחק ראשון", false, "playFirstGame"],
-    [
-      scoreMoreThan100,
-      "תשיג יותר מ-100 נקודות במשחק אחד",
-      false,
-      "scoreMoreThan100",
-    ],
-  ]);
+  const [firstElFoc] = useState(true);
+  const [secondElFoc] = useState(true);
+  const [thirdElFoc] = useState(true);
+  const [fbvalue, setfbvalue] = useState([]);
 
-  const [open, setOpen] = useState(false);
+  const firstElRef = useRef();
+  const secondElRef = useRef();
+  const thirdElRef = useRef();
+
   const [user] = useAuthState(getAuth());
-  const [updateLoading, setupdateLoading] = useState(false);
-  const avatarRef = useRef();
-  const totalMedals = medalsList.length;
-  const [medalsahuz, setmedalsAhuz] = useState(0);
-  const [stam, setStam] = useState(false);
 
-  const query = ref(db);
-  const userRefDB = `users/${user.uid}/achievements`;
+  const [value, setValue] = useState(0);
 
-  const updateProfileLoad = useCallback(() => {
-    setOpen(true);
-    setupdateLoading((previous) => !previous);
-  }, []);
+  const userRefData = ref(db, `users/${user.uid}/data`);
+  const espOutputRef = ref(db, "test");
+  const userData = `users/${user.uid}/data`;
 
   useEffect(() => {
-    get(child(query, userRefDB)).then(
-      (snapshot) => {
-        const list = snapshot.val();
-        let count = 0;
-        medalsList.forEach((medal, i) => {
-          medalsList[i][2] = list[medal[3]];
-          medal[2] && count++;
-        });
-        setmedalsList(medalsList);
-        setmedalsAhuz(Math.round(100 * (count / totalMedals)));
-      },
-      [totalMedals, medalsList]
-    );
-  });
+    get(child(query, userData)).then((snapshot) => {
+      snapshot && snapshot.val().rating && setValue(snapshot.val().rating);
+    });
+
+    // const handleScroll = (event) => {
+    //   if (elementInViewport(firstElRef.current)) {
+    //     setfirstElFoc(true);
+    //     setSecondElFoc(true);
+    //     setThirdElFoc(true);
+    //   } else {
+    //     setfirstElFoc(false);
+    //     setSecondElFoc(false);
+    //     setThirdElFoc(false);
+    //   }
+    //   if (elementInViewport(thirdElRef.current)) {
+    //     setfirstElFoc(true);
+    //     setSecondElFoc(true);
+    //     setThirdElFoc(true);
+    //   } else {
+    //     setThirdElFoc(false);
+    //   }
+
+    //   // window.scrollY > 200 ? setfirstElFoc(true) : setfirstElFoc(false);
+    //   // window.scrollY > 200 ? setSecondElFoc(true) : setSecondElFoc(false);
+    //   // window.scrollY > 950 ? setThirdElFoc(true) : setThirdElFoc(false);
+    // };
+
+    // window.addEventListener("scroll", handleScroll);
+
+    // return () => {
+    //   window.removeEventListener("scroll", handleScroll);
+    // };
+    document.body.classList.add("addbg");
+    return () => {
+      document.body.classList.remove("addbg");
+    };
+  }, [userData]);
+
+  useEffect(() => {
+    onValue(espOutputRef, (snapshot) => {
+      const fetchedTasks = [];
+      snapshot.forEach((childSnapshot) => {
+        const keyval = childSnapshot.key;
+        const data = childSnapshot.val();
+        fetchedTasks.push({ value: keyval, data });
+      });
+      setfbvalue(fetchedTasks);
+    });
+  }, []);
+
+  const handleValueChange = useCallback(
+    (e, nValue) => {
+      setValue(nValue);
+      update(userRefData, {
+        rating: nValue,
+      });
+    },
+    [userRefData]
+  );
 
   return (
     <Box>
       <CssVarsProvider />
       <Navbar />
-      <Grid
-        container
-        spacing={{ xs: -8, md: -15, lg: -35 }}
+      <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "start",
+          backgroundImage: `url(${blackback})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          height: "100%",
         }}
-        dir="rtl"
       >
-        <Badge
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-          badgeInset="17%"
-          color="success"
-          size="lg"
-        >
-          <Tooltip title="תמונת פרופיל">
-            <Avatar
-              src={user.photoURL}
-              sx={{ width: 80, height: 80, mb: 1 }}
-              ref={avatarRef}
-              data-state={stam}
-            ></Avatar>
-          </Tooltip>
-        </Badge>
+        <ProfileInfo /> {/*מידע על המשתמש*/}
+        <Medals />
+      </Box>
 
-        <Typography sx={{ fontFamily: "Noto Sans Hebrew", mr: 2 }}>
-          {user.displayName}
-          <Grid item lg={6}>
-            <Typography sx={{ fontFamily: "Noto Sans Hebrew", opacity: "80%" }}>
-              {user.email}
+      {fbvalue.map((val) => (
+        <Grid container alignItems="center" direction="column">
+          <Grid item>
+            <Typography level="h3" key={val.data}>
+              {" "}
+              {val.value + " - " + val.data || "No data"}
             </Typography>
           </Grid>
-        </Typography>
-
-        <Grid item xs={5} lg={15} md={15}>
-          {updateLoading && open ? (
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{
-                fontWeight: "md",
-                fontFamily: "Noto Sans Hebrew",
-                border: 1,
-                borderRadius: "5%",
-              }}
-              disabled
-            >
-              שינוי תמונה <UploadIcon />
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{
-                fontWeight: "md",
-                fontFamily: "Noto Sans Hebrew",
-                border: 1,
-                borderRadius: "5%",
-              }}
-              onClick={updateProfileLoad}
-            >
-              שינוי תמונה <UploadIcon />
-            </Button>
-          )}
+          <Grid item>
+            {val.value === "ip" && (
+              <img
+                src={"http://" + val.data + "/capture"}
+                alt=""
+                width="128"
+                height="128"
+              />
+            )}
+          </Grid>
         </Grid>
+      ))}
 
-        {/* <Button
-            variant="contained"
-            size="lg"
-            startIcon={<ManageAccountsIcon sx={{ ml: 2 }} />}
+      <Box
+        sx={{
+          backgroundImage: `url(${blackback2})`,
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <Fade in={firstElFoc}>
+          <Box
+            ref={firstElRef}
             sx={{
-              fontWeight: "md",
-              fontFamily: "Noto Sans Hebrew",
-              border: 1,
-              borderRadius: "5%",
+              width: "100%",
+              display: "flex",
+              background: "linear-gradient(to top, black, transparent)",
+            }}
+          />
+        </Fade>
+        <Fade in={secondElFoc}>
+          <Box
+            ref={secondElRef}
+            sx={{
+              display: secondElFoc ? "block" : "none",
+              width: "100%",
+              height: "45vh",
+              background: "black",
             }}
           >
-            לשנות את השם
-          </Button> */}
-        {
-          <FormDialog
-            open={open}
-            setOpen={setOpen}
-            setupdateLoading={setupdateLoading}
-            avatarRefer={avatarRef}
-            setStam={setStam}
-          />
-        }
-      </Grid>
-      <Stack sx={{ p: 5 }}>
-        <Typography
-          dir="rtl"
-          sx={{ p: 3, fontFamily: "Noto Sans Hebrew", fontSize: 30 }}
-        >
-          השגים שלך:
-        </Typography>
-
-        <Grid
-          container
-          rowSpacing={1}
-          columnSpacing={{ xs: 0, sm: 2, md: 3, lg: 0 }}
-          dir="rtl"
-          justifyContent="start"
-          alignItems="start"
-          sx={{
-            "@media screen and (max-width: 90em)": {
-              mr: 2,
-            },
-            mr: 14,
-          }}
-        >
-          <Grid item xs={3} sm={4} md={5} lg={3.3}>
-            {medalsList.map((medal) => (
-              <Tooltip
-                title={medal[1] + (medal[2] ? " (הושלם)" : "")}
-                key={medal[1]}
-                color={medal[2] ? "success" : "neutral"}
-                enterDelay={500}
-              >
-                <img
-                  key={medal[0]}
-                  src={medal[0]}
-                  width="80"
-                  height="80"
-                  alt=""
-                  style={{ opacity: medal[2] ? "100%" : "20%" }}
-                />
-              </Tooltip>
-            ))}
-          </Grid>
-        </Grid>
-        <Box sx={{ display: "flex", justifyContent: "end", mt: 3, mr: 3 }}>
-          <LinearProgress
-            value={medalsahuz}
-            variant="determinate"
-            sx={{ width: "40rem", mt: 1, mr: 1, p: 0.8 }}
-          />
-          <Typography>{medalsahuz + "%"}</Typography>
-        </Box>
-        {medalsahuz === 100 && (
-          <Box>
-            <Typography
-              dir="rtl"
-              sx={{
-                fontFamily: "Noto Sans Hebrew",
-                fontSize: 30,
-                mt: 2,
-                mr: 3,
-              }}
+            <Stack // TODO - REMOVE SPACE ON THE RIGHT, add responsivity to mobile
+              justifyContent="space-around"
+              alignItems="center"
+              direction={{ xs: "column", sm: "column", md: "row" }}
+              spacing={{ xs: 1, sm: 3, md: 0 }}
             >
-              כל הכבוד, השגת את כל המדליות עד כה!
-            </Typography>
+              <Slide in={secondElFoc} direction="right">
+                <Box
+                  sx={{
+                    "@media screen and (min-width: 90em)": {
+                      mt: 10,
+                    },
+
+                    borderRadius: "50%",
+                    backgroundColor: "#f2f0f6",
+                    boxShadow:
+                      "inset 8px 8px 17px 0 rgba(0, 0, 0, 0.05), inset -13px -13px 12px 0 hsla(0, 0%, 100%, 0.65), -11px -11px 40px 3px white, 8px 14px 40px -20px rgba(0, 0, 0, 0.19)",
+                  }}
+                >
+                  <img src={dices} width="166" height="166" alt="" />
+                </Box>
+              </Slide>
+              <Slide in={secondElFoc} direction="left">
+                <Box>
+                  <Typography level="h2" sx={{ color: "white" }} dir="rtl">
+                    מספר משחקים: 5
+                  </Typography>
+                  <Typography
+                    level="h6"
+                    sx={{ color: "white", opacity: "80%", mt: 0.3 }}
+                    dir="rtl"
+                  >
+                    כמות משחקים, אשר בהם השתתפת
+                  </Typography>
+                </Box>
+              </Slide>
+            </Stack>
           </Box>
-        )}
-      </Stack>
+        </Fade>
+        <Fade in={thirdElFoc}>
+          <Box
+            sx={{
+              width: "100%",
+              height: "5vh",
+              display: "flex",
+              background: "linear-gradient(to bottom, black, transparent)",
+              "&::before": {
+                position: "absolute",
+                bottom: 0,
+                width: "100%",
+                height: "100px",
+              },
+            }}
+          />
+        </Fade>
+        <Box sx={{ display: firstElFoc ? "block" : "none" }}>
+          <Fade in={thirdElFoc}>
+            <Box
+              sx={{
+                mt: 10,
+                height: "20vh",
+                display: "flex",
+                background: "linear-gradient(to top, black, transparent)",
+              }}
+            />
+          </Fade>
+        </Box>
+        <Fade in={thirdElFoc}>
+          <Box
+            ref={thirdElRef}
+            sx={{
+              display: thirdElFoc ? "block" : "none",
+              width: "100%",
+              height: "45vh",
+              background: "black",
+              opacity: 0.9,
+            }}
+          >
+            <Stack
+              justifyContent="space-around"
+              alignItems="center"
+              direction={{ xs: "column", sm: "column", md: "row" }}
+              spacing={{ xs: 1, sm: 3, md: 5 }}
+            >
+              <Slide in={thirdElFoc} direction="right">
+                <Box
+                  sx={{
+                    "@media screen and (min-width: 90em)": {
+                      mt: 10,
+                    },
+                    borderRadius: "50%",
+                    backgroundColor: "#f2f0f6",
+                    boxShadow:
+                      "inset 8px 8px 17px 0 rgba(0, 0, 0, 0.05), inset -13px -13px 12px 0 hsla(0, 0%, 100%, 0.65), -11px -11px 40px 3px white, 8px 14px 40px -20px rgba(0, 0, 0, 0.19)",
+                  }}
+                >
+                  <img src={points} width="166" height="166" alt="" />
+                </Box>
+              </Slide>
+              <Slide in={thirdElFoc} direction="left">
+                <Box>
+                  <Typography level="h2" sx={{ color: "white" }} dir="rtl">
+                    סך הכל נקודות: 600
+                  </Typography>
+                  <Typography
+                    level="h6"
+                    sx={{ color: "white", opacity: "80%", mt: 0.3 }}
+                    dir="rtl"
+                  >
+                    כמות נקודות אשר הרווחת, כולל מהיום והאללה
+                  </Typography>
+                </Box>
+              </Slide>
+            </Stack>
+          </Box>
+        </Fade>
+        <Fade in={thirdElFoc}>
+          <Box
+            sx={{
+              width: "100%",
+              height: "5vh",
+              display: "flex",
+              background: "linear-gradient(to bottom, black, transparent)",
+              opacity: "80%",
+              "&::before": {
+                position: "absolute",
+                bottom: 0,
+                width: "100%",
+                height: "100px",
+              },
+            }}
+          />
+        </Fade>
+
+        <Stack direction="column" alignItems="center" sx={{ my: 3 }}>
+          <Typography
+            sx={{
+              color: "white",
+              fontFamily: "Noto Sans Hebrew",
+              fontSize: 25,
+            }}
+          >
+            תן לנו לדעת את דעתך
+          </Typography>
+
+          <Rating
+            value={value}
+            onChange={handleValueChange}
+            readOnly={value > 0}
+            sx={{ backgroundColor: "white", borderRadius: "5px" }}
+          />
+          <Typography dir="rtl" level="h5" sx={{ color: "white" }}>
+            {value > 0 && rateToText[value - 1]}
+          </Typography>
+          {value > 0 && (
+            <Typography sx={{ color: "white" }} dir="rtl">
+              תודה!
+            </Typography>
+          )}
+        </Stack>
+      </Box>
     </Box>
   );
 }

@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container } from "react-bootstrap";
 import SignIn from "./SignIn";
 import { AuthProvider } from "../contexts/AuthLogic";
 import { Typography } from "@mui/joy";
 import { Divider, Grid, Box, Fade, Slide } from "@mui/material";
-import registerLogo from "../assets/register.png";
-import { updateProfile } from "@firebase/auth";
-import logo from "../assets/logo.gif";
+import registerLogo from "../assets/services.png";
+import logo from "../assets/logoblack.svg";
+
 export default function LoginPage() {
+  useEffect(() => {
+    document.body.classList.add("addbg");
+    return () => {
+      document.body.classList.remove("addbg");
+    };
+  }, []);
   return (
     <AuthProvider>
       <Container>
@@ -31,7 +37,14 @@ export default function LoginPage() {
             </Grid>
             <Slide direction="left" in={true}>
               <Box sx={{ position: "absolute", top: 50, mr: 8 }}>
-                <img src={logo} width="140" height="140" alt="" id="logo" />
+                <img
+                  src={logo}
+                  width="140"
+                  height="140"
+                  alt=""
+                  id="logo"
+                  style={{ animation: "rotationAndZoom 1s forwards" }}
+                />
               </Box>
             </Slide>
             <Divider
@@ -77,8 +90,10 @@ export default function LoginPage() {
                 </Typography>
               </Slide>
 
-              <Box sx={{ marginLeft: 8 }}>
-                <img src={registerLogo} alt="" />
+              <Box
+                sx={{ display: "flex", justifyContent: "space-around", ml: 8 }}
+              >
+                <img src={registerLogo} alt="" className="regLogo" />
               </Box>
             </Grid>
           </Grid>
