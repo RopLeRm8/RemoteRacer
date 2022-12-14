@@ -68,7 +68,8 @@ export default function LoginPage() {
                     fontFamily: "Noto Sans Hebrew",
                     textAlign: "justify",
                     fontSize: 25,
-                    fontWeight: 600,
+                    fontWeight: 400,
+                    color: "black",
                   }}
                 >
                   היכנסו בשביל להינות מהשירותים החינמיים שלנו!
@@ -81,7 +82,7 @@ export default function LoginPage() {
                     fontFamily: "Noto Sans Hebrew",
                     fontSize: 25,
                     fontWeight: 300,
-
+                    color: "black",
                     mt: 2,
                     mb: 2,
                   }}

@@ -127,7 +127,14 @@ export default function SignUp() {
   }
 
   return (
-    <Card style={{ border: "0px" }}>
+    <Card
+      style={{
+        border: 0,
+        backgroundColor: "rgba(255,255,255,0.3)",
+        borderRadius: 10,
+        boxShadow: "0px 0px 10px 5px rgba(0,0,0,0.1)",
+      }}
+    >
       <CssVarsProvider></CssVarsProvider>
       <Card.Body className="mx-4 mt-3">
         <Form ref={formValue} style={{ display: "none" }}>
@@ -139,7 +146,16 @@ export default function SignUp() {
           <textarea name="message" id="message" />
         </Form>
 
-        <Typography level="h2" sx={{ textAlign: "end", mb: 2.5 }}>
+        <Typography
+          level="h2"
+          sx={{
+            textAlign: "end",
+            mb: 2.5,
+            fontFamily: "Noto Sans Hebrew",
+            fontWeight: 500,
+            letterSpacing: 2,
+          }}
+        >
           הרשמה
         </Typography>
 
@@ -207,8 +223,16 @@ export default function SignUp() {
         <Form onSubmit={handleSubmit}>
           <Form.Group id="email" className="mb-3" dir="rtl">
             <Form.Label>
-              <Typography sx={{ fontSize: 18 }}>כתובת מייל </Typography>
-              <Typography sx={{ opacity: "80%", fontSize: 13 }}>
+              <Typography sx={{ fontSize: 18, fontFamily: "Noto Sans Hebrew" }}>
+                כתובת מייל{" "}
+              </Typography>
+              <Typography
+                sx={{
+                  opacity: "80%",
+                  fontSize: 13,
+                  fontFamily: "Noto Sans Hebrew",
+                }}
+              >
                 מייל זה ישמש אותך לתמיד ללא אפשרות לשנותו
               </Typography>
             </Form.Label>
@@ -217,13 +241,25 @@ export default function SignUp() {
               required
               ref={emailRef}
               name="user_email"
-              style={{ borderRadius: 4, borderColor: error && "red" }}
+              style={{
+                borderRadius: 4,
+                borderColor: error && "red",
+                transition: "all 0.2s ease-in-out",
+              }}
             />
           </Form.Group>
           <Form.Group id="password" className="mb-3" dir="rtl">
             <Form.Label>
-              <Typography sx={{ fontSize: 18 }}>סיסמא </Typography>
-              <Typography sx={{ opacity: "80%", fontSize: 13 }}>
+              <Typography sx={{ fontSize: 18, fontFamily: "Noto Sans Hebrew" }}>
+                סיסמא{" "}
+              </Typography>
+              <Typography
+                sx={{
+                  opacity: "80%",
+                  fontSize: 13,
+                  fontFamily: "Noto Sans Hebrew",
+                }}
+              >
                 סיסמא לבחירתך, נא שים לב שהסיסמא חייבת להיות חזקה
               </Typography>
             </Form.Label>
@@ -233,7 +269,11 @@ export default function SignUp() {
                 type={isHidden ? "password" : "text"}
                 required
                 ref={passRef}
-                style={{ borderRadius: 4, borderColor: error && "red" }}
+                style={{
+                  borderRadius: 4,
+                  borderColor: error && "red",
+                  transition: "all 0.2s ease-in-out",
+                }}
               />
 
               <IconButton
@@ -252,8 +292,16 @@ export default function SignUp() {
           </Form.Group>
           <Form.Group id="pass-firm" dir="rtl">
             <Form.Label>
-              <Typography sx={{ fontSize: 18 }}>אישור סיסמא </Typography>
-              <Typography sx={{ opacity: "80%", fontSize: 13 }}>
+              <Typography sx={{ fontSize: 18, fontFamily: "Noto Sans Hebrew" }}>
+                אישור סיסמא{" "}
+              </Typography>
+              <Typography
+                sx={{
+                  opacity: "80%",
+                  fontSize: 13,
+                  fontFamily: "Noto Sans Hebrew",
+                }}
+              >
                 סיסמא שהוקלדה לפני
               </Typography>
             </Form.Label>
@@ -262,7 +310,11 @@ export default function SignUp() {
                 type={isHiddenConf ? "password" : "text"}
                 required
                 ref={passFirmRef}
-                style={{ borderRadius: 4, borderColor: error && "red" }}
+                style={{
+                  borderRadius: 4,
+                  borderColor: error && "red",
+                  transition: "all 0.2s ease-in-out",
+                }}
               />
               <IconButton
                 variant="plain"
@@ -385,7 +437,8 @@ export default function SignUp() {
               outlineColor: "white",
               p: 5,
               boxShadow: "lg",
-              borderRadius: 4,
+              backgroundColor: "rgba(255,255,255,0.3)",
+              borderRadius: 10,
             }}
           >
             <Typography level="h3" dir="rtl">

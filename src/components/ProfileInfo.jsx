@@ -54,13 +54,40 @@ export default function ProfileInfo() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          pt: 10,
+          pt: 4,
         }}
         dir="rtl"
       >
-        <Card className="Card" variant="outlined" sx={{}} ref={mainbox}>
-          <Stack direction="row" alignItems="center">
-            <Tooltip title="תמונת פרופיל" color="primary" size="sm" arrow>
+        <Card
+          className="Card"
+          sx={{
+            border: 0,
+            backgroundColor: "rgba(0,0,0,0.3)",
+            borderRadius: 10,
+            boxShadow: "0px 0px 10px 1px rgba(255,255,255,0.3)",
+          }}
+          variant="outlined"
+          ref={mainbox}
+        >
+          <Tooltip title="שינוי תמונת פרופיל" color="primary" size="sm" arrow>
+            {updateLoading && open ? (
+              <Avatar
+                className="onhoverZoom"
+                src={user.photoURL}
+                sx={{
+                  width: 80,
+                  height: 80,
+                  mb: 1,
+                  opacity: "70%",
+                  "&:hover": {
+                    animation: "zoomIn .3s forwards",
+                    cursor: "pointer",
+                  },
+                }}
+                ref={avatarRef}
+                data-state={stam}
+              />
+            ) : (
               <Avatar
                 className="onhoverZoom"
                 src={user.photoURL}
@@ -70,61 +97,38 @@ export default function ProfileInfo() {
                   mb: 1,
                   "&:hover": {
                     animation: "zoomIn .3s forwards",
+                    cursor: "pointer",
                   },
                 }}
                 ref={avatarRef}
                 data-state={stam}
-              ></Avatar>
-            </Tooltip>
-            {updateLoading && open ? (
-              <Button
-                variant="soft"
-                color="success"
-                sx={{
-                  mr: 5,
-                  fontWeight: "md",
-                  fontFamily: "Noto Sans Hebrew",
-                  border: 2,
-                  borderRadius: "0%",
-                }}
-                disabled
-              >
-                שינוי תמונה <UploadIcon />
-              </Button>
-            ) : (
-              <Button
-                variant="outlined"
-                color="info"
-                className="pulse"
-                sx={{
-                  mr: 5,
-                  fontWeight: "md",
-                  fontFamily: "Noto Sans Hebrew",
-                  border: 2,
-                  borderRadius: "0%",
-                }}
                 onClick={updateProfileLoad}
-              >
-                שינוי תמונה <UploadIcon />
-              </Button>
+              />
             )}
-          </Stack>
+          </Tooltip>
+
           <Box sx={{ fontFamily: "Noto Sans Hebrew", mr: 2, m: 1 }}>
-            <Tooltip
-              title={user.displayName + " - שם פרטי"}
-              enterDelay={1000}
-              arrow
-              variant="solid"
-              size="md"
-              color="info"
-              placement="right"
-            >
-              <Typography
-                startDecorator={<BadgeIcon sx={{ ml: 0.5, my: 0.2 }} />}
+            {user.displayName && (
+              <Tooltip
+                title={user.displayName + " - שם פרטי"}
+                enterDelay={1000}
+                arrow
+                variant="solid"
+                size="md"
+                color="info"
+                placement="right"
               >
-                {user.displayName}
-              </Typography>
-            </Tooltip>
+                <Typography
+                  sx={{ color: "white" }}
+                  startDecorator={
+                    <BadgeIcon sx={{ ml: 0.5, my: 0.2, color: "white" }} />
+                  }
+                >
+                  {user.displayName}
+                </Typography>
+              </Tooltip>
+            )}
+
             <Grid item lg={15}>
               <Tooltip
                 title={user.email + " - כתובת מייל"}
@@ -137,7 +141,11 @@ export default function ProfileInfo() {
               >
                 <Typography
                   startDecorator={<EmailIcon sx={{ opacity: "100%" }} />}
-                  sx={{ fontFamily: "Noto Sans Hebrew", my: 0.2 }}
+                  sx={{
+                    fontFamily: "Noto Sans Hebrew",
+                    my: 0.2,
+                    color: "white",
+                  }}
                 >
                   {user.email}
                 </Typography>
@@ -153,20 +161,22 @@ export default function ProfileInfo() {
                       fontFamily: "Noto Sans Hebrew",
                       my: 0.2,
                     }}
-                    startDecorator={<AccessTimeFilledIcon />}
+                    startDecorator={
+                      <AccessTimeFilledIcon sx={{ color: "white" }} />
+                    }
                   >
-                    {" "}
-                    כניסה אחרונה:{" "}
+                    <Typography sx={{ color: "white" }}>
+                      כניסה אחרונה:
+                    </Typography>
                   </Typography>
                 }
-                sx={{ fontFamily: "Noto Sans Hebrew" }}
+                sx={{ fontFamily: "Noto Sans Hebrew", color: "white" }}
               >
                 {timeValue}
               </Typography>
             </Grid>
           </Box>
 
-          <Grid item xs={15} sm={15} md={15} lg={15}></Grid>
           {/* <Button
         variant="contained"
         size="lg"

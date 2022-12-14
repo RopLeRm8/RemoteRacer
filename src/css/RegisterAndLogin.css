@@ -70,7 +70,9 @@
 }
 
 .addbg{
-    background-image: url("../assets/back.webp");
+    background-image: url("../assets/overlay.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .buttAnim {
  

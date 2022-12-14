@@ -97,10 +97,26 @@ export default function LoginPage() {
   };
 
   return (
-    <Card style={{ border: 0 }}>
+    <Card
+      style={{
+        border: 0,
+        backgroundColor: "rgba(255,255,255,0.3)",
+        borderRadius: 10,
+        boxShadow: "0px 0px 10px 5px rgba(0,0,0,0.1)",
+      }}
+    >
       <CssVarsProvider />
       <Card.Body className="mx-4 mt-3">
-        <Typography level="h2" sx={{ textAlign: "end", mb: 2.5 }}>
+        <Typography
+          level="h2"
+          sx={{
+            textAlign: "end",
+            mb: 2.5,
+            fontFamily: "Noto Sans Hebrew",
+            fontWeight: 500,
+            letterSpacing: 2,
+          }}
+        >
           כניסה
         </Typography>
         {error && (
@@ -162,8 +178,21 @@ export default function LoginPage() {
         <Form onSubmit={handleSubmit}>
           <Form.Group id="email" className="mb-3" dir="rtl">
             <Form.Label>
-              <Typography sx={{ fontSize: 18 }}>כתובת מייל </Typography>
-              <Typography sx={{ opacity: "80%", fontSize: 13 }}>
+              <Typography
+                sx={{
+                  fontSize: 18,
+                  fontFamily: "Noto Sans Hebrew",
+                }}
+              >
+                כתובת מייל{" "}
+              </Typography>
+              <Typography
+                sx={{
+                  opacity: "80%",
+                  fontSize: 13,
+                  fontFamily: "Noto Sans Hebrew",
+                }}
+              >
                 מייל זה ישמש אותך לתמיד ללא אפשרות לשנותו
               </Typography>
             </Form.Label>
@@ -179,8 +208,18 @@ export default function LoginPage() {
             <Form.Label>
               {" "}
               <Form.Label>
-                <Typography sx={{ fontSize: 18 }}>סיסמא</Typography>
-                <Typography sx={{ opacity: "80%", fontSize: 13 }}>
+                <Typography
+                  sx={{ fontSize: 18, fontFamily: "Noto Sans Hebrew" }}
+                >
+                  סיסמא
+                </Typography>
+                <Typography
+                  sx={{
+                    opacity: "80%",
+                    fontSize: 13,
+                    fontFamily: "Noto Sans Hebrew",
+                  }}
+                >
                   סיסמא אשר שייכת למשתמש שקשור למייל מלמעלה
                 </Typography>
               </Form.Label>
@@ -251,7 +290,13 @@ export default function LoginPage() {
                     </Box>
                   </Slide>
                 )}
-                <Typography sx={{ mr: 2 }}>להיכנס</Typography>
+                <Typography
+                  sx={{
+                    mr: 2,
+                  }}
+                >
+                  להיכנס
+                </Typography>
               </Button>
             </Box>
           )}
@@ -376,7 +421,8 @@ export default function LoginPage() {
               outlineColor: "white",
               p: 5,
               boxShadow: "lg",
-              borderRadius: 4,
+              backgroundColor: "rgba(255,255,255,0.1)",
+              borderRadius: 10,
             }}
           >
             {/* <ModalClose

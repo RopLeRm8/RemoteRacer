@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import { Snackbar, Alert, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useCallback } from "react";
@@ -16,6 +16,7 @@ import WarningIcon from "@mui/icons-material/Warning";
 import FilePresentIcon from "@mui/icons-material/FilePresent";
 import { db } from "../providers/FirebaseProvider";
 import { ref as refDB, update } from "firebase/database";
+import { useSnackbar } from "notistack";
 
 export default function FormDialog({
   open,
@@ -28,6 +29,8 @@ export default function FormDialog({
   const [image, setImage] = useState(null);
   const [error, setError] = useState("");
   const [finished, setFinished] = useState(false);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const [user] = useAuthState(getAuth());
 
@@ -51,7 +54,10 @@ export default function FormDialog({
               update(userRefData, {
                 photoURL: url,
               });
-              setFinished(true);
+              enqueueSnackbar("התמונה שונתה בהצלחה", {
+                variant: "success",
+                dir: "rtl",
+              });
               avatarRefer.current.src = url;
               setStam((prev) => !prev);
             });
@@ -174,15 +180,6 @@ export default function FormDialog({
           )}
         </DialogActions>
       </Dialog>
-      <Snackbar
-        open={finished}
-        autoHideDuration={4500}
-        onClose={() => setFinished(false)}
-      >
-        <Alert dir="rtl" severity="success" onClose={() => setFinished(false)}>
-          התמונה שונתה בהצחלה!
-        </Alert>
-      </Snackbar>
     </Box>
   );
 }

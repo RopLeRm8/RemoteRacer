@@ -1,6 +1,6 @@
 import { getAuth } from "@firebase/auth";
 import { CssVarsProvider, Stack } from "@mui/joy";
-import { Box, Fade, Rating, Slide, Grid } from "@mui/material";
+import { Box, Fade, Rating, Slide } from "@mui/material";
 import Typography from "@mui/joy/Typography";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -15,6 +15,9 @@ import ProfileInfo from "./ProfileInfo";
 import blackback from "../assets/blackback.png";
 import blackback2 from "../assets/blackback2.png";
 import "../css/Profile.css";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useSnackbar } from "notistack";
 
 const rateToText = [
   "לא אהבתי כלל",
@@ -29,6 +32,8 @@ export default function Profile() {
   const [secondElFoc] = useState(true);
   const [thirdElFoc] = useState(true);
   const [fbvalue, setfbvalue] = useState([]);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const firstElRef = useRef();
   const secondElRef = useRef();
@@ -75,13 +80,14 @@ export default function Profile() {
     // return () => {
     //   window.removeEventListener("scroll", handleScroll);
     // };
-    document.body.classList.add("addbg");
+    document.body.classList.add("addbgprofile");
     return () => {
-      document.body.classList.remove("addbg");
+      document.body.classList.remove("addbgprofile");
     };
   }, [userData]);
 
   useEffect(() => {
+    AOS.init();
     onValue(espOutputRef, (snapshot) => {
       const fetchedTasks = [];
       snapshot.forEach((childSnapshot) => {
@@ -95,12 +101,16 @@ export default function Profile() {
 
   const handleValueChange = useCallback(
     (e, nValue) => {
+      enqueueSnackbar("תודה על השתתפותך בסקר", {
+        variant: "info",
+        dir: "rtl",
+      });
       setValue(nValue);
       update(userRefData, {
         rating: nValue,
       });
     },
-    [userRefData]
+    [userRefData, enqueueSnackbar]
   );
 
   return (
@@ -116,34 +126,29 @@ export default function Profile() {
         }}
       >
         <ProfileInfo /> {/*מידע על המשתמש*/}
-        <Medals />
+        <Medals data-aos="fade-out" />
       </Box>
 
-      {fbvalue.map((val) => (
-        <Grid container alignItems="center" direction="column">
-          <Grid item>
-            <Typography level="h3" key={val.data}>
-              {" "}
-              {val.value + " - " + val.data || "No data"}
-            </Typography>
-          </Grid>
-          <Grid item>
-            {val.value === "ip" && (
-              <img
-                src={"http://" + val.data + "/capture"}
-                alt=""
-                width="128"
-                height="128"
-              />
-            )}
-          </Grid>
-        </Grid>
-      ))}
+      {/* {fbvalue.map((val) => (
+        <Box key={val.value}>
+          כאן יש תמונת ESP
+          {val.value === "ip" && (
+            <img
+              src={"http://" + val.data + "/capture"}
+              alt=""
+              width="128"
+              height="128"
+            />
+          )}
+        </Box>
+      ))} */}
 
       <Box
         sx={{
           backgroundImage: `url(${blackback2})`,
           backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed",
         }}
       >
         <Fade in={firstElFoc}>
@@ -156,6 +161,7 @@ export default function Profile() {
             }}
           />
         </Fade>
+
         <Fade in={secondElFoc}>
           <Box
             ref={secondElRef}
@@ -166,7 +172,8 @@ export default function Profile() {
               background: "black",
             }}
           >
-            <Stack // TODO - REMOVE SPACE ON THE RIGHT, add responsivity to mobile
+            <Stack
+              data-aos="fade-out"
               justifyContent="space-around"
               alignItems="center"
               direction={{ xs: "column", sm: "column", md: "row" }}
@@ -245,6 +252,7 @@ export default function Profile() {
             }}
           >
             <Stack
+              data-aos="fade-out"
               justifyContent="space-around"
               alignItems="center"
               direction={{ xs: "column", sm: "column", md: "row" }}
@@ -275,7 +283,7 @@ export default function Profile() {
                     sx={{ color: "white", opacity: "80%", mt: 0.3 }}
                     dir="rtl"
                   >
-                    כמות נקודות אשר הרווחת, כולל מהיום והאללה
+                    כמות נקודות אשר הרווחת, כולל מהיום והלאה
                   </Typography>
                 </Box>
               </Slide>
@@ -315,16 +323,18 @@ export default function Profile() {
             value={value}
             onChange={handleValueChange}
             readOnly={value > 0}
-            sx={{ backgroundColor: "white", borderRadius: "5px" }}
+            sx={{
+              borderRadius: "5px",
+              border: "2px solid #ccc",
+              color: "rgba(255,255,255,0.8)",
+              ":&emptyicon": {
+                color: "white",
+              },
+            }}
           />
           <Typography dir="rtl" level="h5" sx={{ color: "white" }}>
             {value > 0 && rateToText[value - 1]}
           </Typography>
-          {value > 0 && (
-            <Typography sx={{ color: "white" }} dir="rtl">
-              תודה!
-            </Typography>
-          )}
         </Stack>
       </Box>
     </Box>

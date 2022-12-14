@@ -1,24 +1,27 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import RegisterPage from "../components/RegisterPage";
-import LoginPage from "../components/LoginPage";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+
+import RegisterPage from "../components/RegisterPage";
+import LoginPage from "../components/LoginPage";
 import Centered from "../components/Centered";
 import Dashboard from "../components/Dashboard";
 import Profile from "../components/Profile";
+import AboutUs from "../components/AboutUs";
+
 import "../css/LoginPage.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLoadFonts } from "./FontProvider";
 import "../css/RouteProvider.css";
-import { Snackbar, Alert, Backdrop } from "@mui/material";
+import { Alert, Backdrop } from "@mui/material";
 import Box from "@mui/joy/Box";
 import loading from "../assets/loading.gif";
+import { SnackbarProvider } from "notistack";
 
 export default function RouteProvider() {
   useLoadFonts();
   const auth = getAuth();
   const [authUser, authLoading, authError] = useAuthState(auth);
-  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     if (localStorage.getItem("firstTime") === "true") {
@@ -50,36 +53,26 @@ export default function RouteProvider() {
     <BrowserRouter>
       {authUser ? (
         <Box>
-          <Routes>
-            <Route path="profile" element={<Profile />} />
-            <Route path="*" element={<Navigate to="/dashboard" />} />
-            <Route path="dashboard" element={<Dashboard />} />
-          </Routes>
-
-          <Snackbar
-            open={open}
-            autoHideDuration={6000}
-            onClose={() => setOpen(false)}
-            sx={{ display: "flex", justifyContent: "end" }}
-          >
-            <Alert
-              dir="rtl"
-              severity="success"
-              sx={{ width: "100%" }}
-              onClose={() => setOpen(false)}
-            >
-              !כניסה מוצלחת
-            </Alert>
-          </Snackbar>
+          <SnackbarProvider maxSnack={3}>
+            <Routes>
+              <Route path="profile" element={<Profile />} />
+              <Route path="*" element={<Navigate to="/dashboard" />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="about" element={<AboutUs />} />
+            </Routes>
+          </SnackbarProvider>
         </Box>
       ) : (
-        <Routes>
-          <Route index element={<Navigate to="/login" />} />
-          <Route path="profile" element={<Navigate to="/" />} />
-          <Route path="dashboard" element={<Navigate to="/" />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
-        </Routes>
+        <SnackbarProvider maxSnack={3}>
+          <Routes>
+            <Route index element={<Navigate to="/login" />} />
+            <Route path="profile" element={<Navigate to="/" />} />
+            <Route path="dashboard" element={<Navigate to="/" />} />
+            <Route path="about" element={<Navigate to="/" />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
+          </Routes>
+        </SnackbarProvider>
       )}
     </BrowserRouter>
   );

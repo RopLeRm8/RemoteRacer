@@ -83,7 +83,7 @@ export default function RegisterPage() {
                       fontFamily: "Noto Sans Hebrew",
                       textAlign: "justify",
                       fontSize: 25,
-                      fontWeight: 600,
+                      fontWeight: 400,
                     }}
                   >
                     תהנה מהשירותים שלנו, הירשם כעת! השירותים שלנו חינמיים

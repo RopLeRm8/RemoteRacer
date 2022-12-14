@@ -26,7 +26,6 @@ import InfoIcon from "@mui/icons-material/Info";
 import Zoom from "@mui/material/Zoom";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import LogoutIcon from "@mui/icons-material/Logout";
-import hoverlogo from "../assets/hoverlogo.gif";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import { useMemo } from "react";
@@ -37,18 +36,21 @@ const pages = [
     <LeaderboardIcon key="<LeaderboardIcon />" />,
     "rgba(63, 195, 128)",
     "!כאן תוכלו לראות מי מוביל בנקודות",
+    "/leaderboard",
   ],
   [
     "עיצוב אישי",
     <BrushIcon key="<BrushIcon />" />,
     "rgba(175, 65, 84)",
     "עיצוב אישי לאוטו",
+    "/customize",
   ],
   [
     "עלינו",
     <InfoIcon key="<InfoIcon />" />,
     "rgba(159, 90, 253)",
     "מידע על האתר והמייסדים שלו",
+    "/about",
   ],
 ];
 const settings = [
@@ -57,6 +59,7 @@ const settings = [
 ];
 
 function Navbar() {
+  const navigate = useNavigate();
   useLoadFonts();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -71,11 +74,10 @@ function Navbar() {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (page) => {
+    navigate(page);
     setAnchorElNav(null);
   };
-
-  const navigate = useNavigate();
 
   const handleCloseUserMenu = (setting) => {
     setting && setting === "יציאה" && auth.signOut();
@@ -122,6 +124,7 @@ function Navbar() {
                     src={mode === "light" ? logoblack : logo}
                     width="96"
                     height="96"
+                    alt = ""
                   />
                 </Box>
               </a>
@@ -157,7 +160,10 @@ function Navbar() {
                   }}
                 >
                   {pages.map((page) => (
-                    <MenuItem key={page} onClick={handleCloseNavMenu}>
+                    <MenuItem
+                      key={page}
+                      onClick={() => handleCloseNavMenu(page[4])}
+                    >
                       <IconButton>{page[1]} </IconButton>
                       <Typography textAlign="center">{page[0]}</Typography>
                     </MenuItem>
@@ -177,6 +183,7 @@ function Navbar() {
                     src={mode === "light" ? logoblack : logo}
                     width="96"
                     height="96"
+                    alt = ""
                   />
                 </a>
               </Box>
@@ -197,7 +204,7 @@ function Navbar() {
                     <Button
                       key={page}
                       endIcon={page[1]}
-                      onClick={handleCloseNavMenu}
+                      onClick={() => handleCloseNavMenu(page[4])}
                       sx={{
                         "&:hover": {
                           color: page[2],

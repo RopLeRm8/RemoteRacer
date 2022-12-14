@@ -58,22 +58,6 @@ export default function Medals() {
       },
       [totalMedals, medalsList]
     );
-    const handleScroll = () => {
-      let value = window.scrollY;
-      if (window.screen.height * window.devicePixelRatio < 1000) {
-        mainbox.current.style.right = value * 2 + "px";
-      }
-
-      // mainbox.current.style.right = value * 1.5 + "px";
-      // mainbox.current.style.opacity =
-      //   (value > 0 && 100 - value / 4 + "%") || "100%";
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, [medalsList, totalMedals, userRefDB]);
   return (
     <Grow in={true}>
@@ -94,7 +78,6 @@ export default function Medals() {
             sx={{
               color: "black",
               div: { opacity: "100%" },
-              opacity: "90%",
               p: 10,
               mt: mainbox.current?.style.opacity !== "none" && 6,
               mb: mainbox.current?.style.opacity !== "none" && 10,
@@ -102,21 +85,17 @@ export default function Medals() {
                 mx: 0,
               },
               mx: 50,
-              borderRadius: "15px",
-              backgroundColor: "#f2f0f6",
+              border: 0,
+              backgroundColor: "rgba(0,0,0,0.7)",
+              borderRadius: 10,
+              boxShadow: "0px 0px 10px 1px rgba(255,255,255,0.2)",
             }}
           >
             <Card
               sx={{
                 ml: 1,
-                border: "0",
                 mb: 3.5,
-                opacity: "80%",
-                boxShadow: "inset 0em 0 0 0 white",
-                "&:hover": {
-                  boxShadow: "inset 21em 0 0 0 black",
-                  color: "white",
-                },
+                background: "black",
               }}
             >
               <Typography
@@ -127,6 +106,7 @@ export default function Medals() {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  color: "white",
                 }}
               >
                 <EmojiEventsIcon sx={{ ml: 1, mt: 1.7, fontSize: 45 }} />
@@ -167,7 +147,10 @@ export default function Medals() {
                         className="medalImg"
                         alt=""
                         style={{
-                          opacity: medal[2] ? "100%" : "20%",
+                          opacity: medal[2] ? "100%" : "30%",
+                          borderRadius: 10,
+                          boxShadow: medal[2] && "0px 0px 10px 8px white",
+                          backgroundColor: medal[2] && "white",
                         }}
                       />
                     </Tooltip>
@@ -188,7 +171,7 @@ export default function Medals() {
                   borderRadius: 20,
                 }}
               />
-              <Typography sx={{ ml: 1, fontSize: 25 }}>
+              <Typography sx={{ ml: 1, fontSize: 25, color: "white" }}>
                 {medalsahuz + "%"}
               </Typography>
             </Box>
