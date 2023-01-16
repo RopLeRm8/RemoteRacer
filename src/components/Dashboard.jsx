@@ -1,5 +1,5 @@
-import NavBar from "./NavBar";
-import background from "../assets/background.png";
+import NavBar from "../layouts/NavBar";
+import background from "../assets/Dashboard/background.png";
 import { Box } from "@mui/joy";
 export default function Dashboard() {
   return (

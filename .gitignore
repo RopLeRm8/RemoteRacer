@@ -24,3 +24,4 @@ yarn-error.log*
 src/content/racingcars.mp4
 src/content/racing.png
 src/assets/racingcars.mp4
+.env

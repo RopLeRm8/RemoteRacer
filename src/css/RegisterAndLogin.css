@@ -70,9 +70,20 @@
 }
 
 .addbg{
-    background-image: url("../assets/overlay.svg");
+    background-image: url("../assets/LoginPageSignUpPage/backgroundSignUp.png");
+    background-color: black;
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center center;
+}
+#customize {
+  position: fixed;
+  background-size: cover;
+  background-position: "center center";
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  z-index: -1;
 }
 .buttAnim {
  

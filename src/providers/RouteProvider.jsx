@@ -1,40 +1,34 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import RegisterPage from "../components/RegisterPage";
-import LoginPage from "../components/LoginPage";
+import AboutUs from "../components/AboutUs";
 import Centered from "../components/Centered";
 import Dashboard from "../components/Dashboard";
+import Leaderboard from "../components/Leaderboard";
+import LoginPage from "../components/LoginPage";
 import Profile from "../components/Profile";
-import AboutUs from "../components/AboutUs";
+import RegisterPage from "../components/RegisterPage";
 
-import "../css/LoginPage.css";
-import { useEffect } from "react";
-import { useLoadFonts } from "./FontProvider";
-import "../css/RouteProvider.css";
-import { Alert, Backdrop } from "@mui/material";
 import Box from "@mui/joy/Box";
-import loading from "../assets/loading.gif";
+import { Alert, Backdrop } from "@mui/material";
 import { SnackbarProvider } from "notistack";
+import loading from "../assets/Route/loading.gif";
+import Customize from "../components/Customize";
+import "../css/LoginPage.css";
+import "../css/RouteProvider.css";
+import { useLoadFonts } from "./FontProvider";
 
 export default function RouteProvider() {
   useLoadFonts();
   const auth = getAuth();
   const [authUser, authLoading, authError] = useAuthState(auth);
 
-  useEffect(() => {
-    if (localStorage.getItem("firstTime") === "true") {
-      window.location.reload();
-      localStorage.setItem("firstTime", "false");
-    }
-  }, []);
-
   if (authError)
     return (
       <Centered>
         <Alert variant="danger" className="text-center">
-          בעית התחברות!
+          Connection problem!
         </Alert>
       </Centered>
     );
@@ -58,7 +52,9 @@ export default function RouteProvider() {
               <Route path="profile" element={<Profile />} />
               <Route path="*" element={<Navigate to="/dashboard" />} />
               <Route path="dashboard" element={<Dashboard />} />
+              <Route path="customize" element={<Customize />} />
               <Route path="about" element={<AboutUs />} />
+              <Route path="leaderboard" element={<Leaderboard />} />
             </Routes>
           </SnackbarProvider>
         </Box>
@@ -68,7 +64,9 @@ export default function RouteProvider() {
             <Route index element={<Navigate to="/login" />} />
             <Route path="profile" element={<Navigate to="/" />} />
             <Route path="dashboard" element={<Navigate to="/" />} />
+            <Route path="customize" element={<Navigate to="/" />} />
             <Route path="about" element={<Navigate to="/" />} />
+            <Route path="leaderboard" element={<Navigate to="/" />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
           </Routes>

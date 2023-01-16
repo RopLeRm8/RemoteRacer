@@ -10,3 +10,7 @@
         display:none;
     }
 }
+video[poster]{
+  object-fit: cover;
+  }
+

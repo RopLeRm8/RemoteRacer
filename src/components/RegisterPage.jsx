@@ -2,12 +2,12 @@ import React from "react";
 import { Container } from "react-bootstrap";
 import SignUp from "./SignUp";
 import { AuthProvider } from "../contexts/AuthLogic";
-import { Typography } from "@mui/joy";
+import { Typography, Button } from "@mui/joy";
 import { Divider, Grid, Box, Fade, Slide } from "@mui/material";
-import registerLogo from "../assets/services.png";
-import logo from "../assets/logoblack.svg";
+import logo from "../assets/Global/logo.png";
 import "../css/RegisterAndLogin.css";
 import { useEffect } from "react";
+import { useState } from "react";
 
 export default function RegisterPage() {
   useEffect(() => {
@@ -16,14 +16,14 @@ export default function RegisterPage() {
       document.body.classList.remove("addbg");
     };
   }, []);
-
+  const [focus, setFocus] = useState(false);
   return (
     <AuthProvider>
       <Container>
         <Container>
           <Box
             sx={{
-              mb: 12,
+              mb: { xs: 3, md: 12 },
               // backgroundImage: `url(${back})`,
             }}
           >
@@ -41,24 +41,35 @@ export default function RegisterPage() {
                 <Fade in={true}>
                   <Box
                     sx={{
-                      "@media screen and (max-width: 90em)": {
-                        px: 3.5,
-                      },
+                      px: { xs: 4, md: 0 },
+                      ml: { xs: 4, md: 0 },
                     }}
                   >
-                    <SignUp />
+                    <SignUp focus={focus} />
                   </Box>
                 </Fade>
               </Grid>
               <Slide direction="right" in={true}>
-                <Box sx={{ position: "absolute", top: 50, mr: 8 }}>
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: { xs: 15, lg: 50 },
+                    mr: { lg: 8 },
+                    ml: { xs: 6, md: 0 },
+                    // display: { xs: "none", lg: "flex" },
+                  }}
+                >
                   <img
                     src={logo}
-                    width="140"
-                    height="140"
+                    width="200"
+                    height="125"
                     alt=""
                     id="logo"
-                    style={{ animation: "rotationAndZoom 1s forwards" }}
+                    style={{
+                      animation: "rotationAndZoom 1s forwards",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
                   />
                 </Box>
               </Slide>
@@ -66,7 +77,7 @@ export default function RegisterPage() {
                 orientation="vertical"
                 flexItem
                 sx={{
-                  backgroundColor: "black",
+                  backgroundColor: "white",
                   mx: 8,
                   mt: 30,
                   "@media screen and (max-width: 90em)": {
@@ -75,44 +86,51 @@ export default function RegisterPage() {
                 }}
               />
 
-              <Grid item xs={14} md={8} sm={12} lg={4}>
+              <Grid item xs={14} md={8} sm={12} lg={4} sx={{ mt: { lg: 15 } }}>
                 <Slide direction="right" in={true}>
                   <Typography
-                    dir="rtl"
                     sx={{
-                      fontFamily: "Noto Sans Hebrew",
-                      textAlign: "justify",
-                      fontSize: 25,
+                      fontFamily: "Anton",
+                      textAlign: "center",
+                      fontSize: 82,
                       fontWeight: 400,
+                      color: "#ffe500",
                     }}
                   >
-                    תהנה מהשירותים שלנו, הירשם כעת! השירותים שלנו חינמיים
+                    LETS GET YOU
                   </Typography>
                 </Slide>
                 <Slide direction="right" in={true}>
                   <Typography
-                    dir="rtl"
                     sx={{
-                      fontFamily: "Noto Sans Hebrew",
-                      fontSize: 25,
+                      fontFamily: "Anton",
+                      fontSize: 75,
                       fontWeight: 300,
-                      mt: 2,
-                      mb: 2,
+                      color: "white",
+                      textAlign: "center",
                     }}
                   >
-                    למידע נוסף, גש לעמוד "עלינו"
+                    ON THE ROAD
                   </Typography>
                 </Slide>
-
-                <Box
+                <Button
                   sx={{
+                    fontFamily: "Montserrat",
+                    fontSize: 16,
+                    width: "100%",
                     display: "flex",
-                    justifyContent: "space-around",
-                    ml: 8,
+                    borderRadius: "50px",
+                    color: "black",
+                    backgroundColor: "rgba(255,228,0)",
+                    "&:hover": {
+                      backgroundColor: "rgba(255,228,0,0.9)",
+                    },
+                    mb: 2,
                   }}
+                  onClick={() => setFocus((prev) => !prev)}
                 >
-                  <img src={registerLogo} alt="" className="regLogo" />
-                </Box>
+                  SIGN UP NOW
+                </Button>
               </Grid>
             </Grid>
           </Box>

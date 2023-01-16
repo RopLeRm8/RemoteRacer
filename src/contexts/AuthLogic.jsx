@@ -10,12 +10,13 @@ import { ref, child, get, set, update } from "firebase/database";
 
 const AuthContext = createContext();
 const daysOfWeek = [
-  "יום ראשון",
-  "יום שני",
-  "יום שלישי",
-  "יום רביעי",
-  "יום חמישי",
-  "יום שישי",
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
 ];
 
 export function useAuth() {

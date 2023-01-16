@@ -1,41 +1,44 @@
-import React, { useEffect, useState, useRef } from "react";
-import {
-  Grid,
-  Typography,
-  Box,
-  LinearProgress,
-  Stack,
-  Grow,
-} from "@mui/material";
-import place1 from "../assets/place1.png";
-import place2 from "../assets/place2.png";
-import place3 from "../assets/place3.png";
-import firstSetup from "../assets/firstSetup.png";
-import playFirstGame from "../assets/playFirstGame.png";
-import scoreMoreThan100 from "../assets/scoreMoreThan100.png";
-import { ref, child, get } from "firebase/database";
-import { db } from "../providers/FirebaseProvider";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "@firebase/auth";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import Card from "@mui/joy/Card";
+import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { CardOverflow, Tooltip } from "@mui/joy";
+import Card from "@mui/joy/Card";
+import {
+  Box,
+  Grid,
+  Grow,
+  LinearProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { child, get, ref } from "firebase/database";
+import { useSnackbar } from "notistack";
+import React, { useEffect, useRef, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import firstSetup from "../assets/Medals/firstSetup.png";
+import place1 from "../assets/Medals/place1.png";
+import place2 from "../assets/Medals/place2.png";
+import place3 from "../assets/Medals/place3.png";
+import playFirstGame from "../assets/Medals/playFirstGame.png";
+import scoreMoreThan100 from "../assets/Medals/scoreMoreThan100.png";
 import "../css/Medals.css";
+import { db } from "../providers/FirebaseProvider";
 
 const query = ref(db);
 
-export default function Medals() {
+export default function Medals({ stamProfile }) {
   const [medalsList, setmedalsList] = useState([
-    [place1, "תשיג מקום ראשון בטבלת לידרים", false, "place1"],
-    [place2, "תשיג מקום שני בטבלת לידרים", false, "place2"],
-    [place3, "תשיג מקום שלישי בטבלת לידרים", false, "place3"],
-    [firstSetup, "שינוי ראשוני של תמונת פרופיל", false, "firstSetup"],
-    [playFirstGame, "תשחק משחק ראשון", false, "playFirstGame"],
+    [place1, "Has earned first place", false, "place1", "Winner"],
+    [place2, "Has earned second place", false, "place2", "Competitor"],
+    [place3, "Has earned third place", false, "place3", "Challenger"],
+    [firstSetup, "Has changed profile picture", false, "firstSetup", "Stylist"],
+    [playFirstGame, "Has played first game", false, "playFirstGame", "Newbie"],
     [
       scoreMoreThan100,
-      "תשיג יותר מ-100 נקודות במשחק אחד",
+      "Earned more than 100 points in 1 game",
       false,
       "scoreMoreThan100",
+      "Tryhard",
     ],
   ]);
   const [medalsahuz, setmedalsAhuz] = useState(0);
@@ -43,22 +46,28 @@ export default function Medals() {
   const [user] = useAuthState(getAuth());
   const userRefDB = `users/${user.uid}/achievements`;
   const mainbox = useRef();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    get(child(query, userRefDB)).then(
-      (snapshot) => {
-        const list = snapshot.val();
-        let count = 0;
-        medalsList.forEach((medal, i) => {
-          medalsList[i][2] = list[medal[3]];
-          medal[2] && count++;
-        });
-        setmedalsList(medalsList);
-        setmedalsAhuz(Math.round(100 * (count / totalMedals)));
-      },
-      [totalMedals, medalsList]
-    );
-  }, [medalsList, totalMedals, userRefDB]);
+    get(child(query, userRefDB))
+      .then(
+        (snapshot) => {
+          const list = snapshot.val();
+          let count = 0;
+          medalsList.forEach((medal, i) => {
+            medalsList[i][2] = list[medal[3]];
+            medal[2] && count++;
+          });
+          setmedalsList(medalsList);
+          setmedalsAhuz(Math.round(100 * (count / totalMedals)));
+        },
+        [totalMedals, medalsList]
+      )
+      .catch(() => {
+        enqueueSnackbar("Couldn't load medals!", { variant: "error" });
+      });
+  }, [medalsList, totalMedals, userRefDB, stamProfile]);
+
   return (
     <Grow in={true}>
       <Card
@@ -88,12 +97,12 @@ export default function Medals() {
               border: 0,
               backgroundColor: "rgba(0,0,0,0.7)",
               borderRadius: 10,
-              boxShadow: "0px 0px 10px 1px rgba(255,255,255,0.2)",
+              boxShadow: "0px 0px 25px 1px #ffe500",
             }}
           >
             <Card
               sx={{
-                ml: 1,
+                mr: { sm: 3 },
                 mb: 3.5,
                 background: "black",
               }}
@@ -101,61 +110,90 @@ export default function Medals() {
               <Typography
                 dir="rtl"
                 sx={{
-                  fontFamily: "Noto Sans Hebrew",
-                  fontSize: 50,
+                  fontFamily: "Anton",
+                  fontSize: 40,
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  color: "white",
+                  color: "#ffe500",
+                  letterSpacing: { sm: 5 },
                 }}
               >
-                <EmojiEventsIcon sx={{ ml: 1, mt: 1.7, fontSize: 45 }} />
-                הישגים שלך
+                <EmojiEventsIcon
+                  sx={{ ml: 1, fontSize: 45, color: "#ffe500" }}
+                />
+                ACHIEVEMENTS
               </Typography>
             </Card>
 
             <Grid
               container
-              rowSpacing={1}
+              rowSpacing={-5}
               columnSpacing={{ xs: 0, sm: 2, md: 3, lg: 4 }}
-              dir="rtl"
               justifyContent="center"
-              alignItems="end"
-              sx={{}}
+              alignItems="center"
             >
               <Box
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
+                  display: { sm: "flex" },
+                  justifyContent: { sm: "center" },
                   fontSize: 60,
                   opacity: "100%",
                 }}
               >
-                <Grid item xs={5} sm={10} md={12} lg={7}>
-                  {medalsList.map((medal) => (
-                    <Tooltip
-                      title={medal[1] + (medal[2] ? " (הושלם)" : "")}
-                      key={medal[1]}
-                      color={medal[2] ? "success" : "neutral"}
-                      enterDelay={500}
-                    >
-                      <img
-                        key={medal[0]}
-                        src={medal[0]}
-                        width="80"
-                        height="80"
-                        className="medalImg"
-                        alt=""
-                        style={{
-                          opacity: medal[2] ? "100%" : "30%",
-                          borderRadius: 10,
-                          boxShadow: medal[2] && "0px 0px 10px 8px white",
-                          backgroundColor: medal[2] && "white",
-                        }}
-                      />
-                    </Tooltip>
-                  ))}
-                </Grid>
+                {medalsList.map((medal) => (
+                  <Grid
+                    item
+                    sx={{ mx: 0.5, my: { xs: 5, sm: 0 } }}
+                    key={medal[4]}
+                  >
+                    <Grid container direction="column" key="GridContainerKey">
+                      <Tooltip
+                        color="warning"
+                        size="lg"
+                        variant="outlined"
+                        title={medal[2] ? medal[1] : ""}
+                        key={medal[1]}
+                      >
+                        <img
+                          key={medal[0]}
+                          src={medal[0]}
+                          width="80"
+                          height="80"
+                          className="medalImg"
+                          alt=""
+                          style={{
+                            borderRadius: 10,
+                            filter: !medal[2] && "blur(8px)",
+                          }}
+                        />
+                      </Tooltip>
+                      {!medal[2] && (
+                        <LockRoundedIcon
+                          key="lockkey"
+                          sx={{
+                            color: "white",
+                            ml: 3,
+                            mt: 2,
+                          }}
+                        />
+                      )}
+                      {medal[2] && (
+                        <Typography
+                          key="TitleText"
+                          sx={{
+                            color: "white",
+                            textAlign: "center",
+                            fontFamily: "Montserrat",
+                            mt: { sm: 2 },
+                          }}
+                        >
+                          {medal[4]}
+                        </Typography>
+                      )}
+                    </Grid>
+                  </Grid>
+                ))}
               </Box>
             </Grid>
 
@@ -163,15 +201,23 @@ export default function Medals() {
               <LinearProgress
                 value={medalsahuz}
                 variant="determinate"
+                color="warning"
                 sx={{
-                  width: "200px",
+                  width: { sm: "29rem", xs: "200px" },
                   mt: 1.5,
-                  ml: 5,
+                  ml: { xs: 5 },
                   p: 0.8,
                   borderRadius: 20,
                 }}
               />
-              <Typography sx={{ ml: 1, fontSize: 25, color: "white" }}>
+              <Typography
+                sx={{
+                  ml: 3,
+                  fontSize: 25,
+                  color: "#ffe500",
+                  fontFamily: "Anton",
+                }}
+              >
                 {medalsahuz + "%"}
               </Typography>
             </Box>
@@ -180,13 +226,14 @@ export default function Medals() {
                 <Typography
                   dir="rtl"
                   sx={{
-                    fontFamily: "Noto Sans Hebrew",
+                    fontFamily: "Montserrat",
                     fontSize: 30,
                     mt: 2,
                     mr: 3,
+                    color: "#ffe500",
                   }}
                 >
-                  כל הכבוד, השגת את כל המדליות עד כה!
+                  Good job! You've earned all the achievements so far
                 </Typography>
               </Box>
             )}

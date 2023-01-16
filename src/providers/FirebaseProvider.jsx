@@ -1,24 +1,24 @@
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
 import {
+  GithubAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
-  GithubAuthProvider,
 } from "@firebase/auth";
-import { getStorage } from "firebase/storage";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
 import { getDatabase } from "firebase/database";
+import { getStorage } from "firebase/storage";
 
 const app = firebase.initializeApp({
-  apiKey: "AIzaSyAfSIj-unNx7i5pAk6iX4yQoVcQBbgW_s0",
-  authDomain: "react-project-321f9.firebaseapp.com",
-  databaseURL:
-    "https://react-project-321f9-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: process.env.REACT_FIREBASE_ID,
-  storageBucket: "react-project-321f9.appspot.com",
-  messagingSenderId: process.env.REACT_FIREBASE_MSGID,
-  appId: process.env.REACT_FIREBASE_appID,
-  measurementId: "G-KN069SZKMH",
+  apiKey: process.env.REACT_APP_FIREBASE_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_URL,
+  projectId: process.env.REACT_APP_FIREBASE_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MSGID,
+  appId: process.env.REACT_APP_FIREBASE_appID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREID,
 });
+
 export const auth = app.auth();
 export const storage = getStorage(app);
 export const db = getDatabase(app);

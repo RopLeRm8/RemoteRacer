@@ -1,0 +1,14 @@
+@keyframes rotating {
+    to{
+        transform: rotate3d(0,1,0,360deg);
+    }
+}
+#customize {
+    position: fixed;
+    background-size: cover;
+    background-position: "center center";
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    z-index: -1;
+  }

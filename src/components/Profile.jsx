@@ -1,37 +1,39 @@
 import { getAuth } from "@firebase/auth";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import DirectionsCarFilledOutlinedIcon from "@mui/icons-material/DirectionsCarFilledOutlined";
 import { CssVarsProvider, Stack } from "@mui/joy";
-import { Box, Fade, Rating, Slide } from "@mui/material";
 import Typography from "@mui/joy/Typography";
-import React from "react";
+import { Box, Fade, Rating, Slide } from "@mui/material";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { child, get, ref, update } from "firebase/database";
+import { useSnackbar } from "notistack";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import Navbar from "./NavBar";
-import { useCallback, useState, useEffect, useRef } from "react";
-import dices from "../assets/dices.png";
-import points from "../assets/points.png";
-import { ref, child, get, update, onValue } from "firebase/database";
+import blackback from "../assets/Profile/blackback.png";
+import blackback2 from "../assets/Profile/blackback2.png";
+import dices from "../assets/Profile/dices.png";
+import points from "../assets/Profile/points.png";
+import "../css/SmoothSlide.css";
+import Footer from "../layouts/Footer";
+import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
 import Medals from "./Medals";
 import ProfileInfo from "./ProfileInfo";
-import blackback from "../assets/blackback.png";
-import blackback2 from "../assets/blackback2.png";
-import "../css/Profile.css";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import { useSnackbar } from "notistack";
 
 const rateToText = [
-  "לא אהבתי כלל",
-  "אהבתי ברמה קטנה",
-  "בינוני",
-  "אהבתי",
-  "אהבתי מאוד",
+  "Didn't Like At All",
+  "Meh",
+  "Neutral",
+  "Good",
+  "Very Good",
 ];
 const query = ref(db);
 export default function Profile() {
   const [firstElFoc] = useState(true);
   const [secondElFoc] = useState(true);
   const [thirdElFoc] = useState(true);
-  const [fbvalue, setfbvalue] = useState([]);
+  const [stamProfile, setstamProfile] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -44,13 +46,16 @@ export default function Profile() {
   const [value, setValue] = useState(0);
 
   const userRefData = ref(db, `users/${user.uid}/data`);
-  const espOutputRef = ref(db, "test");
   const userData = `users/${user.uid}/data`;
 
   useEffect(() => {
-    get(child(query, userData)).then((snapshot) => {
-      snapshot && snapshot.val().rating && setValue(snapshot.val().rating);
-    });
+    get(child(query, userData))
+      .then((snapshot) => {
+        snapshot && snapshot.val().rating && setValue(snapshot.val().rating);
+      })
+      .catch(() => {
+        enqueueSnackbar("Couldnt load player's data!", { variant: "error" });
+      });
 
     // const handleScroll = (event) => {
     //   if (elementInViewport(firstElRef.current)) {
@@ -80,30 +85,20 @@ export default function Profile() {
     // return () => {
     //   window.removeEventListener("scroll", handleScroll);
     // };
-    document.body.classList.add("addbgprofile");
+    document.body.style.backgroundColor = "black";
     return () => {
-      document.body.classList.remove("addbgprofile");
+      document.body.style.backgroundColor = "white";
     };
   }, [userData]);
 
   useEffect(() => {
     AOS.init();
-    onValue(espOutputRef, (snapshot) => {
-      const fetchedTasks = [];
-      snapshot.forEach((childSnapshot) => {
-        const keyval = childSnapshot.key;
-        const data = childSnapshot.val();
-        fetchedTasks.push({ value: keyval, data });
-      });
-      setfbvalue(fetchedTasks);
-    });
   }, []);
 
   const handleValueChange = useCallback(
     (e, nValue) => {
-      enqueueSnackbar("תודה על השתתפותך בסקר", {
+      enqueueSnackbar("Thank you!", {
         variant: "info",
-        dir: "rtl",
       });
       setValue(nValue);
       update(userRefData, {
@@ -125,8 +120,8 @@ export default function Profile() {
           height: "100%",
         }}
       >
-        <ProfileInfo /> {/*מידע על המשתמש*/}
-        <Medals data-aos="fade-out" />
+        <ProfileInfo setstamProfile={setstamProfile} /> {/*מידע על המשתמש*/}
+        <Medals data-aos="fade-out" stamProfile={stamProfile} />
       </Box>
 
       {/* {fbvalue.map((val) => (
@@ -176,7 +171,7 @@ export default function Profile() {
               data-aos="fade-out"
               justifyContent="space-around"
               alignItems="center"
-              direction={{ xs: "column", sm: "column", md: "row" }}
+              direction={{ xs: "column", sm: "column", md: "row-reverse" }}
               spacing={{ xs: 1, sm: 3, md: 0 }}
             >
               <Slide in={secondElFoc} direction="right">
@@ -187,9 +182,8 @@ export default function Profile() {
                     },
 
                     borderRadius: "50%",
-                    backgroundColor: "#f2f0f6",
-                    boxShadow:
-                      "inset 8px 8px 17px 0 rgba(0, 0, 0, 0.05), inset -13px -13px 12px 0 hsla(0, 0%, 100%, 0.65), -11px -11px 40px 3px white, 8px 14px 40px -20px rgba(0, 0, 0, 0.19)",
+                    background: "linear-gradient(145deg, #cacaca, #ffffff)",
+                    boxShadow: "8px 8px 30px #ffffff,-8px -8px 30px #ffffff",
                   }}
                 >
                   <img src={dices} width="166" height="166" alt="" />
@@ -197,15 +191,24 @@ export default function Profile() {
               </Slide>
               <Slide in={secondElFoc} direction="left">
                 <Box>
-                  <Typography level="h2" sx={{ color: "white" }} dir="rtl">
-                    מספר משחקים: 5
+                  <Typography
+                    level="h2"
+                    sx={{
+                      color: "#ffe500",
+                      fontFamily: "Anton",
+                      textAlign: "center",
+                    }}
+                  >
+                    Games Played : 5
                   </Typography>
                   <Typography
                     level="h6"
-                    sx={{ color: "white", opacity: "80%", mt: 0.3 }}
-                    dir="rtl"
+                    sx={{
+                      color: "white",
+                      mt: 0.3,
+                    }}
                   >
-                    כמות משחקים, אשר בהם השתתפת
+                    Amount of games you participated in
                   </Typography>
                 </Box>
               </Slide>
@@ -255,7 +258,7 @@ export default function Profile() {
               data-aos="fade-out"
               justifyContent="space-around"
               alignItems="center"
-              direction={{ xs: "column", sm: "column", md: "row" }}
+              direction={{ xs: "column", sm: "column", md: "row-reverse" }}
               spacing={{ xs: 1, sm: 3, md: 5 }}
             >
               <Slide in={thirdElFoc} direction="right">
@@ -265,9 +268,8 @@ export default function Profile() {
                       mt: 10,
                     },
                     borderRadius: "50%",
-                    backgroundColor: "#f2f0f6",
-                    boxShadow:
-                      "inset 8px 8px 17px 0 rgba(0, 0, 0, 0.05), inset -13px -13px 12px 0 hsla(0, 0%, 100%, 0.65), -11px -11px 40px 3px white, 8px 14px 40px -20px rgba(0, 0, 0, 0.19)",
+                    background: "linear-gradient(145deg, #cacaca, #ffe500)",
+                    boxShadow: "8px 8px 30px #ffe500,-8px -8px 30px #ffe500",
                   }}
                 >
                   <img src={points} width="166" height="166" alt="" />
@@ -275,15 +277,21 @@ export default function Profile() {
               </Slide>
               <Slide in={thirdElFoc} direction="left">
                 <Box>
-                  <Typography level="h2" sx={{ color: "white" }} dir="rtl">
-                    סך הכל נקודות: 600
+                  <Typography
+                    level="h2"
+                    sx={{
+                      color: "#ffe500",
+                      fontFamily: "Anton",
+                      textAlign: "center",
+                    }}
+                  >
+                    Points Count : 600
                   </Typography>
                   <Typography
                     level="h6"
-                    sx={{ color: "white", opacity: "80%", mt: 0.3 }}
-                    dir="rtl"
+                    sx={{ color: "white", mt: 0.3, textAlign: "center" }}
                   >
-                    כמות נקודות אשר הרווחת, כולל מהיום והלאה
+                    Amount of points earned since your first game
                   </Typography>
                 </Box>
               </Slide>
@@ -308,35 +316,40 @@ export default function Profile() {
           />
         </Fade>
 
-        <Stack direction="column" alignItems="center" sx={{ my: 3 }}>
+        <Stack
+          direction="column"
+          alignItems="center"
+          sx={{ my: 3, background: "#ffe500" }}
+        >
           <Typography
             sx={{
-              color: "white",
-              fontFamily: "Noto Sans Hebrew",
+              color: "black",
+              fontFamily: "Montserrat",
               fontSize: 25,
             }}
           >
-            תן לנו לדעת את דעתך
+            Let us know your opinion
           </Typography>
-
           <Rating
             value={value}
             onChange={handleValueChange}
             readOnly={value > 0}
             sx={{
               borderRadius: "5px",
-              border: "2px solid #ccc",
-              color: "rgba(255,255,255,0.8)",
-              ":&emptyicon": {
-                color: "white",
-              },
+              color: "black",
             }}
+            icon={<DirectionsCarIcon />}
+            emptyIcon={<DirectionsCarFilledOutlinedIcon />}
           />
-          <Typography dir="rtl" level="h5" sx={{ color: "white" }}>
+          <Typography
+            level="h5"
+            sx={{ color: "black", fontFamily: "Montserrat" }}
+          >
             {value > 0 && rateToText[value - 1]}
           </Typography>
         </Stack>
       </Box>
+      <Footer />
     </Box>
   );
 }

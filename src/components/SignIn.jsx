@@ -29,10 +29,11 @@ import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ReportIcon from "@mui/icons-material/Report";
-import logo from "../assets/logo.gif";
+import logo from "../assets/SignUpLoginWindow/logo.gif";
 import { Fade, Slide } from "@mui/material";
+import { useEffect } from "react";
 
-export default function LoginPage() {
+export default function LoginPage({ focus }) {
   const emailRef = useRef();
   const passRef = useRef();
   const emailVerifi = useRef();
@@ -55,7 +56,7 @@ export default function LoginPage() {
     return sendPasswordResetEmail(auth, userEmail.current.value)
       .then(() => {
         setResetSuccess(
-          "המייל נשלח בהצחלה, אנא בדוק את תיבת הדואר שלך ותעקוב אחרי ההוראות"
+          "Email Successfully Sent, Make Sure To Check Spam Folder Too"
         );
         setResetError(null);
       })
@@ -82,8 +83,8 @@ export default function LoginPage() {
     setSuccess("");
 
     login(emailRef?.current.value, passRef?.current.value)
-      .then((user) => {
-        setSuccess("כניסה מוצלחת");
+      .then(() => {
+        setSuccess("Successfully Logged In");
         localStorage.setItem("firstTime", "true");
       })
       .catch(({ code }) =>
@@ -95,14 +96,16 @@ export default function LoginPage() {
   const handleSubmitButtonResetButton = (e) => {
     e.preventDefault();
   };
-
+  useEffect(() => {
+    emailRef.current.focus();
+  }, [focus]);
   return (
     <Card
       style={{
         border: 0,
-        backgroundColor: "rgba(255,255,255,0.3)",
+        backgroundColor: "rgba(255,255,255)",
         borderRadius: 10,
-        boxShadow: "0px 0px 10px 5px rgba(0,0,0,0.1)",
+        boxShadow: "0px 0px 100px 5px rgba(255,228,0,0.5)",
       }}
     >
       <CssVarsProvider />
@@ -110,14 +113,13 @@ export default function LoginPage() {
         <Typography
           level="h2"
           sx={{
-            textAlign: "end",
+            textAlign: "center",
             mb: 2.5,
-            fontFamily: "Noto Sans Hebrew",
-            fontWeight: 500,
-            letterSpacing: 2,
+            fontFamily: "Montserrat",
+            fontWeight: 300,
           }}
         >
-          כניסה
+          Sign In
         </Typography>
         {error && (
           <Box
@@ -139,7 +141,7 @@ export default function LoginPage() {
             >
               <Box>
                 <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
-                  !שגיאה
+                  Error
                 </Typography>
                 <Typography fontSize="sm" sx={{ opacity: 0.8, color: "white" }}>
                   {error}
@@ -168,7 +170,7 @@ export default function LoginPage() {
             >
               <Box>
                 <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
-                  !הצלחה
+                  Success
                 </Typography>
               </Box>
             </Alert>
@@ -176,24 +178,25 @@ export default function LoginPage() {
         )}
 
         <Form onSubmit={handleSubmit}>
-          <Form.Group id="email" className="mb-3" dir="rtl">
+          <Form.Group id="email" className="mb-3">
             <Form.Label>
               <Typography
                 sx={{
                   fontSize: 18,
-                  fontFamily: "Noto Sans Hebrew",
+                  fontFamily: "Montserrat",
+                  fontWeight: 600,
                 }}
               >
-                כתובת מייל{" "}
+                Email Address
               </Typography>
               <Typography
                 sx={{
                   opacity: "80%",
                   fontSize: 13,
-                  fontFamily: "Noto Sans Hebrew",
+                  fontFamily: "Montserrat",
                 }}
               >
-                מייל זה ישמש אותך לתמיד ללא אפשרות לשנותו
+                The email that you registered with
               </Typography>
             </Form.Label>
             <Form.Control
@@ -204,23 +207,26 @@ export default function LoginPage() {
             />
           </Form.Group>
 
-          <Form.Group id="password" dir="rtl">
+          <Form.Group id="password">
             <Form.Label>
-              {" "}
               <Form.Label>
                 <Typography
-                  sx={{ fontSize: 18, fontFamily: "Noto Sans Hebrew" }}
+                  sx={{
+                    fontSize: 18,
+                    fontFamily: "Montserrat",
+                    fontWeight: 600,
+                  }}
                 >
-                  סיסמא
+                  Password
                 </Typography>
                 <Typography
                   sx={{
                     opacity: "80%",
                     fontSize: 13,
-                    fontFamily: "Noto Sans Hebrew",
+                    fontFamily: "Montserrat",
                   }}
                 >
-                  סיסמא אשר שייכת למשתמש שקשור למייל מלמעלה
+                  Password that matches the existing user with the email above
                 </Typography>
               </Form.Label>
             </Form.Label>
@@ -234,13 +240,15 @@ export default function LoginPage() {
               />
 
               <IconButton
+                color="warning"
                 variant="plain"
                 onClick={(e) => {
                   e.preventDefault();
                   setIsHidden(!isHidden);
                 }}
+                sx={{ ml: 1 }}
               >
-                <Tooltip title={isHidden ? "הראה" : "החבא"} variant="solid">
+                <Tooltip title={isHidden ? "Show" : "Hide"} variant="solid">
                   {isHidden ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </Tooltip>
               </IconButton>
@@ -295,7 +303,7 @@ export default function LoginPage() {
                     mr: 2,
                   }}
                 >
-                  להיכנס
+                  Sign In
                 </Typography>
               </Button>
             </Box>
@@ -306,7 +314,7 @@ export default function LoginPage() {
             sx={{
               color: "black",
               width: 300,
-              fontFamily: "Noto Sans Hebrew",
+              fontFamily: "Montserrat",
               fontSize: 20,
             }}
           >
@@ -318,10 +326,8 @@ export default function LoginPage() {
               sx={{ border: 0 }}
             >
               <GoogleIcon sx={{ mr: 1 }} />
-              <Typography sx={{ fontWeight: "500", mr: 1 }}>
-                Google
-              </Typography>{" "}
-              לכניסה עם
+              Sign In via
+              <Typography sx={{ fontWeight: "500", ml: 1 }}>Google</Typography>
             </Button>
           </Divider>
         </Box>
@@ -330,7 +336,7 @@ export default function LoginPage() {
             sx={{
               color: "black",
               width: 300,
-              fontFamily: "Noto Sans Hebrew",
+              fontFamily: "Montserrat",
               fontSize: 20,
             }}
           >
@@ -342,10 +348,8 @@ export default function LoginPage() {
               sx={{ border: 0 }}
             >
               <GitHubIcon sx={{ mr: 1 }} />
-              <Typography sx={{ fontWeight: "500", mr: 1 }}>
-                GitHub
-              </Typography>{" "}
-              לכניסה עם
+              Sign In via
+              <Typography sx={{ fontWeight: "500", ml: 1 }}>GitHub</Typography>
             </Button>
           </Divider>
         </Box>
@@ -355,11 +359,11 @@ export default function LoginPage() {
           color: "black",
           px: 5,
           mb: 3,
-          fontFamily: "Noto Sans Hebrew",
+          fontFamily: "Montserrat",
           fontSize: 20,
         }}
       >
-        או
+        OR
       </Divider>
       <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
         <Button
@@ -381,7 +385,7 @@ export default function LoginPage() {
             setShowPanel(true);
           }}
         >
-          תהליך שחזור סיסמא
+          Reset Password For Existing User
         </Button>
       </Box>
       <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
@@ -402,7 +406,7 @@ export default function LoginPage() {
           }}
           onClick={() => navigate("/register")}
         >
-          הירשם כאן
+          Sign Up Here
         </Button>
       </Box>
 
@@ -417,11 +421,11 @@ export default function LoginPage() {
             variant="outlined"
             size="lg"
             sx={{
-              color: "#1c1c1c",
+              color: "white",
               outlineColor: "white",
               p: 5,
               boxShadow: "lg",
-              backgroundColor: "rgba(255,255,255,0.1)",
+              backgroundColor: "rgba(255,255,255,0.5)",
               borderRadius: 10,
             }}
           >
@@ -435,20 +439,27 @@ export default function LoginPage() {
               bgcolor: "background.body",
             }}
           /> */}
-            <Typography level="h3" sx={{ mb: 1 }} dir="rtl">
-              שחזור סיסמא
+            <Typography level="h3" fontFamily="Montserrat" sx={{ mb: 1 }}>
+              Password Reset
             </Typography>
 
-            <Typography endDecorator={<EmailIcon />} dir="rtl">
-              הכנס את הכתובת מייל שלך ונשלח לך הודעה עם הוראות
+            <Typography endDecorator={<EmailIcon />} fontFamily="Montserrat">
+              Enter your email address and we will send an email with a reset
+              password link
             </Typography>
 
             <Form onSubmit={handleSubmitButtonResetButton} className="mt-2">
-              <Form.Group className="mb-3" controlId="formBasicEmail" dir="rtl">
+              <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>
-                  <Typography level="h5">כתובת מייל :</Typography>
-                  <Typography sx={{ opacity: "80%" }}>
-                    מייל שאליו ישלח קישור
+                  <Typography
+                    level="h5"
+                    fontWeight={600}
+                    fontFamily="Montserrat"
+                  >
+                    Email:
+                  </Typography>
+                  <Typography sx={{ opacity: "80%" }} fontFamily="Montserrat">
+                    Email to receive the email
                   </Typography>
                 </Form.Label>
                 <Form.Control
@@ -478,7 +489,7 @@ export default function LoginPage() {
                 >
                   <Box>
                     <Typography fontWeight="lg" sx={{ color: "white" }}>
-                      !הצלחה
+                      Success
                     </Typography>
                     <Typography fontSize="sm" sx={{ color: "white" }}>
                       {resetSuccess}
@@ -513,7 +524,7 @@ export default function LoginPage() {
                       mt={0.25}
                       sx={{ color: "white" }}
                     >
-                      !שגיאה
+                      Error
                     </Typography>
                     <Typography fontSize="sm" sx={{ color: "white" }}>
                       {resetError}
@@ -526,7 +537,7 @@ export default function LoginPage() {
               <Button
                 startDecorator={<ArrowUpwardIcon />}
                 variant="solid"
-                color="info"
+                color="warning"
                 loading
                 sx={{
                   width: "100%",
@@ -539,17 +550,17 @@ export default function LoginPage() {
                 }}
                 startDecorator={<ArrowUpwardIcon />}
                 variant="soft"
-                color="info"
+                color="warning"
                 onClick={() => ResetPassword(emailVerifi)}
               >
                 <Typography
                   sx={{
-                    fontFamily: "Noto Sans Hebrew",
+                    fontFamily: "Montserrat",
                     fontSize: 15,
                     mr: 3,
                   }}
                 >
-                  הגשה
+                  Submit code
                 </Typography>
               </Button>
             )}

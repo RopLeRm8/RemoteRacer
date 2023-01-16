@@ -1,0 +1,21 @@
+@keyframes bubble {
+    to {
+      transform: scale(1);
+    }
+  }
+  @keyframes bubbleReverse {
+    to {
+      transform: scale(0);
+    }
+  }
+  @keyframes float {
+    0% {
+      transform: translateY(0%);
+    }
+    50% {
+      transform: translateY(-10%);
+    }
+    100% {
+      transform: translateY(0%);
+    }
+  }

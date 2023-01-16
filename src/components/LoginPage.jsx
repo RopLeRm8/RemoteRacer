@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { Container } from "react-bootstrap";
 import SignIn from "./SignIn";
 import { AuthProvider } from "../contexts/AuthLogic";
-import { Typography } from "@mui/joy";
+import { Typography, Button } from "@mui/joy";
 import { Divider, Grid, Box, Fade, Slide } from "@mui/material";
-import registerLogo from "../assets/services.png";
-import logo from "../assets/logoblack.svg";
+import logo from "../assets/Global/logo.png";
+import { useState } from "react";
 
 export default function LoginPage() {
   useEffect(() => {
@@ -14,6 +14,7 @@ export default function LoginPage() {
       document.body.classList.remove("addbg");
     };
   }, []);
+  const [focus, setFocus] = useState(false);
   return (
     <AuthProvider>
       <Container>
@@ -30,20 +31,34 @@ export default function LoginPage() {
           >
             <Grid item xs={0} sx={{ marginTop: 18, width: "500px" }}>
               <Fade in={true}>
-                <Box>
-                  <SignIn />
+                <Box
+                  sx={{
+                    px: { xs: 3, md: 0 },
+                    ml: { xs: 4, md: 0 },
+                  }}
+                >
+                  <SignIn focus={focus} />
                 </Box>
               </Fade>
             </Grid>
             <Slide direction="left" in={true}>
-              <Box sx={{ position: "absolute", top: 50, mr: 8 }}>
+              <Box  
+                sx={{
+                  position: "absolute",
+                  top: { xs: 10, lg: 50 },
+                  mr: { lg: 8 },
+                  ml: { xs: 7, md: 0 },
+                }}
+              >
                 <img
                   src={logo}
-                  width="140"
-                  height="140"
+                  width="200"
+                  height="125"
                   alt=""
                   id="logo"
-                  style={{ animation: "rotationAndZoom 1s forwards" }}
+                  style={{
+                    animation: "rotationAndZoom 1s forwards",
+                  }}
                 />
               </Box>
             </Slide>
@@ -51,7 +66,7 @@ export default function LoginPage() {
               orientation="vertical"
               flexItem
               sx={{
-                backgroundColor: "black",
+                backgroundColor: "white",
                 mx: 8,
                 mt: 30,
                 "@media screen and (max-width: 90em)": {
@@ -63,39 +78,48 @@ export default function LoginPage() {
             <Grid item xs={14} md={8} sm={12} lg={4}>
               <Slide direction="right" in={true}>
                 <Typography
-                  dir="rtl"
                   sx={{
-                    fontFamily: "Noto Sans Hebrew",
-                    textAlign: "justify",
-                    fontSize: 25,
+                    fontFamily: "Anton",
+                    textAlign: "center",
+                    fontSize: 82,
                     fontWeight: 400,
-                    color: "black",
+                    color: "#ffe500",
                   }}
                 >
-                  היכנסו בשביל להינות מהשירותים החינמיים שלנו!
+                  LETS GET YOU
                 </Typography>
               </Slide>
               <Slide direction="right" in={true}>
                 <Typography
-                  dir="rtl"
                   sx={{
-                    fontFamily: "Noto Sans Hebrew",
-                    fontSize: 25,
+                    fontFamily: "Anton",
+                    fontSize: 75,
                     fontWeight: 300,
-                    color: "black",
-                    mt: 2,
-                    mb: 2,
+                    color: "white",
+                    textAlign: "center",
                   }}
                 >
-                  למידע נוסף, גש לעמוד "עלינו"
+                  ON THE ROAD
                 </Typography>
               </Slide>
-
-              <Box
-                sx={{ display: "flex", justifyContent: "space-around", ml: 8 }}
+              <Button
+                sx={{
+                  fontFamily: "Montserrat",
+                  fontSize: 16,
+                  width: "100%",
+                  display: "flex",
+                  borderRadius: "50px",
+                  color: "black",
+                  backgroundColor: "rgba(255,228,0)",
+                  "&:hover": {
+                    backgroundColor: "rgba(255,228,0,0.9)",
+                  },
+                  mb: 4,
+                }}
+                onClick={() => setFocus((prev) => !prev)}
               >
-                <img src={registerLogo} alt="" className="regLogo" />
-              </Box>
+                SIGN IN NOW
+              </Button>
             </Grid>
           </Grid>
         </Container>
