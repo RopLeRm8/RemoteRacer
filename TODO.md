@@ -6,7 +6,6 @@ Project Description
 
 ### Todo
 
-- [ ] Enter firebase and email API info to .env files  
 - [ ] Remove uselesss node modules  
 - [ ] Fix shit stack error  
 - [ ] Add lazy module that optimizes the work of routing  
@@ -16,6 +15,7 @@ Project Description
 
 ### Done ✓
 
+- [x] Enter firebase and email API info to .env files  
 - [x] Limit email send  
 - [x] Add catch to all API calls in frontend  
 - [x] return null in all callbacks - dont return something because it can be bugged  
