@@ -1,44 +1,44 @@
-import React, { useState, useRef } from "react";
-import { Form, Card } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthLogic";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
-import { authErrorToTitleCase } from "../helpers";
-import "../css/LoginPage.css";
-import { googleauth, gitauth } from "../providers/FirebaseProvider";
+import { ArrowBackIos } from "@mui/icons-material";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import CheckIcon from "@mui/icons-material/Check";
+import EmailIcon from "@mui/icons-material/Email";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import GoogleIcon from "@mui/icons-material/Google";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import LockResetIcon from "@mui/icons-material/LockReset";
 import LoginIcon from "@mui/icons-material/Login";
+import MailIcon from "@mui/icons-material/Mail";
+import ReportIcon from "@mui/icons-material/Report";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
-  CssVarsProvider,
-  IconButton,
-  Tooltip,
-  Typography,
   Alert,
   Box,
   Button,
+  Card,
+  CssVarsProvider,
+  Divider,
+  Grid,
+  IconButton,
+  Input,
   Modal,
   ModalDialog,
-  Divider,
+  Tooltip,
+  Typography,
 } from "@mui/joy";
-import EmailIcon from "@mui/icons-material/Email";
-import CheckIcon from "@mui/icons-material/Check";
-import HowToRegIcon from "@mui/icons-material/HowToReg";
-import LockResetIcon from "@mui/icons-material/LockReset";
-import GoogleIcon from "@mui/icons-material/Google";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ReportIcon from "@mui/icons-material/Report";
-import logo from "../assets/SignUpLoginWindow/logo.gif";
 import { Fade, Slide } from "@mui/material";
-import { useEffect } from "react";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import logo from "../assets/SignUpLoginWindow/logo.gif";
+import star from "../assets/SignUpLoginWindow/star.png";
+import { useAuth } from "../contexts/AuthLogic";
+import "../css/LoginPage.css";
+import { authErrorToTitleCase } from "../helpers";
+import { gitauth, googleauth } from "../providers/FirebaseProvider";
 
-export default function LoginPage({ focus }) {
-  const emailRef = useRef();
-  const passRef = useRef();
-  const emailVerifi = useRef();
+export default function LoginPage() {
   const gifAnimCont = useRef();
-
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -48,12 +48,16 @@ export default function LoginPage({ focus }) {
   const [resetError, setResetError] = useState(null);
   const [resetLoading, setResetLoading] = useState(false);
   const [gifAnim, setgifAnim] = useState(false);
+  const [emailValue, setemailValue] = useState("");
+  const [passValue, setpassValue] = useState("");
+  const [MailVerifi, setMailVerifi] = useState("");
 
   const auth = getAuth();
 
-  function ResetPassword(userEmail) {
+  function ResetPassword(e, userEmail) {
+    e.preventDefault();
     setResetLoading(true);
-    return sendPasswordResetEmail(auth, userEmail.current.value)
+    return sendPasswordResetEmail(auth, userEmail)
       .then(() => {
         setResetSuccess(
           "Email Successfully Sent, Make Sure To Check Spam Folder Too"
@@ -81,8 +85,15 @@ export default function LoginPage({ focus }) {
     setLoading(true);
     setError("");
     setSuccess("");
-
-    login(emailRef?.current.value, passRef?.current.value)
+    if (emailValue.length < 1) {
+      setLoading((prev) => !prev);
+      return setError("Please enter email to be checked");
+    }
+    if (passValue.length < 1) {
+      setLoading((prev) => !prev);
+      return setError("Please enter password to be checked");
+    }
+    login(emailValue, passValue)
       .then(() => {
         setSuccess("Successfully Logged In");
         localStorage.setItem("firstTime", "true");
@@ -93,269 +104,302 @@ export default function LoginPage({ focus }) {
       .finally(() => setLoading(false));
   };
 
-  const handleSubmitButtonResetButton = (e) => {
-    e.preventDefault();
-  };
-  useEffect(() => {
-    emailRef.current.focus();
-  }, [focus]);
+  // useEffect(() => {
+  //   emailRef.current.focus();
+  // }, [focus]);
   return (
     <Card
-      style={{
-        border: 0,
+      sx={{
         backgroundColor: "rgba(255,255,255)",
         borderRadius: 10,
-        boxShadow: "0px 0px 100px 5px rgba(255,228,0,0.5)",
+        boxShadow: "3px 5px 30px 15px black",
+        p: 3.5,
       }}
     >
       <CssVarsProvider />
-      <Card.Body className="mx-4 mt-3">
-        <Typography
-          level="h2"
+      <Grid container direction="row" justifyContent="space-between">
+        <IconButton
+          variant="outlined"
+          color="neutral"
+          sx={{ width: "11%" }}
+          onClick={() => navigate("/")}
+        >
+          <ArrowBackIos sx={{ ml: 1 }} />
+        </IconButton>
+        <img src={star} alt="" />
+      </Grid>
+
+      <Typography
+        level="h2"
+        sx={{
+          textAlign: "start",
+          my: 2.5,
+          fontFamily: "Poppins:wght@700",
+          fontWeight: 700,
+        }}
+      >
+        Sign In
+      </Typography>
+      {error && (
+        <Box
           sx={{
-            textAlign: "center",
-            mb: 2.5,
-            fontFamily: "Montserrat",
-            fontWeight: 300,
+            display: "flex",
+            gap: 2,
+            width: "100%",
+            flexDirection: "column",
+            mb: 3,
           }}
         >
-          Sign In
-        </Typography>
-        {error && (
-          <Box
-            sx={{
-              display: "flex",
-              gap: 2,
-              width: "100%",
-              flexDirection: "column",
-              mb: 3,
-            }}
+          <Alert
+            sx={{ alignItems: "flex-start" }}
+            startDecorator={
+              <ReportIcon sx={{ mt: "7px", mx: "4px", fontSize: "35px" }} />
+            }
+            variant="solid"
+            color="danger"
           >
-            <Alert
-              sx={{ alignItems: "flex-start" }}
-              startDecorator={
-                <ReportIcon sx={{ mt: "7px", mx: "4px", fontSize: "35px" }} />
-              }
-              variant="solid"
-              color="danger"
-            >
-              <Box>
-                <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
-                  Error
-                </Typography>
-                <Typography fontSize="sm" sx={{ opacity: 0.8, color: "white" }}>
-                  {error}
-                </Typography>
-              </Box>
-            </Alert>
-          </Box>
-        )}
-        {success && (
-          <Box
-            sx={{
-              display: "flex",
-              gap: 2,
-              width: "100%",
-              flexDirection: "column",
-              mb: 3,
-            }}
-          >
-            <Alert
-              sx={{ alignItems: "flex-start" }}
-              startDecorator={
-                <CheckIcon sx={{ mt: "7px", mx: "4px", fontSize: "30px" }} />
-              }
-              variant="solid"
-              color="success"
-            >
-              <Box>
-                <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
-                  Success
-                </Typography>
-              </Box>
-            </Alert>
-          </Box>
-        )}
-
-        <Form onSubmit={handleSubmit}>
-          <Form.Group id="email" className="mb-3">
-            <Form.Label>
-              <Typography
-                sx={{
-                  fontSize: 18,
-                  fontFamily: "Montserrat",
-                  fontWeight: 600,
-                }}
-              >
-                Email Address
+            <Box>
+              <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
+                Error
               </Typography>
-              <Typography
-                sx={{
-                  opacity: "80%",
-                  fontSize: 13,
-                  fontFamily: "Montserrat",
-                }}
-              >
-                The email that you registered with
+              <Typography fontSize="sm" sx={{ opacity: 0.8, color: "white" }}>
+                {error}
               </Typography>
-            </Form.Label>
-            <Form.Control
-              type="email"
-              required
-              ref={emailRef}
-              style={{ borderRadius: 4, borderColor: error && "red" }}
-            />
-          </Form.Group>
-
-          <Form.Group id="password">
-            <Form.Label>
-              <Form.Label>
-                <Typography
-                  sx={{
-                    fontSize: 18,
-                    fontFamily: "Montserrat",
-                    fontWeight: 600,
-                  }}
-                >
-                  Password
-                </Typography>
-                <Typography
-                  sx={{
-                    opacity: "80%",
-                    fontSize: 13,
-                    fontFamily: "Montserrat",
-                  }}
-                >
-                  Password that matches the existing user with the email above
-                </Typography>
-              </Form.Label>
-            </Form.Label>
-
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Form.Control
-                type={isHidden ? "password" : "text"}
-                required
-                ref={passRef}
-                style={{ borderRadius: 4, borderColor: error && "red" }}
-              />
-
-              <IconButton
-                color="warning"
-                variant="plain"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsHidden(!isHidden);
-                }}
-                sx={{ ml: 1 }}
-              >
-                <Tooltip title={isHidden ? "Show" : "Hide"} variant="solid">
-                  {isHidden ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                </Tooltip>
-              </IconButton>
             </Box>
-          </Form.Group>
-
-          {loading ? (
-            <Button
-              color="success"
-              variant="outlined"
-              loading
-              type="submit"
-              sx={{ width: 380, mt: 4, borderRadius: 4 }}
-            />
-          ) : (
-            <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <Button
-                ref={gifAnimCont}
-                startDecorator={<LoginIcon />}
-                color="success"
-                variant="outlined"
-                type="submit"
-                className="buttAnim"
-                sx={{
-                  border: 0,
-                  width: 380,
-                  mt: 4,
-                  "@media screen and (max-width: 90em)": {
-                    width: 330,
-                  },
-                }}
-                onMouseEnter={() => {
-                  setgifAnim(true);
-                }}
-                onMouseLeave={() => {
-                  setgifAnim(false);
-                }}
-              >
-                {gifAnim && (
-                  <Slide
-                    direction="right"
-                    in={true}
-                    container={gifAnimCont.current}
-                  >
-                    <Box sx={{ mr: 0.7 }}>
-                      <img src={logo} width="30" height="30" alt="" id="logo" />
-                    </Box>
-                  </Slide>
-                )}
-                <Typography
-                  sx={{
-                    mr: 2,
-                  }}
-                >
-                  Sign In
-                </Typography>
-              </Button>
+          </Alert>
+        </Box>
+      )}
+      {success && (
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            width: "100%",
+            flexDirection: "column",
+            mb: 3,
+          }}
+        >
+          <Alert
+            sx={{ alignItems: "flex-start" }}
+            startDecorator={
+              <CheckIcon sx={{ mt: "7px", mx: "4px", fontSize: "30px" }} />
+            }
+            variant="solid"
+            color="success"
+          >
+            <Box>
+              <Typography fontWeight="lg" mt={0.25} sx={{ color: "white" }}>
+                Success
+              </Typography>
             </Box>
-          )}
-        </Form>
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-          <Divider
+          </Alert>
+        </Box>
+      )}
+
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontFamily: "Inter",
+          fontWeight: 300,
+          mb: 0.5,
+        }}
+      >
+        Email Address
+      </Typography>
+      <Input
+        type="email"
+        required
+        startDecorator={<MailIcon sx={{ color: "black" }} />}
+        color={error ? "danger" : "warning"}
+        variant="outlined"
+        sx={{
+          transition: "all 0.2s ease-in-out",
+          mb: 1,
+          "--Input-radius": "13px",
+          "--Input-placeholderOpacity": 0.5,
+          "--Input-focusedThickness": "1px",
+          "--Input-minHeight": "60px",
+          "--Input-paddingInline": "22px",
+          "--Input-decorator-childHeight": "44px",
+          "&:focus": {
+            color: "blue",
+          },
+        }}
+        placeholder="Example: roplerm8@yahoo.com"
+        onChange={(e) => setemailValue(e.target.value)}
+      />
+
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontFamily: "Inter",
+          fontWeight: 300,
+          mb: 0.5,
+        }}
+      >
+        Password
+      </Typography>
+
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Input
+          type={isHidden ? "password" : "text"}
+          required
+          startDecorator={<MailIcon sx={{ color: "black" }} />}
+          endDecorator={
+            <IconButton
+              color="warning"
+              variant="plain"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsHidden(!isHidden);
+              }}
+              sx={{ ml: 1 }}
+            >
+              <Tooltip title={isHidden ? "Show" : "Hide"} variant="solid">
+                {isHidden ? <VisibilityIcon /> : <VisibilityOffIcon />}
+              </Tooltip>
+            </IconButton>
+          }
+          color={error ? "danger" : "warning"}
+          variant="outlined"
+          sx={{
+            transition: "all 0.2s ease-in-out",
+            mb: 1,
+            width: "100%",
+            "--Input-radius": "13px",
+            "--Input-placeholderOpacity": 0.5,
+            "--Input-focusedThickness": "1px",
+            "--Input-minHeight": "60px",
+            "--Input-paddingInline": "22px",
+            "--Input-decorator-childHeight": "44px",
+            "&:focus": {
+              color: "blue",
+            },
+          }}
+          placeholder="enter password"
+          onChange={(e) => setpassValue(e.target.value)}
+        />
+      </Box>
+
+      {loading ? (
+        <Button
+          color="success"
+          variant="outlined"
+          loading
+          type="submit"
+          sx={{
+            my: 2,
+            border: 0,
+            width: "100%",
+            backgroundColor: "black",
+            "&:hover": {
+              backgroundColor: "rgba(0,0,0,0.85)",
+            },
+            borderRadius: "7px",
+            minHeight: 60,
+          }}
+        />
+      ) : (
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            ref={gifAnimCont}
+            startDecorator={<LoginIcon sx={{ color: "white" }} />}
+            color="neutral"
+            variant="outlined"
+            type="submit"
             sx={{
-              color: "black",
-              width: 300,
-              fontFamily: "Montserrat",
-              fontSize: 20,
+              my: 2,
+              border: 0,
+              width: "100%",
+              backgroundColor: "black",
+              "&:hover": {
+                backgroundColor: "rgba(0,0,0,0.85)",
+              },
+              borderRadius: "7px",
+              minHeight: 60,
+            }}
+            onMouseEnter={() => {
+              setgifAnim(true);
+            }}
+            onMouseLeave={() => {
+              setgifAnim(false);
+            }}
+            onClick={handleSubmit}
+          >
+            {gifAnim && (
+              <Slide
+                direction="right"
+                in={true}
+                container={gifAnimCont.current}
+              >
+                <Box sx={{ mr: 0.7 }}>
+                  <img src={logo} width="30" height="30" alt="" id="logo" />
+                </Box>
+              </Slide>
+            )}
+            <Typography
+              sx={{
+                mr: 2,
+                fontFamily: "Inter",
+                fontSize: 14,
+                color: "white",
+              }}
+            >
+              Sign In
+            </Typography>
+          </Button>
+        </Box>
+      )}
+      <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
+        <Divider
+          sx={{
+            color: "black",
+            width: "100%",
+            fontFamily: "Inter",
+            fontSize: 14,
+          }}
+        >
+          Or Login with
+        </Divider>
+      </Box>
+      <Grid
+        direction="row"
+        sx={{ display: "flex" }}
+        justifyContent="space-evenly"
+      >
+        <Grid item>
+          <IconButton
+            color="danger"
+            variant="outlined"
+            onClick={googleauth}
+            sx={{
+              "--IconButton-size": "60px",
+              mr: 10,
+              width: "100%",
             }}
           >
-            <Button
-              color="danger"
-              variant="outlined"
-              onClick={googleauth}
-              className="googlebuttAnim"
-              sx={{ border: 0 }}
-            >
-              <GoogleIcon sx={{ mr: 1 }} />
-              Sign In via
-              <Typography sx={{ fontWeight: "500", ml: 1 }}>Google</Typography>
-            </Button>
-          </Divider>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-          <Divider
+            <GoogleIcon />
+          </IconButton>
+        </Grid>
+        <Grid item>
+          <IconButton
+            color="neutral"
+            variant="outlined"
+            onClick={gitauth}
             sx={{
-              color: "black",
-              width: 300,
-              fontFamily: "Montserrat",
-              fontSize: 20,
+              "--IconButton-size": "60px",
+              mr: 10,
+              width: "100%",
             }}
           >
-            <Button
-              color="neutral"
-              variant="outlined"
-              onClick={gitauth}
-              className="gitbuttAnim"
-              sx={{ border: 0 }}
-            >
-              <GitHubIcon sx={{ mr: 1 }} />
-              Sign In via
-              <Typography sx={{ fontWeight: "500", ml: 1 }}>GitHub</Typography>
-            </Button>
-          </Divider>
-        </Box>
-      </Card.Body>
+            <GitHubIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
+
       <Divider
         sx={{
+          mt: 2,
           color: "black",
           px: 5,
           mb: 3,
@@ -439,36 +483,49 @@ export default function LoginPage({ focus }) {
               bgcolor: "background.body",
             }}
           /> */}
-            <Typography level="h3" fontFamily="Montserrat" sx={{ mb: 1 }}>
+            <Typography level="h3" fontFamily="Poppins:wght@700" sx={{ mb: 1 }}>
               Password Reset
             </Typography>
 
-            <Typography endDecorator={<EmailIcon />} fontFamily="Montserrat">
+            <Typography endDecorator={<EmailIcon />} fontFamily="Inter">
               Enter your email address and we will send an email with a reset
               password link
             </Typography>
 
-            <Form onSubmit={handleSubmitButtonResetButton} className="mt-2">
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>
-                  <Typography
-                    level="h5"
-                    fontWeight={600}
-                    fontFamily="Montserrat"
-                  >
-                    Email:
-                  </Typography>
-                  <Typography sx={{ opacity: "80%" }} fontFamily="Montserrat">
-                    Email to receive the email
-                  </Typography>
-                </Form.Label>
-                <Form.Control
-                  type="email"
-                  ref={emailVerifi}
-                  style={{ borderRadius: 4 }}
-                />
-              </Form.Group>
-            </Form>
+            <Typography
+              level="h5"
+              fontWeight={600}
+              fontFamily="Poppins:wght@700"
+            >
+              Email:
+            </Typography>
+            <Typography sx={{ opacity: "80%" }} fontFamily="Inter">
+              Email to receive the email
+            </Typography>
+            <Input
+              style={{ borderRadius: 4 }}
+              type="email"
+              required
+              startDecorator={<MailIcon sx={{ color: "black" }} />}
+              color={error ? "danger" : "warning"}
+              variant="outlined"
+              sx={{
+                transition: "all 0.2s ease-in-out",
+                mt: 2,
+                mb: 3,
+                "--Input-radius": "13px",
+                "--Input-placeholderOpacity": 0.5,
+                "--Input-focusedThickness": "1px",
+                "--Input-minHeight": "60px",
+                "--Input-paddingInline": "22px",
+                "--Input-decorator-childHeight": "44px",
+                "&:focus": {
+                  color: "blue",
+                },
+              }}
+              placeholder="Email to reset the password for"
+              onChange={(e) => setMailVerifi(e.target.value)}
+            />
             {resetSuccess && (
               <Box
                 sx={{
@@ -551,11 +608,11 @@ export default function LoginPage({ focus }) {
                 startDecorator={<ArrowUpwardIcon />}
                 variant="soft"
                 color="warning"
-                onClick={() => ResetPassword(emailVerifi)}
+                onClick={(e) => ResetPassword(e, MailVerifi)}
               >
                 <Typography
                   sx={{
-                    fontFamily: "Montserrat",
+                    fontFamily: "Inter",
                     fontSize: 15,
                     mr: 3,
                   }}

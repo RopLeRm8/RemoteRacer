@@ -1,13 +1,13 @@
+import { child, get, ref, set, update } from "firebase/database";
 import React, {
+  createContext,
   useContext,
   useEffect,
-  useState,
-  createContext,
   useRef,
+  useState,
 } from "react";
+import { sendSuccessEmail } from "../providers/EmailProvider";
 import { auth, db } from "../providers/FirebaseProvider";
-import { ref, child, get, set, update } from "firebase/database";
-
 const AuthContext = createContext();
 const daysOfWeek = [
   "Sunday",
@@ -33,6 +33,7 @@ export function AuthProvider({ children }) {
       .createUserWithEmailAndPassword(email, pass)
       .then(() => {
         setSuccess("You successfully created a user");
+        sendSuccessEmail(email);
         auth.signOut();
       })
       .catch(({ code }) => {

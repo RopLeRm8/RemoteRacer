@@ -12,6 +12,8 @@ export function useLoadFonts() {
           "Noto Sans Hebrew",
           "IBM Plex Sans Hebrew",
           "Anton",
+          "Poppins:wght@700",
+          "Inter",
         ],
       },
     });

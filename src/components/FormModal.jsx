@@ -4,8 +4,10 @@ import FilePresentIcon from "@mui/icons-material/FilePresent";
 import WarningIcon from "@mui/icons-material/Warning";
 import {
   Box,
+  Button,
   Card,
   Chip,
+  CssVarsProvider,
   Divider,
   Grid,
   Modal,
@@ -13,7 +15,6 @@ import {
   ModalDialog,
   Typography,
 } from "@mui/joy";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -40,6 +41,7 @@ export default function FormModal({
   const [error, setError] = useState("");
   const [showText, setshowText] = useState(false);
   const [openModal, setopenModal] = useState(false);
+  const [uploadLoading, setUploadLoading] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -95,6 +97,7 @@ export default function FormModal({
       setImage(null);
       setOpen(false);
       setError(null);
+      setUploadLoading(false);
     },
     [image, setOpen, setupdateLoading, storageRef, user, avatarRefer, setStam]
   );
@@ -121,20 +124,31 @@ export default function FormModal({
       setimageURL(URL.createObjectURL(val.target.files[0]));
       setError("");
     }
+    setUploadLoading((prev) => !prev);
   };
 
   return (
     <Box>
+      <CssVarsProvider />
       <Dialog
         onClose={() => {
           setOpen(false);
           setimageName(null);
           setImage(null);
+          setUploadLoading(false);
         }}
         sx={{ fontFamily: "Noto Sans Hebrew" }}
         open={open}
       >
-        <DialogTitle>Upload new image</DialogTitle>
+        <DialogTitle
+          sx={{
+            textAlign: "center",
+            fontFamily: "Montserrat",
+            fontWeight: 500,
+          }}
+        >
+          UPLOAD NEW IMAGE
+        </DialogTitle>
 
         <Divider
           sx={{
@@ -147,27 +161,46 @@ export default function FormModal({
         />
         <Grid container direction="column">
           <DialogContent sx={{ p: 2 }}>
-            <Typography sx={{ mb: 2 }}>
+            <Typography sx={{ mb: 2, textAlign: "center" }}>
               Click the UPLOAD button to update your profile picture, make sure
-              its less than 1MB
+              its less than 8MB
             </Typography>
             <Grid item sx={{ mb: 2 }}>
-              <Button
-                variant="contained"
-                color="warning"
-                component="label"
-                sx={{ fontFamily: "Noto Sans Hebrew" }}
-                startIcon={<ArrowUpwardIcon />}
-              >
-                Upload
-                <input
-                  hidden
-                  accept="image/*"
-                  multiple
-                  type="file"
-                  onChange={changeHandler}
-                />
-              </Button>
+              {uploadLoading ? (
+                <Button
+                  variant="outlined"
+                  color="warning"
+                  component="label"
+                  sx={{ fontFamily: "Noto Sans Hebrew", width: "100%" }}
+                  loading
+                >
+                  <input
+                    hidden
+                    accept="image/*"
+                    multiple
+                    type="file"
+                    onChange={changeHandler}
+                  />
+                </Button>
+              ) : (
+                <Button
+                  variant="outlined"
+                  color="warning"
+                  component="label"
+                  sx={{ fontFamily: "Noto Sans Hebrew", width: "100%" }}
+                  startDecorator={<ArrowUpwardIcon />}
+                  onClick={() => setUploadLoading(true)}
+                >
+                  Upload
+                  <input
+                    hidden
+                    accept="image/*"
+                    multiple
+                    type="file"
+                    onChange={changeHandler}
+                  />
+                </Button>
+              )}
             </Grid>
 
             {imageName && (
@@ -198,12 +231,19 @@ export default function FormModal({
                     onMouseOver={() => setshowText(true)}
                     onMouseLeave={() => setshowText(false)}
                     onClick={() => setopenModal(true)}
+                    sx={{
+                      backgroundColor: "inherit",
+                      "&:hover": {
+                        backgroundColor: "inherit",
+                      },
+                    }}
                   >
-                    <Card>
+                    <Card variant="outlined" color="warning">
                       <Typography
                         sx={{
                           display: showText ? "flex" : "none",
                           justifyContent: "center",
+                          mb: 1,
                         }}
                       >
                         PREVIEW
@@ -233,16 +273,20 @@ export default function FormModal({
               sx={{ fontFamily: "Noto Sans Hebrew" }}
               onClick={() => handleClose(true)}
               color="success"
+              variant="outlined"
+              size="sm"
             >
-              Confirm
+              CONFIRM
             </Button>
           )}
           <Button
             sx={{ fontFamily: "Noto Sans Hebrew" }}
             onClick={() => handleClose(false)}
-            color="error"
+            color="danger"
+            variant="outlined"
+            size="sm"
           >
-            close
+            CLOSE
           </Button>
         </DialogActions>
       </Dialog>

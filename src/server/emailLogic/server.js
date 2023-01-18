@@ -49,5 +49,25 @@ app.post('/send-verification', loginRateLimiter, (req, res) => {
 
   
 })
+app.post('/send-success', loginRateLimiter, (req, res) => {
+  const msgSuccess = {
+    to: req.body.email, 
+    from: 'reactprojnoreply@gmail.com',
+    subject: '[Welcome email - REMOTERACER]',
+    text: 'hello',
+    html: `<div style = "border-radius:10px; background-color:#ffe500; padding-top:25px; padding-bottom:25px;"> <h1 style = "color:black; margin: 5px auto;"> Hello dear customer! Thanks for signing up on our website! </h1> <h2 style = "color:black;margin: 5px auto;"> Registered with ${req.body.email} </h2> </div>`,
+  }
+  sgMail
+  .send(msgSuccess)
+  .then(() => {
+    console.log('Email sent')
+    res.send({ result: "ok" });
+  })
+  .catch((error) => {
+    console.error(error)
+  })
+
+  
+})
 
 app.listen(port, () => console.log(`Server listening on port ${port}!`));

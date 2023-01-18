@@ -1,0 +1,13 @@
+@keyframes zoomIn {
+    from{
+        transform: scale(0);
+    }
+    to{
+        transform: scale(1);
+    }
+}
+@keyframes zoomInAlmost {
+    to{
+        transform: scale(1);
+    }
+}

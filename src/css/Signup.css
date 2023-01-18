@@ -1,0 +1,11 @@
+.ReactInputVerificationCode__item{
+    border: 1px solid black;
+}
+.ReactInputVerificationCode__item.is-active{
+    box-shadow: 2px 2px 10px 2px #ffe500;
+}
+.codeBack{
+    --ReactInputVerificationCode-itemWidth: 4vmax;
+    --ReactInputVerificationCode-itemHeight: 4.5vmax;
+    --ReactInputVerificationCode-itemSpacing: 3vmin;
+}

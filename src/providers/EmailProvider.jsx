@@ -1,9 +1,3 @@
-// import emailjs from "@emailjs/browser";
-
-// const serviceID = "service_6fg6l9i";
-// const tempID = "template_efhjt64";
-// const pKey = "MtStPxdqA9vC0UXk_";
-
 export const sendEmail = (emailaddr, code, setloadingEmail, setMailError) => {
   fetch("http://localhost:6969/send-verification", {
     method: "POST",
@@ -21,9 +15,21 @@ export const sendEmail = (emailaddr, code, setloadingEmail, setMailError) => {
     .finally(() => {
       setloadingEmail(false);
     });
-
-  // emailjs.sendForm(serviceID, tempID, formValue, pKey).then(
-  //   () => {},
-  //   () => {}
-  // );
+};
+export const sendSuccessEmail = (emailaddr) => {
+  fetch("http://localhost:6969/send-success", {
+    method: "POST",
+    body: JSON.stringify({
+      email: emailaddr,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then(() => {
+      console.log("ok");
+    })
+    .catch(() => {
+      console.log("bad");
+    });
 };

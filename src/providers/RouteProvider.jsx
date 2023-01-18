@@ -9,6 +9,7 @@ import Leaderboard from "../components/Leaderboard";
 import LoginPage from "../components/LoginPage";
 import Profile from "../components/Profile";
 import RegisterPage from "../components/RegisterPage";
+import WelcomePage from "../components/WelcomePage";
 
 import Box from "@mui/joy/Box";
 import { Alert, Backdrop } from "@mui/material";
@@ -61,12 +62,14 @@ export default function RouteProvider() {
       ) : (
         <SnackbarProvider maxSnack={3}>
           <Routes>
-            <Route index element={<Navigate to="/login" />} />
+            <Route index element={<Navigate to="/welcomepage" />} />
+            <Route path="*" element={<Navigate to="/welcomepage" />} />
             <Route path="profile" element={<Navigate to="/" />} />
             <Route path="dashboard" element={<Navigate to="/" />} />
             <Route path="customize" element={<Navigate to="/" />} />
             <Route path="about" element={<Navigate to="/" />} />
             <Route path="leaderboard" element={<Navigate to="/" />} />
+            <Route path="welcomepage" element={<WelcomePage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
           </Routes>

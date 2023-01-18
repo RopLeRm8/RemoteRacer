@@ -85,33 +85,7 @@
   min-width: 100%;
   z-index: -1;
 }
-.buttAnim {
- 
-  color: #ffffff;
-  padding: 30px;
-  text-align: center;
-  border-radius: 4px;
-}
 
-
-/* The animation starts here */
-.buttAnim {
-  position: relative;
-}
-
-.buttAnim:after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 3px;
-  background: linear-gradient(120deg, white, #99f1af,white);
-  background-size: 300% 300%;
-  clip-path: polygon(0% 100%, 3px 100%, 3px 3px, calc(100% - 3px) 3px, calc(100% - 3px) calc(100% - 3px), 3px calc(100% - 3px), 3px 100%, 100% 100%, 100% 0%, 0% 0%);
-  animation: frame-enter 0.5s forwards ease-in-out reverse, gradient-animation 2.5s ease-in-out infinite;
-}
 
 .secbuttAnim {
  
@@ -141,62 +115,8 @@
     animation: frame-enter 0.5s forwards ease-in-out reverse, gradient-animation 2.5s ease-in-out infinite;
   }
 
-  .googlebuttAnim {
- 
-    color: #ffffff;
-    padding: 30px;
-    text-align: center;
-    border-radius: 3px;
-  }
-  
-  
-  /* The animation starts here */
-  .googlebuttAnim {
-    position: relative;
-  }
-  
-  .googlebuttAnim:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 3px;
-    background: linear-gradient(120deg, white, #ffd5d3,white);
-    background-size: 300% 300%;
-    clip-path: polygon(0% 100%, 3px 100%, 3px 3px, calc(100% - 3px) 3px, calc(100% - 3px) calc(100% - 3px), 3px calc(100% - 3px), 3px 100%, 100% 100%, 100% 0%, 0% 0%);
-    animation: frame-enter 0.5s forwards ease-in-out reverse, gradient-animation 2.5s ease-in-out infinite;
-  }
 
   
-  .gitbuttAnim {
- 
-    color: #ffffff;
-    padding: 30px;
-    text-align: center;
-    border-radius: 3px;
-  }
-  
-  
-  /* The animation starts here */
-  .gitbuttAnim {
-    position: relative;
-  }
-  
-  .gitbuttAnim:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 3px;
-    background: linear-gradient(120deg, white, #e5e6e8,white);
-    background-size: 300% 300%;
-    clip-path: polygon(0% 100%, 3px 100%, 3px 3px, calc(100% - 3px) 3px, calc(100% - 3px) calc(100% - 3px), 3px calc(100% - 3px), 3px 100%, 100% 100%, 100% 0%, 0% 0%);
-    animation: frame-enter 0.5s forwards ease-in-out reverse, gradient-animation 2.5s ease-in-out infinite;
-  }
   .regLogo{
     animation:floatz 5s infinite;
   }
