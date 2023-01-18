@@ -2,13 +2,16 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import CheckIcon from "@mui/icons-material/Check";
 import EmailIcon from "@mui/icons-material/Email";
+import HomeIcon from "@mui/icons-material/Home";
 import HowToRegRoundedIcon from "@mui/icons-material/HowToRegRounded";
 import LoginIcon from "@mui/icons-material/Login";
 import MailIcon from "@mui/icons-material/Mail";
+import PasswordIcon from "@mui/icons-material/Password";
 import ReportIcon from "@mui/icons-material/Report";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
+  Badge,
   Button,
   Card,
   Chip,
@@ -80,8 +83,6 @@ export default function SignUp() {
     return result;
   }
   function SubmitCode() {
-    console.log(codeValue);
-    console.log(message);
     if (" " + codeValue === message) {
       setCodeError(null);
       setCodeSuccess("Successfully confirmed email");
@@ -101,14 +102,9 @@ export default function SignUp() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (emailValue.length < 1) {
-      console.log("hi");
-      return setError("Please enter valid email");
-    }
-    if (!emailReg.test(emailValue)) {
-      console.log("hi2");
-      return setError("Please enter valid email");
-    }
+    if (emailValue.length < 1) return setError("Please enter valid email");
+
+    if (!emailReg.test(emailValue)) return setError("Please enter valid email");
 
     if (passValue.length < 6) {
       return setError("Password must contain atleast 6 characters");
@@ -158,14 +154,22 @@ export default function SignUp() {
         }}
       >
         <Grid container direction="row" justifyContent="space-between">
-          <IconButton
-            variant="outlined"
-            color="neutral"
-            sx={{ width: "11%" }}
-            onClick={() => navigate("/")}
+          <Badge
+            badgeContent={<HomeIcon />}
+            size="sm"
+            color="warning"
+            variant="soft"
+            badgeInset={10}
           >
-            <ArrowBackIosIcon sx={{ ml: 1 }} />
-          </IconButton>
+            <IconButton
+              variant="outlined"
+              color="neutral"
+              sx={{ width: "80%", px: 2 }}
+              onClick={() => navigate("/")}
+            >
+              <ArrowBackIosIcon sx={{ ml: 1 }} />
+            </IconButton>
+          </Badge>
           <img src={star} alt="" />
         </Grid>
         <CssVarsProvider />
@@ -286,7 +290,7 @@ export default function SignUp() {
           <Input
             type={isHidden ? "password" : "text"}
             required
-            startDecorator={<MailIcon sx={{ color: "black" }} />}
+            startDecorator={<PasswordIcon sx={{ color: "black" }} />}
             color={error ? "danger" : "warning"}
             variant="outlined"
             sx={{
@@ -300,7 +304,7 @@ export default function SignUp() {
               "--Input-decorator-childHeight": "44px",
               width: "100%",
             }}
-            placeholder="must be 6+ characters"
+            placeholder="Must be 6+ characters"
             onChange={(e) => setpassValue(e.target.value)}
             endDecorator={
               <IconButton
@@ -334,7 +338,7 @@ export default function SignUp() {
           <Input
             type={isHiddenConf ? "password" : "text"}
             required
-            startDecorator={<MailIcon sx={{ color: "black" }} />}
+            startDecorator={<PasswordIcon sx={{ color: "black" }} />}
             color={error ? "danger" : "warning"}
             variant="outlined"
             sx={{
@@ -348,7 +352,7 @@ export default function SignUp() {
               "--Input-decorator-childHeight": "44px",
               width: "100%",
             }}
-            placeholder="repeat password"
+            placeholder="Repeat password"
             onChange={(e) => setpassfirmValue(e.target.value)}
             endDecorator={
               <IconButton
@@ -390,16 +394,12 @@ export default function SignUp() {
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Button
               ref={gifAnimCont}
-              startDecorator={<HowToRegRoundedIcon sx={{ color: "white" }} />}
+              startDecorator={<HowToRegRoundedIcon />}
               variant="outlined"
+              color="warning"
               type="submit"
               sx={{
-                border: 0,
                 width: "100%",
-                backgroundColor: "black",
-                "&:hover": {
-                  backgroundColor: "rgba(0,0,0,0.85)",
-                },
                 borderRadius: "7px",
                 minHeight: 60,
               }}
@@ -428,7 +428,6 @@ export default function SignUp() {
                   fontFamily: "Inter",
                   fontSize: 15,
                   fontWeight: 400,
-                  color: "white",
                 }}
               >
                 Sign up

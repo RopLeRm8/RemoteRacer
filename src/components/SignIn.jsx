@@ -1,18 +1,22 @@
-import { ArrowBackIos } from "@mui/icons-material";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import CheckIcon from "@mui/icons-material/Check";
 import EmailIcon from "@mui/icons-material/Email";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
+import HomeIcon from "@mui/icons-material/Home";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import LoginIcon from "@mui/icons-material/Login";
 import MailIcon from "@mui/icons-material/Mail";
+import PasswordIcon from "@mui/icons-material/Password";
 import ReportIcon from "@mui/icons-material/Report";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+
 import {
   Alert,
+  Badge,
   Box,
   Button,
   Card,
@@ -118,14 +122,22 @@ export default function LoginPage() {
     >
       <CssVarsProvider />
       <Grid container direction="row" justifyContent="space-between">
-        <IconButton
-          variant="outlined"
-          color="neutral"
-          sx={{ width: "11%" }}
-          onClick={() => navigate("/")}
+        <Badge
+          badgeContent={<HomeIcon />}
+          size="sm"
+          color="warning"
+          variant="soft"
+          badgeInset={10}
         >
-          <ArrowBackIos sx={{ ml: 1 }} />
-        </IconButton>
+          <IconButton
+            variant="outlined"
+            color="neutral"
+            sx={{ width: "80%", px: 2 }}
+            onClick={() => navigate("/")}
+          >
+            <ArrowBackIosIcon sx={{ ml: 1 }} />
+          </IconButton>
+        </Badge>
         <img src={star} alt="" />
       </Grid>
 
@@ -244,7 +256,7 @@ export default function LoginPage() {
         <Input
           type={isHidden ? "password" : "text"}
           required
-          startDecorator={<MailIcon sx={{ color: "black" }} />}
+          startDecorator={<PasswordIcon sx={{ color: "black" }} />}
           endDecorator={
             <IconButton
               color="warning"
@@ -276,7 +288,7 @@ export default function LoginPage() {
               color: "blue",
             },
           }}
-          placeholder="enter password"
+          placeholder="Enter password"
           onChange={(e) => setpassValue(e.target.value)}
         />
       </Box>
@@ -303,18 +315,13 @@ export default function LoginPage() {
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Button
             ref={gifAnimCont}
-            startDecorator={<LoginIcon sx={{ color: "white" }} />}
-            color="neutral"
+            startDecorator={<LoginIcon />}
+            color="warning"
             variant="outlined"
             type="submit"
             sx={{
               my: 2,
-              border: 0,
               width: "100%",
-              backgroundColor: "black",
-              "&:hover": {
-                backgroundColor: "rgba(0,0,0,0.85)",
-              },
               borderRadius: "7px",
               minHeight: 60,
             }}
@@ -342,7 +349,6 @@ export default function LoginPage() {
                 mr: 2,
                 fontFamily: "Inter",
                 fontSize: 14,
-                color: "white",
               }}
             >
               Sign In
@@ -376,6 +382,7 @@ export default function LoginPage() {
               "--IconButton-size": "60px",
               mr: 10,
               width: "100%",
+              border: 2,
             }}
           >
             <GoogleIcon />
@@ -390,6 +397,7 @@ export default function LoginPage() {
               "--IconButton-size": "60px",
               mr: 10,
               width: "100%",
+              border: 2,
             }}
           >
             <GitHubIcon />
@@ -507,7 +515,7 @@ export default function LoginPage() {
               type="email"
               required
               startDecorator={<MailIcon sx={{ color: "black" }} />}
-              color={error ? "danger" : "warning"}
+              color={"warning"}
               variant="outlined"
               sx={{
                 transition: "all 0.2s ease-in-out",
