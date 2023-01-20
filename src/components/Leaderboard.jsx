@@ -1,26 +1,39 @@
-import { getAuth } from "@firebase/auth";
-import {
-  Avatar,
-  Badge,
-  Box,
-  CssVarsProvider,
-  Grid,
-  Stack,
-  Typography,
-} from "@mui/joy";
-
-import { useAuthState } from "react-firebase-hooks/auth";
-import trophy from "../assets/Leaderboard/trophy.png";
-import Navbar from "../layouts/NavBar";
+// import { getAuth } from "@firebase/auth";
+import { Box } from "@mui/joy";
+import { onValue, ref } from "firebase/database";
+import { useEffect, useState } from "react";
+// import { useAuthState } from "react-firebase-hooks/auth";
+// import trophy from "../assets/Leaderboard/trophy.png";
+// import Navbar from "../layouts/NavBar";
+import { db } from "../providers/FirebaseProvider";
 const backColor = "black";
-const secondaryColor = "#ffe500";
-const boxesColor = "#201c1c";
+// const secondaryColor = "#ffe500";
+// const boxesColor = "#201c1c";
+const usersRef = ref(db, "users/");
 export default function Leaderboard() {
-  const [user] = useAuthState(getAuth());
+  // const [user] = useAuthState(getAuth());
+  const [usersData, setusersData] = useState([]);
+  useEffect(() => {
+    onValue(usersRef, (snapshot) => {
+      const data = snapshot.val();
+      for (const key in data) {
+        setusersData(usersData.push(data[key].data));
+      }
+      let arr = usersData.sort((a, b) => b.points - a.points);
+      arr = arr.slice(0, 3);
+      console.log(arr);
+      setusersData([...arr]);
+      console.log(usersData);
+    });
+
+    // return () => {
+    //   setusersData([]);
+    // };
+  }, []);
 
   return (
     <Box sx={{ background: backColor }}>
-      <Navbar />
+      {/* <Navbar />
       <CssVarsProvider />
       <Grid container alignItems="center" sx={{ py: 10 }} direction="column">
         <Grid item>
@@ -45,7 +58,6 @@ export default function Leaderboard() {
         </Grid>
       </Grid>
       <Grid container sx={{ py: 2 }} alignItems="center" direction="column">
-        {/*main grid*/}
 
         <Box
           sx={{
@@ -76,7 +88,7 @@ export default function Leaderboard() {
                 }}
                 badgeInset={-4}
               >
-                <Avatar src={user.photoURL} size="lg" />
+                <Avatar src={usersData[0].photoURL} size="lg" />
               </Badge>
             </Grid>
             <Grid item>
@@ -85,13 +97,13 @@ export default function Leaderboard() {
                   fontFamily="Montserrat"
                   sx={{ color: secondaryColor }}
                 >
-                  {user.displayName}
+                  {usersData[0]?.name}
                 </Typography>
                 <Typography
                   fontFamily="Montserrat"
                   sx={{ color: secondaryColor }}
                 >
-                  {user.email}
+                  {usersData[0].mail}
                 </Typography>
               </Grid>
             </Grid>
@@ -105,7 +117,6 @@ export default function Leaderboard() {
             </Grid>
           </Grid>
         </Box>
-        {/*second box */}
         <Stack
           direction={{ xs: "column", md: "row" }}
           sx={{ margin: 0, padding: 0 }}
@@ -132,7 +143,7 @@ export default function Leaderboard() {
                 </Typography>
               </Grid>
               <Grid item>
-                <Avatar src={user.photoURL} size="lg" />
+                <Avatar src={usersData[1].photoURL} size="lg" />
               </Grid>
               <Grid item>
                 <Grid container direction="column">
@@ -140,13 +151,13 @@ export default function Leaderboard() {
                     fontFamily="Montserrat"
                     sx={{ color: secondaryColor }}
                   >
-                    {user.displayName}
+                    {usersData[1]?.name}
                   </Typography>
                   <Typography
                     fontFamily="Montserrat"
                     sx={{ color: secondaryColor }}
                   >
-                    {user.email}
+                    {usersData[1].mail}
                   </Typography>
                 </Grid>
               </Grid>
@@ -198,7 +209,7 @@ export default function Leaderboard() {
               </Typography>
             </Grid>
             <Grid item>
-              <Avatar src={user.photoURL} size="lg" />
+              <Avatar src={usersData[2].photoURL} size="lg" />
             </Grid>
             <Grid item>
               <Grid container direction="column">
@@ -206,13 +217,13 @@ export default function Leaderboard() {
                   fontFamily="Montserrat"
                   sx={{ color: secondaryColor }}
                 >
-                  {user.displayName}
+                  {usersData[2]?.name}
                 </Typography>
                 <Typography
                   fontFamily="Montserrat"
                   sx={{ color: secondaryColor }}
                 >
-                  {user.email}
+                  {usersData[2].mail}
                 </Typography>
               </Grid>
             </Grid>
@@ -261,7 +272,7 @@ export default function Leaderboard() {
         >
           25
         </Typography>
-      </Box>
+      </Box> */}
     </Box>
   );
 }
