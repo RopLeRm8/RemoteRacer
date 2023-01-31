@@ -1,6 +1,6 @@
-import NavBar from "../layouts/NavBar";
+import { Box, CssVarsProvider } from "@mui/joy";
 import background from "../assets/Dashboard/background.png";
-import { Box } from "@mui/joy";
+import NavBar from "../layouts/NavBar";
 export default function Dashboard() {
   return (
     <Box
@@ -15,6 +15,7 @@ export default function Dashboard() {
       }}
     >
       <NavBar />
+      <CssVarsProvider />
     </Box>
   );
 }

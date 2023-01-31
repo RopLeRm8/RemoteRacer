@@ -1,14 +1,14 @@
 import MenuIcon from "@mui/icons-material/Menu";
+import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
+import IconButton from "@mui/joy/IconButton";
+import Tooltip from "@mui/joy/Tooltip";
 import AppBar from "@mui/material/AppBar";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
-import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
 import logo from "../assets/Global/logoblack.png";
@@ -19,8 +19,8 @@ import BrushIcon from "@mui/icons-material/Brush";
 import InfoIcon from "@mui/icons-material/Info";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import LogoutIcon from "@mui/icons-material/Logout";
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import { Slide } from "@mui/material";
-import Zoom from "@mui/material/Zoom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../providers/FirebaseProvider";
@@ -93,6 +93,7 @@ function Navbar() {
                   width: "100%",
                   maxHeight: "100px",
                   my: 1,
+                  mr: 3,
                 }}
               >
                 <img src={logo} width="130" height="80" alt="" />
@@ -151,7 +152,7 @@ function Navbar() {
                 display: { xs: "flex", md: "none" },
                 mr: -2,
                 my: 1.2,
-                flexGrow: 1,
+                flexGrow: { xs: 0.3, md: 1 },
               }}
             >
               <a href="/">
@@ -169,32 +170,37 @@ function Navbar() {
             >
               {pages.map((page) => (
                 <Tooltip
+                  variant="outlined"
                   arrow
                   title={
                     <Typography
-                      style={{ fontSize: 13, fontFamily: "Montserrat" }}
+                      style={{
+                        fontSize: 13,
+                        fontFamily: "Inter",
+                        animation: "fadein 0.3s forwards",
+                      }}
                     >
                       {page[3]}
                     </Typography>
                   }
                   key={page[3]}
-                  TransitionComponent={Zoom}
-                  enterDelay={500}
                 >
                   <Button
+                    variant="plain"
+                    color="warning"
                     key={page}
-                    endIcon={page[1]}
+                    startDecorator={page[1]}
                     onClick={() => handleCloseNavMenu(page[4])}
                     sx={{
                       "&:hover": {
                         color: page[2],
                       },
-                      fontFamily: "Montserrat",
+                      fontFamily: "Poppins",
                       my: 2,
-                      mx: 2,
+                      ml: 3,
                       color: "black",
-                      fontSize: 15,
-                      fontWeight: 600,
+                      fontSize: 16,
+                      fontWeight: 500,
                       justifyContent: "center",
                     }}
                   >
@@ -204,7 +210,10 @@ function Navbar() {
               ))}
             </Box>
 
-            <Box sx={{ flexGrow: 0 }}>
+            <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
+              <IconButton color="warning" variant="plain">
+                <SettingsSuggestIcon />
+              </IconButton>
               <Tooltip
                 title={
                   <Typography
@@ -214,14 +223,22 @@ function Navbar() {
                   </Typography>
                 }
               >
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <IconButton
+                  onClick={handleOpenUserMenu}
+                  sx={{
+                    backgroundColor: "rgba(0,0,0,0)",
+                    "&:hover": {
+                      backgroundColor: "rgba(0,0,0,0)",
+                    },
+                  }}
+                >
                   <Avatar
                     alt="Remy Sharp"
                     src={user?.photoURL}
                     sx={{
                       color: "white",
-                      width: 50,
-                      height: 50,
+                      "--Avatar-size": { xs: "35px", md: "50px" },
+                      ml: 3,
                     }}
                   />
                 </IconButton>
@@ -260,6 +277,10 @@ function Navbar() {
                       sx={{
                         ml: setting[0] === "יציאה" ? 1 : 0,
                         color: "black",
+                        backgroundColor: "rgba(0,0,0,0)",
+                        "&:hover": {
+                          backgroundColor: "rgba(0,0,0,0)",
+                        },
                       }}
                     >
                       {setting[1]}{" "}

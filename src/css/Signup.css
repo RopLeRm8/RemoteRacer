@@ -1,11 +1,21 @@
 .codeBack .ReactInputVerificationCode__item{
-    border: 3px solid black;
+    border: 3px solid white;
+    color:"white";
+    background-color: white;
 }
 .codeBack .ReactInputVerificationCode__item.is-active{
-    border: 4px solid black;
+    border: 4px solid white;
+    color:"white";
+
+}
+.codeBack .ReactInputVerificationCode__item.is-filled{
+    color:"white";
 }
 .codeBack{
     --ReactInputVerificationCode-itemWidth: 4vmax;
     --ReactInputVerificationCode-itemHeight: 4.5vmax;
     --ReactInputVerificationCode-itemSpacing: 3vmin;
 }
+@keyframes shake-horizontal{0%,100%{transform:translateX(0)}10%,30%,50%,70%{transform:translateX(-10px)}20%,40%,60%{transform:translateX(10px)}80%{transform:translateX(8px)}90%{transform:translateX(-8px)}}
+@keyframes slide-in-elliptic-top-fwd{0%{transform:translateY(-600px) rotateX(-30deg) scale(0);transform-origin:50% 100%;opacity:0}100%{transform:translateY(0) rotateX(0) scale(1);transform-origin:50% 1400px;opacity:1}}
+@keyframes swing-in-top-fwd{0%{transform:rotateX(-100deg);transform-origin:top;opacity:0}100%{transform:rotateX(0deg);transform-origin:top;opacity:1}}

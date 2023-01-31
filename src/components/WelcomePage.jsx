@@ -15,7 +15,15 @@ export default function WelcomePage() {
         justifyContent="center"
         alignItems="center"
       >
-        <img src={stars} alt="" style={{ maxWidth: "100%" }} />
+        <img
+          src={stars}
+          alt=""
+          style={{
+            maxWidth: "100%",
+            animation:
+              "swing-in-top-fwd 0.7s cubic-bezier(.175,.885,.32,1.275) both",
+          }}
+        />
         <Typography
           sx={{
             mt: 7,
@@ -48,12 +56,13 @@ export default function WelcomePage() {
             transition: "all 0.3s ease-out",
             backgroundColor: "black",
             border: 2,
-            transform: "scale(0.7)",
-            animation: "zoomInAlmost 0.4s forwards 0.5s",
+            animation: "bounce-in-top 0.8s forwards",
+            animationIterationCount: 1,
             "&:hover": {
               backgroundColor: "white",
               color: "black",
               borderColor: "black",
+              boxShadow: "0 0 20px 0 rgba(0,0,0,.35)",
             },
           }}
           onClick={() => navigate("/login")}
@@ -69,12 +78,12 @@ export default function WelcomePage() {
             color: "black",
             border: 2,
             borderColor: "black",
+            animation: "bounce-in-top 0.8s both",
             transition: "all 0.3s ease-out",
-            transform: "scale(0.7)",
-            animation: "zoomInAlmost 0.4s forwards 0.5s",
             "&:hover": {
-              backgroundColor: "black",
-              color: "white",
+              backgroundColor: "white",
+              color: "black",
+              boxShadow: "0 0 20px 0 rgba(0,0,0,.35)",
             },
           }}
           onClick={() => navigate("/register")}

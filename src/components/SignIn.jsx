@@ -13,7 +13,6 @@ import PasswordIcon from "@mui/icons-material/Password";
 import ReportIcon from "@mui/icons-material/Report";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-
 import {
   Alert,
   Badge,
@@ -30,7 +29,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/joy";
-import { Fade, Slide } from "@mui/material";
+import { Slide } from "@mui/material";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -118,6 +117,8 @@ export default function LoginPage() {
         borderRadius: 10,
         boxShadow: "3px 5px 30px 15px black",
         p: 3.5,
+        animation:
+          "slide-in-elliptic-top-fwd .4s cubic-bezier(.25,.46,.45,.94) both",
       }}
     >
       <CssVarsProvider />
@@ -233,6 +234,9 @@ export default function LoginPage() {
           "--Input-minHeight": "60px",
           "--Input-paddingInline": "22px",
           "--Input-decorator-childHeight": "44px",
+          animation: error
+            ? "shake-horizontal .3s cubic-bezier(.455,.03,.515,.955) both"
+            : null,
           "&:focus": {
             color: "blue",
           },
@@ -284,6 +288,9 @@ export default function LoginPage() {
             "--Input-minHeight": "60px",
             "--Input-paddingInline": "22px",
             "--Input-decorator-childHeight": "44px",
+            animation: error
+              ? "shake-horizontal .3s cubic-bezier(.455,.03,.515,.955) both"
+              : null,
             "&:focus": {
               color: "blue",
             },
@@ -432,6 +439,7 @@ export default function LoginPage() {
             "@media screen and (max-width: 90em)": {
               width: 330,
             },
+            fontFamily: "Inter",
           }}
           onClick={() => {
             setShowPanel(true);
@@ -455,6 +463,7 @@ export default function LoginPage() {
             "@media screen and (max-width: 90em)": {
               width: 330,
             },
+            fontFamily: "Inter",
           }}
           onClick={() => navigate("/register")}
         >
@@ -468,20 +477,17 @@ export default function LoginPage() {
         aria-labelledby="modal-title"
         aria-describedby="modal-desc"
       >
-        <Fade in={true}>
-          <ModalDialog
-            variant="outlined"
-            size="lg"
-            sx={{
-              color: "white",
-              outlineColor: "white",
-              p: 5,
-              boxShadow: "lg",
-              backgroundColor: "rgba(255,255,255,0.5)",
-              borderRadius: 10,
-            }}
-          >
-            {/* <ModalClose
+        <ModalDialog
+          variant="outlined"
+          size="lg"
+          sx={{
+            p: 5,
+            boxShadow: "lg",
+            backgroundColor: "black",
+            borderRadius: 10,
+          }}
+        >
+          {/* <ModalClose
             variant="outlined"
             sx={{
               top: "calc(-1/4 * var(--IconButton-size))",
@@ -491,23 +497,40 @@ export default function LoginPage() {
               bgcolor: "background.body",
             }}
           /> */}
-            <Typography level="h3" fontFamily="Poppins:wght@700" sx={{ mb: 1 }}>
+          <Box
+            sx={{
+              animation:
+                "swing-in-top-fwd .5s cubic-bezier(.175,.885,.32,1.275) both",
+            }}
+          >
+            <Typography
+              level="h3"
+              fontFamily="Poppins:wght@700"
+              fontSize={40}
+              sx={{
+                mb: 1,
+                color: "white",
+                textAlign: "center",
+                display: "flex",
+                justifyContent: "center",
+              }}
+              startDecorator={<LockResetIcon sx={{ fontSize: 40 }} />}
+            >
               Password Reset
             </Typography>
 
-            <Typography endDecorator={<EmailIcon />} fontFamily="Inter">
+            <Typography
+              endDecorator={<EmailIcon />}
+              fontFamily="Inter"
+              sx={{ color: "white" }}
+            >
               Enter your email address and we will send an email with a reset
               password link
             </Typography>
-
             <Typography
-              level="h5"
-              fontWeight={600}
-              fontFamily="Poppins:wght@700"
+              sx={{ opacity: "80%", color: "white" }}
+              fontFamily="Inter"
             >
-              Email:
-            </Typography>
-            <Typography sx={{ opacity: "80%" }} fontFamily="Inter">
               Email to receive the email
             </Typography>
             <Input
@@ -629,8 +652,8 @@ export default function LoginPage() {
                 </Typography>
               </Button>
             )}
-          </ModalDialog>
-        </Fade>
+          </Box>
+        </ModalDialog>
       </Modal>
     </Card>
   );

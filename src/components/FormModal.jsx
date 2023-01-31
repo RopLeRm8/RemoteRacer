@@ -118,7 +118,9 @@ export default function FormModal({
       setimageURL(null);
     } else {
       val.target.files[0]
-        ? setimageName(val.target.files[0]?.name + ` (${exactSize})`)
+        ? setimageName(
+            val.target.files[0]?.name.slice(0, 10) + ` (${exactSize})`
+          )
         : setimageName("");
       setImage(val.target.files[0]);
       setimageURL(URL.createObjectURL(val.target.files[0]));
@@ -137,158 +139,186 @@ export default function FormModal({
           setImage(null);
           setUploadLoading(false);
         }}
-        sx={{ fontFamily: "Noto Sans Hebrew" }}
         open={open}
       >
-        <DialogTitle
-          sx={{
-            textAlign: "center",
-            fontFamily: "Montserrat",
-            fontWeight: 500,
-          }}
-        >
-          UPLOAD NEW IMAGE
-        </DialogTitle>
-
-        <Divider
+        <Box
           sx={{
             backgroundColor: "black",
-            mx: 3,
-            // "@media screen and (max-width: 90em)": {
-            //   display: "none",
-            // },
+            color: "white",
+            p: 2,
           }}
-        />
-        <Grid container direction="column">
-          <DialogContent sx={{ p: 2 }}>
-            <Typography sx={{ mb: 2, textAlign: "center" }}>
-              Click the UPLOAD button to update your profile picture, make sure
-              its less than 8MB
-            </Typography>
-            <Grid item sx={{ mb: 2 }}>
-              {uploadLoading ? (
-                <Button
-                  variant="outlined"
-                  color="warning"
-                  component="label"
-                  sx={{ fontFamily: "Noto Sans Hebrew", width: "100%" }}
-                  loading
-                >
-                  <input
-                    hidden
-                    accept="image/*"
-                    multiple
-                    type="file"
-                    onChange={changeHandler}
-                  />
-                </Button>
-              ) : (
-                <Button
-                  variant="outlined"
-                  color="warning"
-                  component="label"
-                  sx={{ fontFamily: "Noto Sans Hebrew", width: "100%" }}
-                  startDecorator={<ArrowUpwardIcon />}
-                  onClick={() => setUploadLoading(true)}
-                >
-                  Upload
-                  <input
-                    hidden
-                    accept="image/*"
-                    multiple
-                    type="file"
-                    onChange={changeHandler}
-                  />
-                </Button>
-              )}
-            </Grid>
+        >
+          <DialogTitle
+            sx={{
+              textAlign: "center",
+              fontFamily: "Poppins",
+              fontWeight: 500,
+            }}
+          >
+            UPLOAD NEW IMAGE
+          </DialogTitle>
 
-            {imageName && (
-              <Chip
-                variant="soft"
-                color="warning"
-                sx={{
-                  "--Chip-radius": "9px",
-                  "--Chip-gap": "7px",
-                  "--Chip-minHeight": "33px",
-                }}
-                startDecorator={<FilePresentIcon />}
-              >
-                <Typography>{imageName}</Typography>
-              </Chip>
-            )}
-            <Grid item sx={{ mt: 2 }}>
-              {image && (
-                <Box
-                  sx={{
-                    width: "150px",
-                    "&:hover": {
-                      opacity: "50%",
-                    },
-                  }}
-                >
+          <Divider
+            sx={{
+              backgroundColor: "white",
+              mx: 3,
+              // "@media screen and (max-width: 90em)": {
+              //   display: "none",
+              // },
+            }}
+          />
+
+          <Grid container direction="column">
+            <DialogContent sx={{ p: 2 }}>
+              <Typography sx={{ mb: 2, textAlign: "center", color: "white" }}>
+                Click the UPLOAD button to update your profile picture, make
+                sure its less than 8MB
+              </Typography>
+              <Grid item sx={{ mb: 2 }}>
+                {uploadLoading ? (
                   <Button
-                    onMouseOver={() => setshowText(true)}
-                    onMouseLeave={() => setshowText(false)}
-                    onClick={() => setopenModal(true)}
+                    variant="outlined"
+                    color="warning"
+                    component="label"
+                    sx={{ fontFamily: "Inter", width: "100%", color: "white" }}
+                    loading
+                  >
+                    <input
+                      hidden
+                      accept="image/*"
+                      multiple
+                      type="file"
+                      onChange={changeHandler}
+                    />
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    color="warning"
+                    component="label"
                     sx={{
-                      backgroundColor: "inherit",
+                      fontFamily: "Inter",
+                      width: "100%",
+                      color: "white",
                       "&:hover": {
-                        backgroundColor: "inherit",
+                        color: "black",
+                      },
+                    }}
+                    startDecorator={<ArrowUpwardIcon />}
+                    onClick={() => setUploadLoading(true)}
+                  >
+                    Upload
+                    <input
+                      hidden
+                      accept="image/*"
+                      multiple
+                      type="file"
+                      onChange={changeHandler}
+                    />
+                  </Button>
+                )}
+              </Grid>
+
+              {imageName && (
+                <Chip
+                  variant="soft"
+                  color="warning"
+                  sx={{
+                    "--Chip-radius": "9px",
+                    "--Chip-gap": "7px",
+                    "--Chip-minHeight": "33px",
+                    maxWidth: "100%",
+                  }}
+                  startDecorator={<FilePresentIcon />}
+                >
+                  <Typography>{imageName}</Typography>
+                </Chip>
+              )}
+              <Grid item sx={{ mt: 2 }}>
+                {image && (
+                  <Box
+                    sx={{
+                      width: "150px",
+                      "&:hover": {
+                        opacity: "50%",
                       },
                     }}
                   >
-                    <Card variant="outlined" color="warning">
-                      <Typography
-                        sx={{
-                          display: showText ? "flex" : "none",
-                          justifyContent: "center",
-                          mb: 1,
-                        }}
-                      >
-                        PREVIEW
-                      </Typography>
-                      <img src={imageURL} width="150px" alt="" />
-                    </Card>
-                  </Button>
-                </Box>
-              )}
-            </Grid>
+                    <Button
+                      onMouseOver={() => setshowText(true)}
+                      onMouseLeave={() => setshowText(false)}
+                      onClick={() => setopenModal(true)}
+                      sx={{
+                        backgroundColor: "inherit",
+                        "&:hover": {
+                          backgroundColor: "inherit",
+                        },
+                      }}
+                    >
+                      <Card variant="outlined" color="warning">
+                        <Typography
+                          sx={{
+                            display: showText ? "flex" : "none",
+                            justifyContent: "center",
+                            mb: 1,
+                          }}
+                        >
+                          PREVIEW
+                        </Typography>
+                        <img src={imageURL} width="150px" alt="" />
+                      </Card>
+                    </Button>
+                  </Box>
+                )}
+              </Grid>
 
-            {error && (
-              <Chip
-                color="danger"
-                variant="soft"
-                sx={{ "--Chip-radius": "9px" }}
-                startDecorator={<WarningIcon />}
+              {error && (
+                <Chip
+                  color="danger"
+                  variant="soft"
+                  sx={{ "--Chip-radius": "9px" }}
+                  startDecorator={<WarningIcon />}
+                >
+                  {error}
+                </Chip>
+              )}
+            </DialogContent>
+          </Grid>
+          <DialogActions>
+            {imageName && (
+              <Button
+                sx={{
+                  fontFamily: "Poppins",
+                  color: "white",
+                  "&:hover": {
+                    color: "black",
+                  },
+                }}
+                onClick={() => handleClose(true)}
+                color="success"
+                variant="outlined"
+                size="sm"
               >
-                {error}
-              </Chip>
+                CONFIRM
+              </Button>
             )}
-          </DialogContent>
-        </Grid>
-        <DialogActions>
-          {imageName && (
             <Button
-              sx={{ fontFamily: "Noto Sans Hebrew" }}
-              onClick={() => handleClose(true)}
-              color="success"
+              sx={{
+                fontFamily: "Poppins",
+                color: "white",
+                "&:hover": {
+                  color: "black",
+                },
+              }}
+              onClick={() => handleClose(false)}
+              color="danger"
               variant="outlined"
               size="sm"
             >
-              CONFIRM
+              CLOSE
             </Button>
-          )}
-          <Button
-            sx={{ fontFamily: "Noto Sans Hebrew" }}
-            onClick={() => handleClose(false)}
-            color="danger"
-            variant="outlined"
-            size="sm"
-          >
-            CLOSE
-          </Button>
-        </DialogActions>
+          </DialogActions>
+        </Box>
       </Dialog>
       <Modal open={openModal} onClose={() => setopenModal(false)}>
         <ModalDialog color="warning" sx={{ width: "25%" }}>

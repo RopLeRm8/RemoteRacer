@@ -27,7 +27,7 @@ import Alert from "@mui/joy/Alert";
 import Box from "@mui/joy/Box";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
-import { Fade, Slide } from "@mui/material";
+import { Slide } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -151,6 +151,8 @@ export default function SignUp() {
           borderRadius: 10,
           boxShadow: "3px 5px 30px 15px black",
           p: 3.5,
+          animation:
+            "slide-in-elliptic-top-fwd .4s cubic-bezier(.25,.46,.45,.94) both",
         }}
       >
         <Grid container direction="row" justifyContent="space-between">
@@ -268,6 +270,9 @@ export default function SignUp() {
             "--Input-minHeight": "60px",
             "--Input-paddingInline": "22px",
             "--Input-decorator-childHeight": "44px",
+            animation: error
+              ? "shake-horizontal .3s cubic-bezier(.455,.03,.515,.955) both"
+              : null,
             "&:focus": {
               color: "blue",
             },
@@ -303,6 +308,9 @@ export default function SignUp() {
               "--Input-paddingInline": "22px",
               "--Input-decorator-childHeight": "44px",
               width: "100%",
+              animation: error
+                ? "shake-horizontal .3s cubic-bezier(.455,.03,.515,.955) both"
+                : null,
             }}
             placeholder="Must be 6+ characters"
             onChange={(e) => setpassValue(e.target.value)}
@@ -351,6 +359,9 @@ export default function SignUp() {
               "--Input-paddingInline": "22px",
               "--Input-decorator-childHeight": "44px",
               width: "100%",
+              animation: error
+                ? "shake-horizontal .3s cubic-bezier(.455,.03,.515,.955) both"
+                : null,
             }}
             placeholder="Repeat password"
             onChange={(e) => setpassfirmValue(e.target.value)}
@@ -461,6 +472,7 @@ export default function SignUp() {
               },
               borderRadius: 4,
               width: 380,
+              fontFamily: "Inter",
             }}
           >
             Sign In With Existing Account
@@ -474,28 +486,34 @@ export default function SignUp() {
             setCodeSuccess(null);
           }}
         >
-          <Fade in={true}>
-            <ModalDialog
-              variant="outlined"
+          <ModalDialog
+            variant="outlined"
+            sx={{
+              color: "#1c1c1c",
+              outlineColor: "white",
+              p: 5,
+              boxShadow: "lg",
+              backgroundColor: "black",
+              borderRadius: 10,
+            }}
+          >
+            <Box
               sx={{
-                color: "#1c1c1c",
-                outlineColor: "white",
-                p: 5,
-                boxShadow: "lg",
-                backgroundColor: "rgba(255,255,255,0.5)",
-                borderRadius: 10,
+                animation:
+                  "swing-in-top-fwd .5s cubic-bezier(.175,.885,.32,1.275) both",
               }}
             >
               <Typography
                 level="h3"
                 fontFamily="Poppins@wght700"
                 fontWeight={900}
+                sx={{ color: "white" }}
               >
                 Enter code
               </Typography>
 
               {emailValue && (
-                <Typography fontFamily="Inter">
+                <Typography fontFamily="Inter" sx={{ color: "white" }}>
                   We sent a verification code to {emailValue}, please check your
                   email and enter the code here
                   <EmailIcon />
@@ -626,8 +644,8 @@ export default function SignUp() {
                   {mailError}
                 </Chip>
               ) : null}
-            </ModalDialog>
-          </Fade>
+            </Box>
+          </ModalDialog>
         </Modal>
       </Card>
     </Box>

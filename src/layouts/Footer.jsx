@@ -1,9 +1,9 @@
-import { Grid, Typography, List, ListItemButton } from "@mui/joy";
-import logo from "../assets/Global/logo.png";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import { Grid, List, ListItemButton, Typography } from "@mui/joy";
+import logo from "../assets/Global/logo.png";
 const listOfSocials = [
   {
     icon: <TwitterIcon />,
@@ -31,7 +31,7 @@ export default function Footer() {
     <Grid
       container
       sx={{ p: 5, backgroundColor: "black" }}
-      justifyContent="space-evenly"
+      justifyContent={{ xs: "center", md: "space-evenly" }}
     >
       <Grid item>
         <img src={logo} alt="" width="225" height="140" />
@@ -67,7 +67,7 @@ export default function Footer() {
 
                 mt: 1,
                 color: "#ffe500",
-                mx: { xs: 2, sm: 3.5 },
+                mx: { xs: 2, md: 3.5 },
               }}
               onClick={() => window.open(social.link)}
             >

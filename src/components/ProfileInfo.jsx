@@ -1,25 +1,25 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
-import { Avatar, Grid, Zoom } from "@mui/material";
+import { getAuth } from "@firebase/auth";
+import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
+import BadgeIcon from "@mui/icons-material/Badge";
+import EditIcon from "@mui/icons-material/Edit";
+import EmailIcon from "@mui/icons-material/Email";
 import {
+  Box,
+  Button,
   Card,
-  Typography,
+  IconButton,
   Stack,
   Tooltip,
-  Box,
-  IconButton,
-  Button,
+  Typography,
 } from "@mui/joy";
+import { Avatar, Grid, Zoom } from "@mui/material";
+import { child, get, ref } from "firebase/database";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { getAuth } from "@firebase/auth";
+import "../css/ProfileInfo.css";
+import { db } from "../providers/FirebaseProvider";
 import FormModal from "./FormModal";
 import FormModalSecond from "./FormModalSecond";
-import "../css/ProfileInfo.css";
-import BadgeIcon from "@mui/icons-material/Badge";
-import EmailIcon from "@mui/icons-material/Email";
-import { ref, child, get } from "firebase/database";
-import { db } from "../providers/FirebaseProvider";
-import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
-import EditIcon from "@mui/icons-material/Edit";
 
 export default function ProfileInfo({ setstamProfile }) {
   const [updateLoading, setupdateLoading] = useState(false);
@@ -66,6 +66,8 @@ export default function ProfileInfo({ setstamProfile }) {
           alignItems: "center",
           p: 5,
           pb: 2,
+          animation:
+            "puff-in-center .5s cubic-bezier(.47,0.000,.745,.715) both",
         }}
       >
         <Card

@@ -117,6 +117,8 @@ export default function Medals({ stamProfile }) {
                   alignItems: "center",
                   color: "#ffe500",
                   letterSpacing: { sm: 5 },
+                  animation:
+                    "tracking-in-expand 1s cubic-bezier(.215,.61,.355,1.000) both",
                 }}
               >
                 <EmojiEventsIcon
@@ -144,7 +146,12 @@ export default function Medals({ stamProfile }) {
                 {medalsList.map((medal) => (
                   <Grid
                     item
-                    sx={{ mx: 0.5, my: { xs: 5, sm: 0 } }}
+                    sx={{
+                      mx: 0.5,
+                      my: { xs: 5, sm: 0 },
+                      animation:
+                        "swing-in-top-fwd 3s cubic-bezier(.175,.885,.32,1.275) both",
+                    }}
                     key={medal[4]}
                   >
                     <Grid container direction="column" key="GridContainerKey">
@@ -215,7 +222,7 @@ export default function Medals({ stamProfile }) {
                   ml: 3,
                   fontSize: 25,
                   color: "#ffe500",
-                  fontFamily: "Anton",
+                  fontFamily: "Poppins",
                 }}
               >
                 {medalsahuz + "%"}

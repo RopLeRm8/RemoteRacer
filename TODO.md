@@ -6,6 +6,8 @@ Project Description
 
 ### Todo
 
+- [ ] Set navbar to be static  
+- [ ] Finish with leaderboard  
 - [ ] Remove uselesss node modules  
 - [ ] Fix shit stack error  
 - [ ] Add lazy module that optimizes the work of routing  
@@ -15,6 +17,7 @@ Project Description
 
 ### Done ✓
 
+- [x] Fix issues in sign in/up pages when they go deep down when error comes up  
 - [x] Enter firebase and email API info to .env files  
 - [x] Limit email send  
 - [x] Add catch to all API calls in frontend  

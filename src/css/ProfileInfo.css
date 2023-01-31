@@ -6,3 +6,5 @@
 @keyframes pulse {
   0% { box-shadow: 0 0 0 .3em rgba(95,53,174,0.7); }
 }
+
+@keyframes puff-in-center{0%{transform:scale(2);filter:blur(4px);opacity:0}100%{transform:scale(1);filter:blur(0);opacity:1}}
