@@ -1,7 +1,7 @@
 
 @keyframes fadein{
     from{
-        opacity: 25%;
+        opacity: 0%;
     }
     to{
         opacity: 100%;
@@ -11,4 +11,12 @@
 #nav{
     animation-name: fadein;
     animation-duration: 0.3s;
+}
+@keyframes fadeslideout{
+    from{
+        opacity:"100%";
+    }
+    to{
+        opacity: "5%";
+    }
 }

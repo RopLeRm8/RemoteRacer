@@ -12,21 +12,24 @@ import {
   Chip,
   CssVarsProvider,
   Divider,
+  FormControl,
+  FormLabel,
   Grid,
+  Input,
   ListDivider,
   ListItemDecorator,
   Option,
   Select,
-  TextField,
   Typography,
 } from "@mui/joy";
+import { FormHelperText } from "@mui/material";
 import { child, get, ref, update } from "firebase/database";
-import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import CustomizeVideo from "../assets/Customize/Customize2.mp4";
 import robot from "../assets/Customize/robot.png";
 import "../css/Customize.css";
+import useNotification from "../hooks/SnackBarInitialize";
 import Footer from "../layouts/Footer";
 import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
@@ -51,13 +54,13 @@ export default function Customize() {
   const [user] = useAuthState(getAuth());
   const userRefDataUpdate = ref(db, `users/${user.uid}/data`);
   const userRefData = `users/${user.uid}/data`;
-  const { enqueueSnackbar } = useSnackbar();
+  const notify = useNotification();
 
   useEffect(() => {
     get(child(query, userRefData))
       .then((snap) => {
         if (!snap.val().carName && !snap.val().carColor) {
-          enqueueSnackbar(
+          useNotification(
             "No configuration detected - restoring values to default",
             {
               variant: "info",
@@ -71,11 +74,11 @@ export default function Customize() {
         videoRef.current?.play();
       })
       .catch(() => {
-        enqueueSnackbar("Couldn't connect to firebase database", {
+        useNotification("Couldn't connect to firebase database", {
           variant: "error",
         });
       });
-  }, []);
+  }, [query, userRefData]);
 
   const handlechangeName = useCallback((e) => {
     setwriteLength(15 - e.target.value.length);
@@ -99,15 +102,15 @@ export default function Customize() {
     setcarNameError("");
   }, []);
 
-  const handleColorChange = useCallback((e, nValue) => {
+  const handleColorChange = useCallback((_, nValue) => {
     carNameTitleRef.current.style.color = nValue;
     carNameTitleRef.current.style.transition = "0.5s all ease-out";
     setcarColor(nValue);
-  });
+  }, []);
 
   const handleconfSave = useCallback(() => {
     if (carNameError) {
-      enqueueSnackbar(carNameError, { variant: "error" });
+      notify(carNameError, { variant: "error" });
       return;
     }
     if (writeLength === 0 && !carColor) {
@@ -115,7 +118,7 @@ export default function Customize() {
       return;
     }
     if ((!carName && !carColor) || carName === "'Car Name'") {
-      enqueueSnackbar(
+      notify(
         "Please edit one of the options in order for the car to be updated",
         { variant: "info" }
       );
@@ -127,11 +130,11 @@ export default function Customize() {
       carColor: carColor,
     }).finally(() => {
       setLoading(false);
-      enqueueSnackbar("Successfully updated car configuration", {
+      notify("Successfully updated car configuration", {
         variant: "success",
       });
     });
-  });
+  }, [carColor, carName, carNameError, writeLength, userRefDataUpdate, notify]);
 
   return (
     <Box>
@@ -197,9 +200,9 @@ export default function Customize() {
             <Divider sx={{ backgroundColor: "white", my: 2 }} />
             <Grid container direction="column" spacing={1}>
               <Grid item>
-                <TextField
-                  startDecorator={<TextSnippetIcon sx={{ color: "black" }} />}
-                  label={
+                <FormControl>
+                  <FormLabel>
+                    {" "}
                     <Typography
                       fontFamily="Montserrat"
                       sx={{ color: "#ffe500" }}
@@ -207,15 +210,21 @@ export default function Customize() {
                     >
                       {"Car Name (" + writeLength + ")"}
                     </Typography>
-                  }
-                  color="warning"
-                  size="md"
-                  onChange={handlechangeName}
-                  error={carNameError !== ""}
-                  helperText={carNameError}
-                  sx={{ transition: "0.2s all ease-out" }}
-                />
+                  </FormLabel>
+                  <Input
+                    startDecorator={<TextSnippetIcon sx={{ color: "black" }} />}
+                    color="warning"
+                    size="md"
+                    onChange={handlechangeName}
+                    error={carNameError !== ""}
+                    sx={{ transition: "0.2s all ease-out" }}
+                  />
+                  <FormHelperText sx={{ color: "red", fontFamily: "Poppins" }}>
+                    {carNameError}
+                  </FormHelperText>
+                </FormControl>
               </Grid>
+
               <Grid item>
                 <Typography
                   sx={{ color: "#ffe500", fontFamily: "Montserrat", mb: 1 }}
@@ -266,7 +275,7 @@ export default function Customize() {
                             sx={{
                               backgroundColor: option.value,
                               borderRadius: 50,
-                              width: 24,
+                              width: 20,
                               color: "rgba(0,0,0,0)",
                             }}
                           >
@@ -287,7 +296,7 @@ export default function Customize() {
                     color="warning"
                     sx={{
                       mt: 1,
-                      width: carNameError ? "325px" : "270px",
+                      width: carNameError ? "335px" : "270px",
                       borderRadius: "1",
                       fontFamily: "Montserrat",
                       fontWeight: 600,
@@ -306,7 +315,7 @@ export default function Customize() {
                     color="warning"
                     sx={{
                       mt: 1,
-                      width: carNameError ? "325px" : "270px",
+                      width: carNameError ? "335px" : "270px",
                       borderRadius: "1",
                       fontFamily: "Montserrat",
                       fontWeight: 600,

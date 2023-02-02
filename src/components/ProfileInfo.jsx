@@ -66,8 +66,6 @@ export default function ProfileInfo({ setstamProfile }) {
           alignItems: "center",
           p: 5,
           pb: 2,
-          animation:
-            "puff-in-center .5s cubic-bezier(.47,0.000,.745,.715) both",
         }}
       >
         <Card

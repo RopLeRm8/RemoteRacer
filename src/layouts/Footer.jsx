@@ -9,21 +9,25 @@ const listOfSocials = [
     icon: <TwitterIcon />,
     color: "rgb(29, 161, 242)",
     link: "https://www.twitter.com",
+    name: "Twitter",
   },
   {
     icon: <InstagramIcon />,
     color: "rgba(193, 53, 132)",
     link: "https://www.instagram.com",
+    name: "Instagram",
   },
   {
     icon: <WhatsAppIcon />,
     color: "rgba(7 ,94 ,84)",
     link: "https://web.whatsapp.com/",
+    name: "Whatsapp",
   },
   {
     icon: <FacebookIcon />,
     color: "rgba(59,89,152)",
     link: "https://www.facebook.com",
+    name: "Facebook",
   },
 ];
 export default function Footer() {
@@ -32,6 +36,8 @@ export default function Footer() {
       container
       sx={{ p: 5, backgroundColor: "black" }}
       justifyContent={{ xs: "center", md: "space-evenly" }}
+      direction="row"
+      alignItems="center"
     >
       <Grid item>
         <img src={logo} alt="" width="225" height="140" />
@@ -56,7 +62,7 @@ export default function Footer() {
         >
           Final Project IOT - Ilya Boicov
         </Typography>
-        <List row>
+        <List>
           {listOfSocials.map((social) => (
             <ListItemButton
               key={social.link}
@@ -64,14 +70,21 @@ export default function Footer() {
                 "&:hover": {
                   backgroundColor: social.color,
                 },
-
+                display: "flex",
+                justifyContent: "center",
                 mt: 1,
                 color: "#ffe500",
-                mx: { xs: 2, md: 3.5 },
               }}
               onClick={() => window.open(social.link)}
             >
               {social.icon}
+              <Typography
+                level="h6"
+                fontFamily="Poppins"
+                sx={{ color: "white", ml: 2 }}
+              >
+                {social.name}
+              </Typography>
             </ListItemButton>
           ))}
         </List>

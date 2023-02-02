@@ -1,5 +1,5 @@
-import { Box, CssVarsProvider, Grid, Typography, Button } from "@mui/joy";
 import Person2RoundedIcon from "@mui/icons-material/Person2Rounded";
+import { Box, Button, CssVarsProvider, Grid, Typography } from "@mui/joy";
 import { useNavigate } from "react-router-dom";
 export default function HeeaderAboutUs() {
   const navigate = useNavigate();
@@ -46,6 +46,7 @@ export default function HeeaderAboutUs() {
               mt: 2,
               fontSize: 15,
               fontFamily: "Anton",
+              fontWeight: 500,
               backgroundColor: "black",
               letterSpacing: 1,
               "&:hover": {

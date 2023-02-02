@@ -39,9 +39,8 @@ export default function Leaderboard() {
       arr = arr.sort((a, b) => b.points - a.points);
       arr = arr.slice(0, 3);
       setusersData(arr.map((val, ind) => ({ ...val, index: ind })));
-      console.log(usersData);
     });
-  }, []);
+  }, [user]);
 
   return (
     <Box sx={{ background: backColor }}>
@@ -81,7 +80,7 @@ export default function Leaderboard() {
                   borderRadius: "10px",
                   mb: 2,
                 }}
-                key={userData.email}
+                key={userData.name}
               >
                 <Grid container direction="row" justifyContent="space-evenly">
                   <Typography

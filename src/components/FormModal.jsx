@@ -21,10 +21,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { ref as refDB, update } from "firebase/database";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useSnackbar } from "notistack";
 import React, { useCallback, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "../css/FormModal.css";
+import useNotification from "../hooks/SnackBarInitialize";
 import { db, storage } from "../providers/FirebaseProvider";
 
 export default function FormModal({
@@ -43,7 +43,7 @@ export default function FormModal({
   const [openModal, setopenModal] = useState(false);
   const [uploadLoading, setUploadLoading] = useState(false);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const notify = useNotification();
 
   const [user] = useAuthState(getAuth());
 
@@ -70,7 +70,7 @@ export default function FormModal({
                     update(userRefData, {
                       photoURL: url,
                     });
-                    enqueueSnackbar("Successfully updated profile picture", {
+                    notify("Successfully updated profile picture", {
                       variant: "success",
                     });
                     avatarRefer.current.src = url;
@@ -78,17 +78,17 @@ export default function FormModal({
                     setstamProfile((prev) => !prev);
                   })
                   .catch(() => {
-                    enqueueSnackbar("Couldnt update profile Info!");
+                    notify("Couldnt update profile Info!");
                   });
               })
               .catch(() => {
-                enqueueSnackbar("Couldnt get download URL of image", {
+                notify("Couldnt get download URL of image", {
                   variant: "error",
                 });
               });
           })
           .catch(() => {
-            enqueueSnackbar("Couldnt upload the image into the storage!", {
+            notify("Couldnt upload the image into the storage!", {
               variant: "error",
             });
           });
@@ -99,7 +99,19 @@ export default function FormModal({
       setError(null);
       setUploadLoading(false);
     },
-    [image, setOpen, setupdateLoading, storageRef, user, avatarRefer, setStam]
+    [
+      image,
+      setOpen,
+      setupdateLoading,
+      storageRef,
+      user,
+      avatarRefer,
+      setStam,
+      notify,
+      setstamProfile,
+      userRefAchiv,
+      userRefData,
+    ]
   );
   const changeHandler = (val) => {
     let size = val.target.files[0]?.size;
@@ -180,7 +192,13 @@ export default function FormModal({
                     variant="outlined"
                     color="warning"
                     component="label"
-                    sx={{ fontFamily: "Inter", width: "100%", color: "white" }}
+                    sx={{
+                      fontFamily: "Inter",
+                      width: "95%",
+                      color: "white",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
                     loading
                   >
                     <input
@@ -198,7 +216,10 @@ export default function FormModal({
                     component="label"
                     sx={{
                       fontFamily: "Inter",
-                      width: "100%",
+                      fontWeight: 500,
+                      width: "95%",
+                      display: "flex",
+                      justifyContent: "center",
                       color: "white",
                       "&:hover": {
                         color: "black",
@@ -289,6 +310,7 @@ export default function FormModal({
               <Button
                 sx={{
                   fontFamily: "Poppins",
+                  fontWeight: 500,
                   color: "white",
                   "&:hover": {
                     color: "black",
@@ -305,6 +327,7 @@ export default function FormModal({
             <Button
               sx={{
                 fontFamily: "Poppins",
+                fontWeight: 500,
                 color: "white",
                 "&:hover": {
                   color: "black",
@@ -332,7 +355,9 @@ export default function FormModal({
               Image Preview
             </Typography>
             <Divider sx={{ bgcolor: "black", mb: 2 }} />
-            <img src={imageURL} style={{ maxWidth: "100%" }} alt="" />
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <img src={imageURL} style={{ maxWidth: "100%" }} alt="" />
+            </Box>
           </Box>
         </ModalDialog>
       </Modal>

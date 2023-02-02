@@ -66,7 +66,7 @@ export default function Medals({ stamProfile }) {
       .catch(() => {
         enqueueSnackbar("Couldn't load medals!", { variant: "error" });
       });
-  }, [medalsList, totalMedals, userRefDB, stamProfile]);
+  }, [medalsList, totalMedals, userRefDB, stamProfile, enqueueSnackbar]);
 
   return (
     <Grow in={true}>

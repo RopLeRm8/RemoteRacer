@@ -28,7 +28,6 @@ import Box from "@mui/joy/Box";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import { Slide } from "@mui/material";
-import { useSnackbar } from "notistack";
 import React, { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReactInputVerificationCode from "react-input-verification-code";
@@ -37,6 +36,7 @@ import logo from "../assets/SignUpLoginWindow/logo.gif";
 import star from "../assets/SignUpLoginWindow/star.png";
 import { useAuth } from "../contexts/AuthLogic";
 import "../css/Signup.css";
+import useNotification from "../hooks/SnackBarInitialize";
 import { sendEmail } from "../providers/EmailProvider";
 export default function SignUp() {
   const [emailValue, setEmailValue] = useState("");
@@ -64,7 +64,7 @@ export default function SignUp() {
 
   const navigate = useNavigate();
 
-  const { enqueueSnackbar } = useSnackbar();
+  const notify = useNotification();
 
   const characters = "0123456789";
   const sitekey = "6LdtZQwjAAAAAKNmmvSfw7SdiiiMMeq3Ls4q7_zn";
@@ -136,13 +136,13 @@ export default function SignUp() {
   // }, [focus]);
   useEffect(() => {
     if (!mailError) return;
-    enqueueSnackbar(mailError, {
+    notify(mailError, {
       variant: "error",
     });
     setTimeout(() => {
       setMailError("");
     }, 5000);
-  }, [mailError]);
+  }, [mailError, notify]);
   return (
     <Box>
       <Card
@@ -473,6 +473,7 @@ export default function SignUp() {
               borderRadius: 4,
               width: 380,
               fontFamily: "Inter",
+              fontWeight: 500,
             }}
           >
             Sign In With Existing Account
@@ -513,10 +514,13 @@ export default function SignUp() {
               </Typography>
 
               {emailValue && (
-                <Typography fontFamily="Inter" sx={{ color: "white" }}>
+                <Typography
+                  fontFamily="Inter"
+                  sx={{ color: "white" }}
+                  endDecorator={<EmailIcon />}
+                >
                   We sent a verification code to {emailValue}, please check your
                   email and enter the code here
-                  <EmailIcon />
                 </Typography>
               )}
               <Box

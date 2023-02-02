@@ -29,8 +29,8 @@ const gitprovider = new GithubAuthProvider();
 export const googleauth = () => {
   signInWithPopup(auth, provider)
     .then(() => {})
-    .catch(() => {
-      //  const errorCode = authErrorToTitleCase(error.code);
+    .catch((err) => {
+      console.log(err);
     });
 };
 // git Authentication

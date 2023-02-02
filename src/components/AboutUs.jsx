@@ -1,25 +1,25 @@
 import { Box } from "@mui/joy";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import React, { useEffect } from "react";
 import ProfileCenter from "../assets/AboutUs/ProfileCenter.png";
 import "../css/About.css";
 import "../css/SmoothSlide.css";
+import useInitializeAOS from "../hooks/AOSInitialize";
 import Footer from "../layouts/Footer";
 import AboutUsBenefits from "./AboutUsBenefits";
+import AboutUsHeader from "./AboutUsHeader";
 import AboutUsInfo from "./AboutUsInfo";
 import AboutUsVideo from "./AboutUsVideo";
 import DevInfo from "./DevInfo";
-import HeeaderAboutUs from "./HeaderAboutUs";
 
 export default function AboutUs() {
+  const initializeAOS = useInitializeAOS();
   useEffect(() => {
-    AOS.init();
-  }, []);
+    initializeAOS;
+  }, [initializeAOS]);
 
   return (
     <Box>
-      <HeeaderAboutUs />
+      <AboutUsHeader />
       <Box
         sx={{
           minHeight: "100%",

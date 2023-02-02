@@ -5,8 +5,11 @@ import {
   Card,
   Checkbox,
   CssVarsProvider,
+  FormControl,
+  FormHelperText,
+  FormLabel,
   Grid,
-  TextField,
+  Input,
   Tooltip,
   Typography,
 } from "@mui/joy";
@@ -16,10 +19,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import EmailIcon from "@mui/icons-material/Email";
 import { Drawer } from "@mui/material";
 import { getAuth, updateEmail, updateProfile } from "firebase/auth";
-import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useState } from "react";
 import "../css/FormModalSecond.css";
 import { authErrorToTitleCase } from "../helpers";
+import useNotification from "../hooks/SnackBarInitialize";
 
 const engReg = /^[a-zA-Z ]+$/;
 const emailReg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -42,7 +45,7 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
 
   const [checked, setChecked] = useState(false);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const notify = useNotification();
 
   const auth = getAuth();
 
@@ -61,7 +64,7 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
       return;
     }
     setnameError("");
-  });
+  }, []);
   const handleChangeLastName = useCallback((e) => {
     setlastnameValue(e.target.value);
     if (!engReg.test(e.target.value) && e.target.value.length > 0) {
@@ -75,7 +78,7 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
       return;
     }
     setlastNameerror("");
-  });
+  }, []);
   const handleChangeMail = useCallback((e) => {
     setemailValue(e.target.value);
     if (!emailReg.test(e.target.value) && e.target.value.length > 0) {
@@ -83,7 +86,7 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
       return;
     }
     setemailError("");
-  });
+  }, []);
 
   const UpdateErrorsFound = () => {
     setErrorFound(!nameerror && !lastNameerror && !emailError);
@@ -92,17 +95,16 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
 
   const submitNewValues = useCallback(() => {
     if (!nameValue || !lastnameValue) {
-      enqueueSnackbar(
+      notify(
         "Please enter atleast 4 characters into name and last name fields",
         { variant: "warning" }
       );
       return;
     }
     if (!checked) {
-      enqueueSnackbar(
-        "Please mark 'checked' if you desire to change any information",
-        { variant: "warning" }
-      );
+      notify("Please mark 'checked' if you desire to change any information", {
+        variant: "warning",
+      });
       return;
     }
     setLoading(true);
@@ -110,7 +112,7 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
       displayName: nameValue + " " + lastnameValue,
     })
       .then(() => {
-        enqueueSnackbar("Successfully Updated User Information", {
+        notify("Successfully Updated User Information", {
           variant: "success",
         });
         setStam((prev) => !prev);
@@ -120,13 +122,13 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
         }
         updateEmail(auth.currentUser, emailValue)
           .then(() => {
-            enqueueSnackbar("Successfully Updated User Email", {
+            notify("Successfully Updated User Email", {
               variant: "success",
             });
             setStam((prev) => !prev);
           })
           .catch((error) => {
-            enqueueSnackbar(authErrorToTitleCase(error.code), {
+            notify(authErrorToTitleCase(error.code), {
               variant: "error",
             });
           })
@@ -135,27 +137,35 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
           });
       })
       .catch(() => {
-        enqueueSnackbar("Couldn't update first and last names", {
+        notify("Couldn't update first and last names", {
           variant: "error",
         });
       });
-  });
-
+  }, [
+    auth.currentUser,
+    checked,
+    emailValue,
+    notify,
+    lastnameValue,
+    nameValue,
+    setStam,
+  ]);
+  const handleClose = useCallback(() => {
+    setnameValue(null);
+    setlastnameValue(null);
+    setemailValue(null);
+    setnameError(null);
+    setlastNameerror(null);
+    setemailError(null);
+    setOpen(false);
+  }, [setOpen]);
   return (
     <Box>
       <CssVarsProvider />
       <Drawer
         anchor="right"
         open={open}
-        onClose={() => {
-          setnameValue("");
-          setlastnameValue("");
-          setemailValue("");
-          setnameError("");
-          setlastNameerror("");
-          setemailError("");
-          setOpen(false);
-        }}
+        onClose={handleClose}
         sx={{ color: "#ffe500" }}
       >
         <Card sx={{ px: { xs: 5, sm: 20 }, py: 8, borderRadius: 0 }}>
@@ -169,17 +179,8 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
           </Typography>
           <Grid container>
             <Grid item>
-              <TextField
-                startDecorator={
-                  <EditIcon
-                    sx={{
-                      color: "black",
-                      transform: nameFocused ? "scale(1)" : "scale(0.6)",
-                      transition: "all 0.15s ease-out",
-                    }}
-                  />
-                }
-                label={
+              <FormControl>
+                <FormLabel>
                   <Typography
                     startDecorator={
                       <Badge
@@ -199,29 +200,32 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
                   >
                     First Name
                   </Typography>
-                }
-                color="warning"
-                onChange={handleChangeName}
-                onFocus={() => setnameFocused(true)}
-                onBlur={() => setnameFocused(false)}
-                sx={{ mr: { sm: 4 }, mb: { xs: 3, sm: 0 } }}
-                required
-                error={!!nameerror}
-                helperText={nameerror}
-              />
+                </FormLabel>
+                <Input
+                  startDecorator={
+                    <EditIcon
+                      sx={{
+                        color: "black",
+                        transform: nameFocused ? "scale(1)" : "scale(0.6)",
+                        transition: "all 0.15s ease-out",
+                      }}
+                    />
+                  }
+                  color={nameerror ? "danger" : "warning"}
+                  onChange={handleChangeName}
+                  onFocus={() => setnameFocused(true)}
+                  onBlur={() => setnameFocused(false)}
+                  sx={{ mr: { sm: 4 }, mb: { xs: 3, sm: 0 } }}
+                  required
+                />
+                <FormHelperText sx={{ color: "red" }}>
+                  {nameerror}
+                </FormHelperText>
+              </FormControl>
             </Grid>
             <Grid item>
-              <TextField
-                startDecorator={
-                  <EditIcon
-                    sx={{
-                      color: "black",
-                      transform: lastnameFocused ? "scale(1)" : "scale(0.6)",
-                      transition: "all 0.15s ease-out",
-                    }}
-                  />
-                }
-                label={
+              <FormControl>
+                <FormLabel>
                   <Typography
                     startDecorator={
                       <Badge
@@ -241,28 +245,31 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
                   >
                     Last Name
                   </Typography>
-                }
-                color="warning"
-                onChange={handleChangeLastName}
-                onFocus={() => setlastnameFocused(true)}
-                onBlur={() => setlastnameFocused(false)}
-                required
-                error={!!lastNameerror}
-                helperText={lastNameerror}
-              />
+                </FormLabel>
+                <Input
+                  startDecorator={
+                    <EditIcon
+                      sx={{
+                        color: "black",
+                        transform: lastnameFocused ? "scale(1)" : "scale(0.6)",
+                        transition: "all 0.15s ease-out",
+                      }}
+                    />
+                  }
+                  color={lastNameerror ? "danger" : "warning"}
+                  onChange={handleChangeLastName}
+                  onFocus={() => setlastnameFocused(true)}
+                  onBlur={() => setlastnameFocused(false)}
+                  required
+                />
+                <FormHelperText sx={{ color: "red", ml: nameerror ? 1 : null }}>
+                  {lastNameerror}
+                </FormHelperText>
+              </FormControl>
             </Grid>
           </Grid>
-          <TextField
-            startDecorator={
-              <EditIcon
-                sx={{
-                  color: "black",
-                  transform: emailFocused ? "scale(1)" : "scale(0.6)",
-                  transition: "all 0.15s ease-out",
-                }}
-              />
-            }
-            label={
+          <FormControl>
+            <FormLabel sx={{ mt: 3.5 }}>
               <Typography
                 startDecorator={
                   <Badge
@@ -279,16 +286,25 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
               >
                 Email
               </Typography>
-            }
-            color="warning"
-            onChange={handleChangeMail}
-            onFocus={() => setemailFocused(true)}
-            onBlur={() => setemailFocused(false)}
-            placeholder="example: ropler@yahoo.com"
-            sx={{ mt: 3 }}
-            error={!!emailError}
-            helperText={emailError}
-          />
+            </FormLabel>
+            <Input
+              startDecorator={
+                <EditIcon
+                  sx={{
+                    color: "black",
+                    transform: emailFocused ? "scale(1)" : "scale(0.6)",
+                    transition: "all 0.15s ease-out",
+                  }}
+                />
+              }
+              color={emailError ? "danger" : "warning"}
+              onChange={handleChangeMail}
+              onFocus={() => setemailFocused(true)}
+              onBlur={() => setemailFocused(false)}
+              placeholder="example: ropler@yahoo.com"
+            />
+            <FormHelperText sx={{ color: "red" }}>{emailError}</FormHelperText>
+          </FormControl>
           <Typography sx={{ my: 1, opacity: "70%", fontSize: 13 }}>
             Required recent login status in order to change email
           </Typography>
@@ -328,7 +344,7 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
                   fontFamily: "Montserrat",
                   fontWeight: 700,
                 }}
-                onClick={() => setOpen(false)}
+                onClick={handleClose}
                 size="lg"
               >
                 Cancel

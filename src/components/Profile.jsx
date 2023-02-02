@@ -4,10 +4,7 @@ import DirectionsCarFilledOutlinedIcon from "@mui/icons-material/DirectionsCarFi
 import { CssVarsProvider, Stack } from "@mui/joy";
 import Typography from "@mui/joy/Typography";
 import { Box, Fade, Rating, Slide } from "@mui/material";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import { child, get, ref, update } from "firebase/database";
-import { useSnackbar } from "notistack";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import blackback from "../assets/Profile/blackback.png";
@@ -15,6 +12,8 @@ import blackback2 from "../assets/Profile/blackback2.png";
 import dices from "../assets/Profile/dices.png";
 import points from "../assets/Profile/points.png";
 import "../css/SmoothSlide.css";
+import useInitializeAOS from "../hooks/AOSInitialize";
+import useNotification from "../hooks/SnackBarInitialize";
 import Footer from "../layouts/Footer";
 import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
@@ -34,19 +33,16 @@ export default function Profile() {
   const [secondElFoc] = useState(true);
   const [thirdElFoc] = useState(true);
   const [stamProfile, setstamProfile] = useState(false);
-
-  const { enqueueSnackbar } = useSnackbar();
-
   const firstElRef = useRef();
   const secondElRef = useRef();
   const thirdElRef = useRef();
-
   const [user] = useAuthState(getAuth());
-
   const [value, setValue] = useState(0);
-
   const userRefData = ref(db, `users/${user.uid}/data`);
   const userData = `users/${user.uid}/data`;
+  const notify = useNotification();
+
+  const initializeAOS = useInitializeAOS();
 
   useEffect(() => {
     get(child(query, userData))
@@ -54,37 +50,9 @@ export default function Profile() {
         snapshot && snapshot.val().rating && setValue(snapshot.val().rating);
       })
       .catch(() => {
-        enqueueSnackbar("Couldnt load player's data!", { variant: "error" });
+        useNotification("Couldnt load player's data!", { variant: "error" });
       });
 
-    // const handleScroll = (event) => {
-    //   if (elementInViewport(firstElRef.current)) {
-    //     setfirstElFoc(true);
-    //     setSecondElFoc(true);
-    //     setThirdElFoc(true);
-    //   } else {
-    //     setfirstElFoc(false);
-    //     setSecondElFoc(false);
-    //     setThirdElFoc(false);
-    //   }
-    //   if (elementInViewport(thirdElRef.current)) {
-    //     setfirstElFoc(true);
-    //     setSecondElFoc(true);
-    //     setThirdElFoc(true);
-    //   } else {
-    //     setThirdElFoc(false);
-    //   }
-
-    //   // window.scrollY > 200 ? setfirstElFoc(true) : setfirstElFoc(false);
-    //   // window.scrollY > 200 ? setSecondElFoc(true) : setSecondElFoc(false);
-    //   // window.scrollY > 950 ? setThirdElFoc(true) : setThirdElFoc(false);
-    // };
-
-    // window.addEventListener("scroll", handleScroll);
-
-    // return () => {
-    //   window.removeEventListener("scroll", handleScroll);
-    // };
     document.body.style.backgroundColor = "black";
     return () => {
       document.body.style.backgroundColor = "white";
@@ -92,12 +60,12 @@ export default function Profile() {
   }, [userData]);
 
   useEffect(() => {
-    AOS.init();
-  }, []);
+    initializeAOS;
+  }, [initializeAOS]);
 
   const handleValueChange = useCallback(
-    (e, nValue) => {
-      enqueueSnackbar("Thank you!", {
+    (_, nValue) => {
+      notify("Thank you!", {
         variant: "info",
       });
       setValue(nValue);
@@ -105,7 +73,7 @@ export default function Profile() {
         rating: nValue,
       });
     },
-    [userRefData, enqueueSnackbar]
+    [userRefData, notify]
   );
 
   return (

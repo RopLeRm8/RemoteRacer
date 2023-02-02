@@ -356,6 +356,7 @@ export default function LoginPage() {
                 mr: 2,
                 fontFamily: "Inter",
                 fontSize: 14,
+                fontWeight: 500,
               }}
             >
               Sign In
@@ -440,6 +441,7 @@ export default function LoginPage() {
               width: 330,
             },
             fontFamily: "Inter",
+            fontWeight: 500,
           }}
           onClick={() => {
             setShowPanel(true);
@@ -464,6 +466,7 @@ export default function LoginPage() {
               width: 330,
             },
             fontFamily: "Inter",
+            fontWeight: 500,
           }}
           onClick={() => navigate("/register")}
         >
