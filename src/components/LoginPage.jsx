@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/joy";
+import { Button, Divider, Typography } from "@mui/joy";
 import { Box, Fade, Grid, Slide } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import logo from "../assets/Global/logo.png";
@@ -18,21 +18,13 @@ export default function LoginPage() {
       <Grid
         container
         direction="row-reverse"
-        spacing={{ xs: 4, md: 3, lg: 5 }}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+        spacing={{ xs: 4, md: 3, lg: 2 }}
+        justifyContent="space-evenly"
+        alignItems="center"
       >
         <Grid item xs={0} sx={{ marginTop: 18, width: "500px" }}>
           <Fade in={true}>
-            <Box
-              sx={{
-                px: { xs: 3, md: 0 },
-                ml: { xs: 4, md: 0 },
-              }}
-            >
+            <Box>
               <SignIn focus={focus} />
             </Box>
           </Fade>
@@ -43,7 +35,7 @@ export default function LoginPage() {
               position: "absolute",
               top: { xs: 10, lg: 50 },
               mr: { lg: 8 },
-              ml: { xs: 7, md: 0 },
+              ml: { xs: 8, md: 0 },
             }}
           >
             <img
@@ -56,16 +48,20 @@ export default function LoginPage() {
                 animation: "rotationAndZoom 1s forwards",
               }}
             />
+            <Divider
+              sx={{
+                backgroundColor: "white",
+                p: 0.1,
+                minHeight: "30vmax",
+                ml: 11,
+                mt: 5,
+                display: { xs: "none", md: "flex" },
+              }}
+              orientation="vertical"
+            />
           </Box>
         </Slide>
-        <Grid
-          item
-          xs={14}
-          md={8}
-          sm={12}
-          lg={3}
-          sx={{ mt: { lg: 15 }, mr: { lg: 10 } }}
-        >
+        <Grid item xs={14} md={8} sm={12} lg={3} sx={{ mt: { lg: 15 } }}>
           <Slide direction="right" in={true}>
             <Typography
               sx={{

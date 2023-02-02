@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import ProfileCenter from "../assets/AboutUs/ProfileCenter.png";
 import "../css/About.css";
 import "../css/SmoothSlide.css";
-import useInitializeAOS from "../hooks/AOSInitialize";
+import useInitializeAOS from "../hooks/useInitializeAOS";
 import Footer from "../layouts/Footer";
 import AboutUsBenefits from "./AboutUsBenefits";
 import AboutUsHeader from "./AboutUsHeader";

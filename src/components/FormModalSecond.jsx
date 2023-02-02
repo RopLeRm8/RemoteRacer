@@ -22,7 +22,7 @@ import { getAuth, updateEmail, updateProfile } from "firebase/auth";
 import { useCallback, useEffect, useState } from "react";
 import "../css/FormModalSecond.css";
 import { authErrorToTitleCase } from "../helpers";
-import useNotification from "../hooks/SnackBarInitialize";
+import { useNotification } from "../hooks/useNotification";
 
 const engReg = /^[a-zA-Z ]+$/;
 const emailReg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;

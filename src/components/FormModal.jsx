@@ -24,7 +24,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import React, { useCallback, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "../css/FormModal.css";
-import useNotification from "../hooks/SnackBarInitialize";
+import { useNotification } from "../hooks/useNotification";
 import { db, storage } from "../providers/FirebaseProvider";
 
 export default function FormModal({

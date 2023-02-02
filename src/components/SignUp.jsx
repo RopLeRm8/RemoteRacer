@@ -36,7 +36,7 @@ import logo from "../assets/SignUpLoginWindow/logo.gif";
 import star from "../assets/SignUpLoginWindow/star.png";
 import { useAuth } from "../contexts/AuthLogic";
 import "../css/Signup.css";
-import useNotification from "../hooks/SnackBarInitialize";
+import { useNotification } from "../hooks/useNotification";
 import { sendEmail } from "../providers/EmailProvider";
 export default function SignUp() {
   const [emailValue, setEmailValue] = useState("");

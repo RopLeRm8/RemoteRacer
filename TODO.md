@@ -6,9 +6,8 @@ Project Description
 
 ### Todo
 
-- [ ] Set navbar to be static  
-- [ ] Finish with leaderboard  
-- [ ] Remove uselesss node modules  
+- [ ] Combine components to create pages folder  
+- [ ] Finish adding custom hooks  
 - [ ] Fix shit stack error  
 - [ ] Add lazy module that optimizes the work of routing  
 
@@ -17,6 +16,9 @@ Project Description
 
 ### Done ✓
 
+- [x] Remove uselesss node modules  
+- [x] Finish with leaderboard  
+- [x] Set navbar to be static  
 - [x] Fix issues in sign in/up pages when they go deep down when error comes up  
 - [x] Enter firebase and email API info to .env files  
 - [x] Limit email send  

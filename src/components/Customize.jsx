@@ -29,7 +29,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import CustomizeVideo from "../assets/Customize/Customize2.mp4";
 import robot from "../assets/Customize/robot.png";
 import "../css/Customize.css";
-import useNotification from "../hooks/SnackBarInitialize";
+import { useNotification } from "../hooks/useNotification";
 import Footer from "../layouts/Footer";
 import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
@@ -60,12 +60,9 @@ export default function Customize() {
     get(child(query, userRefData))
       .then((snap) => {
         if (!snap.val().carName && !snap.val().carColor) {
-          useNotification(
-            "No configuration detected - restoring values to default",
-            {
-              variant: "info",
-            }
-          );
+          notify("No configuration detected - restoring values to default", {
+            variant: "info",
+          });
           setcarName("'Car Name'");
           return;
         }
@@ -74,11 +71,11 @@ export default function Customize() {
         videoRef.current?.play();
       })
       .catch(() => {
-        useNotification("Couldn't connect to firebase database", {
+        notify("Couldn't connect to firebase database", {
           variant: "error",
         });
       });
-  }, [query, userRefData]);
+  }, [query, userRefData, notify]);
 
   const handlechangeName = useCallback((e) => {
     setwriteLength(15 - e.target.value.length);
