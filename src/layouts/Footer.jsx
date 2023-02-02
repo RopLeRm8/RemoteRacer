@@ -34,15 +34,15 @@ export default function Footer() {
   return (
     <Grid
       container
-      sx={{ p: 5, backgroundColor: "black" }}
-      justifyContent={{ xs: "center", md: "space-evenly" }}
+      sx={{ p: 5, pt: { xs: 5, md: 0 }, backgroundColor: "black" }}
+      justifyContent={{ xs: "center", md: "space-around" }}
       direction="row"
       alignItems="center"
     >
       <Grid item>
         <img src={logo} alt="" width="225" height="140" />
       </Grid>
-      <Grid item sx={{ mt: 5 }}>
+      <Grid item>
         <Typography
           sx={{
             color: "#ffe500",
@@ -62,6 +62,8 @@ export default function Footer() {
         >
           Final Project IOT - Ilya Boicov
         </Typography>
+      </Grid>
+      <Grid item sx={{ mt: 5, mr: 4 }}>
         <List>
           {listOfSocials.map((social) => (
             <ListItemButton
@@ -74,12 +76,13 @@ export default function Footer() {
                 justifyContent: "center",
                 mt: 1,
                 color: "#ffe500",
+                borderRadius: "20px",
               }}
               onClick={() => window.open(social.link)}
             >
               {social.icon}
               <Typography
-                level="h6"
+                level="h7"
                 fontFamily="Poppins"
                 sx={{ color: "white", ml: 2 }}
               >

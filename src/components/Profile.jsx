@@ -287,7 +287,7 @@ export default function Profile() {
         <Stack
           direction="column"
           alignItems="center"
-          sx={{ my: 3, background: "#ffe500" }}
+          sx={{ mt: 3, background: "#ffe500" }}
         >
           <Typography
             sx={{
