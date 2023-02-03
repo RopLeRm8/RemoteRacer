@@ -20,7 +20,7 @@ export default function AboutUsInfo() {
       >
         ABOUT US
       </Typography>
-      <AnimationContext animationName="animate__jackInTheBox">
+      <AnimationContext animationName="animate__fadeInDown">
         <Stack
           sx={{
             pb: 7,

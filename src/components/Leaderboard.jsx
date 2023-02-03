@@ -16,6 +16,7 @@ import CasinoIcon from "@mui/icons-material/Casino";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import Centered from "../features/Centered";
+import ScrollAnimation from "../features/ScrollAnimation";
 import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
 const backColor = "black";
@@ -46,103 +47,105 @@ export default function Leaderboard() {
     <Box sx={{ background: backColor }}>
       <Navbar />
       <CssVarsProvider />
-      <Centered>
-        <Typography
-          fontFamily="Anton"
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            color: "white",
-            fontSize: "3vmax",
-          }}
-        >
-          LEADERBOARD
-        </Typography>
-        <Typography
-          fontFamily="Inter"
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            color: "white",
-            textAlign: "center",
-            fontSize: "2vmax",
-          }}
-        >
-          See who leads know on our webiste
-        </Typography>
-        <Grid container direction="column" alignItems="center">
-          {usersData &&
-            arr.map((userData) => (
-              <Box
-                sx={{
-                  backgroundColor: secondaryColor,
-                  p: 2,
-                  borderRadius: "10px",
-                  mb: 2,
-                }}
-                key={userData.name}
-              >
-                <Grid container direction="row" justifyContent="space-evenly">
-                  <Typography
-                    sx={{
-                      color: backColor,
-                      mr: 3,
-                      fontFamily: "Poppins",
-                      fontWeight: 500,
-                    }}
-                    startDecorator={<CasinoIcon />}
-                  >
-                    3 points
-                  </Typography>
-                  <Badge
-                    badgeContent={<PersonPinIcon />}
-                    size="sm"
-                    color="warning"
-                    variant="outlined"
-                  >
-                    <Avatar
-                      src={userData.photoURL}
-                      sx={{
-                        "--Avatar-ringSize": "4px",
-                        "--Avatar-size": "52px",
-                      }}
-                    />
-                  </Badge>
-                  <Grid container direction="column">
-                    <Typography
-                      key={userData.name}
-                      sx={{
-                        color: backColor,
-                        ml: 3,
-                        fontFamily: "Inter",
-                        fontWeight: 500,
-                      }}
-                      startDecorator={<BadgeIcon />}
-                    >
-                      {userData.name || "[No name]"}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: backColor,
-                        ml: 3,
-                        fontFamily: "Inter",
-                        fontWeight: 500,
-                      }}
-                      startDecorator={<EmailIcon />}
-                    >
-                      {userData.mail || "[No email]"}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Box>
-            ))}
-        </Grid>
-        <Box>
-          <Typography fontSize="Anton">
-            {user.points ? "Your current points are " + user.points : null}
+      <ScrollAnimation animationName="animate__fadeInTopLeft">
+        <Centered>
+          <Typography
+            fontFamily="Anton"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              color: "white",
+              fontSize: "3vmax",
+            }}
+          >
+            LEADERBOARD
           </Typography>
-        </Box>
-      </Centered>
+          <Typography
+            fontFamily="Inter"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              color: "white",
+              textAlign: "center",
+              fontSize: "2vmax",
+            }}
+          >
+            See who leads know on our webiste
+          </Typography>
+          <Grid container direction="column" alignItems="center">
+            {usersData &&
+              arr.map((userData) => (
+                <Box
+                  sx={{
+                    backgroundColor: secondaryColor,
+                    p: 2,
+                    borderRadius: "10px",
+                    mb: 2,
+                  }}
+                  key={userData.name}
+                >
+                  <Grid container direction="row" justifyContent="space-evenly">
+                    <Typography
+                      sx={{
+                        color: backColor,
+                        mr: 3,
+                        fontFamily: "Poppins",
+                        fontWeight: 500,
+                      }}
+                      startDecorator={<CasinoIcon />}
+                    >
+                      3 points
+                    </Typography>
+                    <Badge
+                      badgeContent={<PersonPinIcon />}
+                      size="sm"
+                      color="warning"
+                      variant="outlined"
+                    >
+                      <Avatar
+                        src={userData.photoURL}
+                        sx={{
+                          "--Avatar-ringSize": "4px",
+                          "--Avatar-size": "52px",
+                        }}
+                      />
+                    </Badge>
+                    <Grid container direction="column">
+                      <Typography
+                        key={userData.name}
+                        sx={{
+                          color: backColor,
+                          ml: 3,
+                          fontFamily: "Inter",
+                          fontWeight: 500,
+                        }}
+                        startDecorator={<BadgeIcon />}
+                      >
+                        {userData.name || "[No name]"}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: backColor,
+                          ml: 3,
+                          fontFamily: "Inter",
+                          fontWeight: 500,
+                        }}
+                        startDecorator={<EmailIcon />}
+                      >
+                        {userData.mail || "[No email]"}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Box>
+              ))}
+          </Grid>
+          <Box>
+            <Typography fontSize="Anton">
+              {user.points ? "Your current points are " + user.points : null}
+            </Typography>
+          </Box>
+        </Centered>
+      </ScrollAnimation>
     </Box>
   );
 }

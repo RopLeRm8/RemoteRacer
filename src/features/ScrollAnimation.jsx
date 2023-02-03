@@ -1,8 +1,12 @@
 import { AnimationOnScroll } from "react-animation-on-scroll";
 
-export default function ScrollAnimation({ children, animationName }) {
+export default function ScrollAnimation({ children, animationName, duration }) {
   return (
-    <AnimationOnScroll animateIn={animationName} duration={0.5} animateOnce>
+    <AnimationOnScroll
+      animateIn={animationName}
+      duration={duration ? duration : 0.5}
+      animateOnce
+    >
       {children}
     </AnimationOnScroll>
   );

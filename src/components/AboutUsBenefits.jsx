@@ -1,10 +1,11 @@
 import { Box, Grid, Tooltip, Typography } from "@mui/joy";
-import { useEffect } from "react";
-import { AnimationOnScroll } from "react-animation-on-scroll";
+import { useContext, useEffect } from "react";
 import CALENDAR from "../assets/AboutUs/CALENDAR.png";
 import KEYS from "../assets/AboutUs/KEY.png";
 import MAP from "../assets/AboutUs/MAP.png";
+import { AboutContext } from "./AboutUs";
 export default function AboutUsBenefits() {
+  const AnimationContext = useContext(AboutContext);
   useEffect(() => {
     document.body.style.backgroundColor = "#ffe500";
     return () => {
@@ -14,11 +15,7 @@ export default function AboutUsBenefits() {
   return (
     <Box sx={{ mt: 5, backgroundColor: "black" }}>
       <Grid container direction="column">
-        <AnimationOnScroll
-          animateIn="animate__slideInDown"
-          duration={0.5}
-          animateOnce
-        >
+        <AnimationContext animationName="animate__slideInDown">
           <Typography
             fontSize={{ xs: 50, sm: 80 }}
             fontFamily="Anton"
@@ -33,12 +30,8 @@ export default function AboutUsBenefits() {
           >
             All the benefits you will
           </Typography>
-        </AnimationOnScroll>
-        <AnimationOnScroll
-          animateIn="animate__flipInX"
-          duration={0.5}
-          animateOnce
-        >
+        </AnimationContext>
+        <AnimationContext animationName="animate__flipInX">
           <Typography
             fontSize={{ xs: 50, sm: 80 }}
             fontFamily="Anton"
@@ -52,13 +45,9 @@ export default function AboutUsBenefits() {
           >
             get when you choose our services
           </Typography>
-        </AnimationOnScroll>
+        </AnimationContext>
       </Grid>
-      <AnimationOnScroll
-        animateIn="animate__bounceIn"
-        duration={0.7}
-        animateOnce
-      >
+      <AnimationContext animationName="animate__bounceIn">
         <Grid container justifyContent="space-evenly" sx={{ py: 3, pb: 5 }}>
           <Box
             sx={{
@@ -203,7 +192,7 @@ export default function AboutUsBenefits() {
             </Grid>
           </Box>
         </Grid>
-      </AnimationOnScroll>
+      </AnimationContext>
     </Box>
   );
 }
