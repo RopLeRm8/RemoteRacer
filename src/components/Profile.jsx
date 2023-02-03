@@ -12,7 +12,6 @@ import blackback2 from "../assets/Profile/blackback2.png";
 import dices from "../assets/Profile/dices.png";
 import points from "../assets/Profile/points.png";
 import "../css/SmoothSlide.css";
-import useInitializeAOS from "../hooks/useInitializeAOS";
 import { useNotification } from "../hooks/useNotification";
 import Footer from "../layouts/Footer";
 import Navbar from "../layouts/NavBar";
@@ -42,8 +41,6 @@ export default function Profile() {
   const userData = `users/${user.uid}/data`;
   const notify = useNotification();
 
-  const initializeAOS = useInitializeAOS();
-
   useEffect(() => {
     get(child(query, userData))
       .then((snapshot) => {
@@ -58,10 +55,6 @@ export default function Profile() {
       document.body.style.backgroundColor = "white";
     };
   }, [userData]);
-
-  useEffect(() => {
-    initializeAOS;
-  }, [initializeAOS]);
 
   const handleValueChange = useCallback(
     (_, nValue) => {

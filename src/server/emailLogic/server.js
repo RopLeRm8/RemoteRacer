@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const sgMail = require('@sendgrid/mail')
 const app = express();
 const cors = require('cors');
-// const htmlmessage = require('./message.html')
 const port = 6969;
 const rateLimit = require('express-rate-limit')
 require('dotenv').config();
@@ -36,7 +35,7 @@ app.post('/send-verification', loginRateLimiter, (req, res) => {
     from: 'reactprojnoreply@gmail.com',
     subject: '[Verification email - REMOTERACER]',
     text: 'hello',
-    html: ``,
+    html: `<div style = "background-color:#ffe500; padding-top:25px; padding-bottom: 25px"> <h1 style = "color:black; text-align:center;"> REMOTE RACER </h1> <h2 style = "color:black; text-align:center;"> Hello, ${req.body.email}, here is a verification code in order to finish the sign up step - ${req.body.codemessage}</h2></div>`,
   }
   sgMail
   .send(msg)
@@ -56,7 +55,7 @@ app.post('/send-success', loginRateLimiter, (req, res) => {
     from: 'reactprojnoreply@gmail.com',
     subject: '[Welcome email - REMOTERACER]',
     text: 'hello',
-    html: `<div style = "border-radius:10px; background-color:#ffe500; padding-top:25px; padding-bottom:25px;"> <h1 style = "color:black; margin: 5px auto;"> Hello dear customer! Thanks for signing up on our website! </h1> <h2 style = "color:black;margin: 5px auto;"> Registered with ${req.body.email} </h2> </div>`
+    html: `<div style = "border-radius:10px; background-color:#ffe500; padding-top:25px; padding-bottom:25px;"> <h1 style = "color:black; margin: 5px auto;"> Hello dear customer! Thanks for signing up on our website! </h1> <h2 style = "color:black;margin: 5px auto;"> Registered with ${req.body.email} </h2> </div>`,
   }
   sgMail
   .send(msgSuccess)

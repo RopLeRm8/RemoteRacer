@@ -3,13 +3,13 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import AboutUs from "../components/AboutUs";
-import Centered from "../components/Centered";
 import Dashboard from "../components/Dashboard";
 import Leaderboard from "../components/Leaderboard";
 import LoginPage from "../components/LoginPage";
 import Profile from "../components/Profile";
 import RegisterPage from "../components/RegisterPage";
 import WelcomePage from "../components/WelcomePage";
+import Centered from "../features/Centered";
 
 import Box from "@mui/joy/Box";
 import { Alert, Backdrop } from "@mui/material";

@@ -2,7 +2,7 @@ import { Button, CssVarsProvider, Grid, Typography } from "@mui/joy";
 import { useNavigate } from "react-router-dom";
 import stars from "../assets/WelcomePage/stars.png";
 import "../css/WelcomePage.css";
-import Centered from "./Centered";
+import Centered from "../features/Centered";
 export default function WelcomePage() {
   const navigate = useNavigate();
   return (

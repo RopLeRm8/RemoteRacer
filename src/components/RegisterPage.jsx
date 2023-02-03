@@ -1,5 +1,5 @@
-import { Button, Typography } from "@mui/joy";
-import { Box, Fade, Grid, Slide } from "@mui/material";
+import { Button, Divider, Grid, Typography } from "@mui/joy";
+import { Box, Fade, Slide } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import logo from "../assets/Global/logo.png";
 import { AuthProvider } from "../contexts/AuthLogic";
@@ -25,19 +25,15 @@ export default function RegisterPage() {
         <Grid
           container
           direction="row-reverse"
-          spacing={{ xs: 4, md: 3, lg: 5 }}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          spacing={{ xs: 4, md: 3, lg: 2 }}
+          justifyContent="space-evenly"
+          alignItems="center"
         >
           <Grid item xs={0} sx={{ marginTop: 20, width: "500px" }}>
             <Fade in={true}>
               <Box
                 sx={{
                   px: { xs: 4, md: 0 },
-                  ml: { xs: 4, md: 0 },
                 }}
               >
                 <SignUp focus={focus} />
@@ -50,7 +46,6 @@ export default function RegisterPage() {
                 position: "absolute",
                 top: { xs: 15, lg: 50 },
                 mr: { lg: 8 },
-                ml: { xs: 6, md: 0 },
                 // display: { xs: "none", lg: "flex" },
               }}
             >
@@ -66,17 +61,21 @@ export default function RegisterPage() {
                   justifyContent: "center",
                 }}
               />
+              <Divider
+                sx={{
+                  backgroundColor: "white",
+                  p: 0.1,
+                  minHeight: "30vmax",
+                  ml: 11,
+                  mt: 5,
+                  display: { xs: "none", md: "flex" },
+                }}
+                orientation="vertical"
+              />
             </Box>
           </Slide>
 
-          <Grid
-            item
-            xs={14}
-            md={8}
-            sm={12}
-            lg={3}
-            sx={{ mt: { lg: 15 }, mr: { lg: 10 } }}
-          >
+          <Grid item xs={14} md={8} sm={12} lg={3} sx={{ mt: { lg: 15 } }}>
             <Slide direction="right" in={true}>
               <Typography
                 sx={{

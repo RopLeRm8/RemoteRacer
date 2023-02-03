@@ -1,22 +1,20 @@
 import { Box } from "@mui/joy";
-import React, { useEffect } from "react";
+import "animate.css/animate.min.css";
+import React, { createContext } from "react";
 import ProfileCenter from "../assets/AboutUs/ProfileCenter.png";
 import "../css/About.css";
 import "../css/SmoothSlide.css";
-import useInitializeAOS from "../hooks/useInitializeAOS";
+import ScrollAnimation from "../features/ScrollAnimation";
 import Footer from "../layouts/Footer";
 import AboutUsBenefits from "./AboutUsBenefits";
+import AboutUsDevInfo from "./AboutUsDevInfo";
 import AboutUsHeader from "./AboutUsHeader";
 import AboutUsInfo from "./AboutUsInfo";
 import AboutUsVideo from "./AboutUsVideo";
-import DevInfo from "./DevInfo";
+
+export const AboutContext = createContext();
 
 export default function AboutUs() {
-  const initializeAOS = useInitializeAOS();
-  useEffect(() => {
-    initializeAOS;
-  }, [initializeAOS]);
-
   return (
     <Box>
       <AboutUsHeader />
@@ -34,10 +32,12 @@ export default function AboutUs() {
           alt=""
         />
       </Box>
-      <AboutUsInfo />
-      <AboutUsBenefits />
-      <AboutUsVideo />
-      <DevInfo />
+      <AboutContext.Provider value={ScrollAnimation}>
+        <AboutUsInfo />
+        <AboutUsBenefits />
+        <AboutUsVideo />
+        <AboutUsDevInfo />
+      </AboutContext.Provider>
       <Footer />
     </Box>
   );
