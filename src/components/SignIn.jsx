@@ -117,6 +117,7 @@ export default function LoginPage() {
         borderRadius: 10,
         boxShadow: "3px 5px 30px 15px black",
         p: 3.5,
+        ml: { xs: 7, md: 0 },
         animation:
           "slide-in-elliptic-top-fwd .4s cubic-bezier(.25,.46,.45,.94) both",
       }}
@@ -509,23 +510,26 @@ export default function LoginPage() {
             <Typography
               level="h3"
               fontFamily="Poppins:wght@700"
-              fontSize={40}
               sx={{
                 mb: 1,
                 color: "white",
                 textAlign: "center",
                 display: "flex",
                 justifyContent: "center",
+                fontSize: "150%",
+                mr: { xs: 2, md: 3 },
               }}
-              startDecorator={<LockResetIcon sx={{ fontSize: 40 }} />}
+              startDecorator={<LockResetIcon sx={{ fontSize: "150%" }} />}
             >
               Password Reset
             </Typography>
 
             <Typography
-              endDecorator={<EmailIcon />}
+              startDecorator={
+                <EmailIcon sx={{ display: { xs: "none", md: "flex" } }} />
+              }
               fontFamily="Inter"
-              sx={{ color: "white" }}
+              sx={{ color: "white", textAlign: "center" }}
             >
               Enter your email address and we will send an email with a reset
               password link
@@ -648,6 +652,7 @@ export default function LoginPage() {
                   sx={{
                     fontFamily: "Inter",
                     fontSize: 15,
+                    fontWeight: 500,
                     mr: 3,
                   }}
                 >

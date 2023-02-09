@@ -11,9 +11,7 @@ export default function Centered({ children, style }) {
         minHeight: "100vh",
       }}
     >
-      <Box className="w-100" sx={style}>
-        {children}
-      </Box>
+      <Box sx={style}>{children}</Box>
     </Box>
   );
 }

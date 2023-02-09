@@ -2,8 +2,8 @@ import { Button, Divider, Typography } from "@mui/joy";
 import { Box, Fade, Grid, Slide } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import logo from "../assets/Global/logo.png";
+import SignIn from "../components/SignIn";
 import { AuthProvider } from "../contexts/AuthLogic";
-import SignIn from "./SignIn";
 
 export default function LoginPage() {
   useEffect(() => {
@@ -61,13 +61,20 @@ export default function LoginPage() {
             />
           </Box>
         </Slide>
-        <Grid item xs={14} md={8} sm={12} lg={3} sx={{ mt: { lg: 15 } }}>
+        <Grid
+          item
+          xs={14}
+          md={8}
+          sm={12}
+          lg={3}
+          sx={{ mt: { lg: 15 }, ml: { xs: 7, md: 0 } }}
+        >
           <Slide direction="right" in={true}>
             <Typography
               sx={{
                 fontFamily: "Anton",
                 textAlign: "center",
-                fontSize: 82,
+                fontSize: "400%",
                 fontWeight: 400,
                 color: "#ffe500",
               }}
@@ -79,7 +86,7 @@ export default function LoginPage() {
             <Typography
               sx={{
                 fontFamily: "Anton",
-                fontSize: 75,
+                fontSize: "400%",
                 fontWeight: 300,
                 color: "white",
                 textAlign: "center",
@@ -92,8 +99,8 @@ export default function LoginPage() {
             sx={{
               fontFamily: "Montserrat",
               fontSize: 16,
-              width: "100%",
               display: "flex",
+              justifyContent: "center",
               borderRadius: "50px",
               color: "black",
               backgroundColor: "rgba(255,228,0)",
@@ -102,6 +109,7 @@ export default function LoginPage() {
               },
               mb: 4,
             }}
+            fullWidth
             onClick={() => setFocus((prev) => !prev)}
           >
             SIGN IN NOW

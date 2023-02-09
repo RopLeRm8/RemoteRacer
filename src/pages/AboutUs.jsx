@@ -2,15 +2,15 @@ import { Box } from "@mui/joy";
 import "animate.css/animate.min.css";
 import React, { createContext } from "react";
 import ProfileCenter from "../assets/AboutUs/ProfileCenter.png";
+import AboutUsBenefits from "../components/AboutUsBenefits";
+import AboutUsDevInfo from "../components/AboutUsDevInfo";
+import AboutUsHeader from "../components/AboutUsHeader";
+import AboutUsInfo from "../components/AboutUsInfo";
+import AboutUsVideo from "../components/AboutUsVideo";
 import "../css/About.css";
 import "../css/SmoothSlide.css";
 import ScrollAnimation from "../features/ScrollAnimation";
 import Footer from "../layouts/Footer";
-import AboutUsBenefits from "./AboutUsBenefits";
-import AboutUsDevInfo from "./AboutUsDevInfo";
-import AboutUsHeader from "./AboutUsHeader";
-import AboutUsInfo from "./AboutUsInfo";
-import AboutUsVideo from "./AboutUsVideo";
 
 export const AboutContext = createContext();
 

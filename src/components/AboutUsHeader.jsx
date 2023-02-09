@@ -9,29 +9,34 @@ export default function HeeaderAboutUs() {
         display: "flex",
         backgroundColor: "#ffe500",
         justifyContent: "center",
-        py: 10,
+        py: { xs: 5, md: 10 },
         px: { xs: 4 },
       }}
     >
       <CssVarsProvider />
-      <Grid container spacing={2} direction="column" alignItems="center">
+      <Grid
+        container
+        spacing={{ md: 2 }}
+        direction="column"
+        alignItems="center"
+      >
         <Grid item>
           <Typography
             dir="rtl"
             fontWeight={400}
-            sx={{ fontSize: { xs: 45, sm: 50 }, fontFamily: "Anton" }}
+            sx={{ fontSize: "250%", fontFamily: "Anton" }}
           >
             REMOTE RACER
           </Typography>
         </Grid>
         <Grid item>
-          <Typography sx={{ fontFamily: "Anton" }} fontSize={20}>
+          <Typography sx={{ fontFamily: "Anton", textAlign: "center" }}>
             We help you to do the first step into the new era that includes
             innovative and fun technologies
           </Typography>
         </Grid>
         <Grid item>
-          <Typography sx={{ fontFamily: "Anton" }}>
+          <Typography sx={{ fontFamily: "Anton", textAlign: "center" }}>
             The company provides fun and innovative technologies for free
           </Typography>
         </Grid>

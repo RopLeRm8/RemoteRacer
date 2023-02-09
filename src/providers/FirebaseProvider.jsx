@@ -25,12 +25,16 @@ export const db = getDatabase(app);
 
 const provider = new GoogleAuthProvider();
 const gitprovider = new GithubAuthProvider();
+
 // Google authentication
 export const googleauth = () => {
   signInWithPopup(auth, provider)
-    .then(() => {})
+    .then(() => {
+      console.log("hi");
+    })
     .catch((err) => {
-      console.log(err);
+      console.log(err.code);
+      console.log(err.message);
     });
 };
 // git Authentication

@@ -2,9 +2,9 @@ import { Button, Divider, Grid, Typography } from "@mui/joy";
 import { Box, Fade, Slide } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import logo from "../assets/Global/logo.png";
+import SignUp from "../components/SignUp";
 import { AuthProvider } from "../contexts/AuthLogic";
 import "../css/RegisterAndLogin.css";
-import SignUp from "./SignUp";
 
 export default function RegisterPage() {
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function RegisterPage() {
         <Grid
           container
           direction="row-reverse"
-          spacing={{ xs: 4, md: 3, lg: 2 }}
+          spacing={{ xs: 4, md: 3, lg: 0 }}
           justifyContent="space-evenly"
           alignItems="center"
         >
@@ -81,7 +81,7 @@ export default function RegisterPage() {
                 sx={{
                   fontFamily: "Anton",
                   textAlign: "center",
-                  fontSize: 82,
+                  fontSize: "400%",
                   fontWeight: 400,
                   color: "#ffe500",
                 }}
@@ -93,7 +93,7 @@ export default function RegisterPage() {
               <Typography
                 sx={{
                   fontFamily: "Anton",
-                  fontSize: 75,
+                  fontSize: "400%",
                   fontWeight: 300,
                   color: "white",
                   textAlign: "center",

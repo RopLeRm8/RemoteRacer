@@ -3,7 +3,7 @@ import { useContext } from "react";
 import Poster from "../assets/AboutUs/Poster.png";
 import videoshowcase from "../assets/AboutUs/video.mp4";
 import "../css/About.css";
-import { AboutContext } from "./AboutUs";
+import { AboutContext } from "../pages/AboutUs";
 export default function AboutUsVideo() {
   const AnimationContext = useContext(AboutContext);
   return (
@@ -15,27 +15,34 @@ export default function AboutUsVideo() {
           justifyContent="space-around"
           sx={{ pt: 5 }}
         >
-          <Typography fontFamily="Anton" fontSize={70} sx={{ color: "white" }}>
+          <Typography
+            fontFamily="Anton"
+            sx={{ color: "white", fontSize: "3vmax" }}
+          >
             Be Amazed
           </Typography>
           <Grid container direction="column">
             <Typography
               fontFamily="Montserrat"
-              fontSize={20}
               sx={{
                 color: "white",
                 display: "flex",
                 alignItems: "center",
                 textAlign: "center",
                 px: { xs: 2, sm: 0 },
+                fontSize: "100%",
               }}
             >
               Use your car without phisycally touching it
             </Typography>
             <Typography
               fontFamily="Montserrat"
-              fontSize={20}
-              sx={{ color: "white", display: "flex", justifyContent: "center" }}
+              sx={{
+                color: "white",
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "100%",
+              }}
             >
               Move silent - move fast
             </Typography>

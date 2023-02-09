@@ -1,5 +1,6 @@
 import { getAuth } from "@firebase/auth";
 import EditIcon from "@mui/icons-material/Edit";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import NearbyErrorIcon from "@mui/icons-material/NearbyError";
 import OpacityIcon from "@mui/icons-material/Opacity";
 import PaletteIcon from "@mui/icons-material/Palette";
@@ -22,8 +23,9 @@ import {
   Select,
   Typography,
 } from "@mui/joy";
-import { FormHelperText } from "@mui/material";
+import { FormHelperText, Popover } from "@mui/material";
 import { child, get, ref, update } from "firebase/database";
+import { MuiColorInput } from "mui-color-input";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import CustomizeVideo from "../assets/Customize/Customize2.mp4";
@@ -35,14 +37,6 @@ import Footer from "../layouts/Footer";
 import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
 const englishchars = /^[A-Za-z0-9 ]*$/;
-const options = [
-  { Name: "Red", value: "rgb(255,0,0)" },
-  { Name: "Green", value: "rgb(0,255,0)" },
-  { Name: "Blue", value: "rgb(0,0,255)" },
-  { Name: "Cyan", value: "rgb(0,255,255)" },
-  { Name: "Dark Violet", value: "rgb(148,0,211)" },
-  { Name: "Restore To Default", value: "rgb(255,255,255)" },
-];
 export default function Customize() {
   const query = ref(db);
   const [carName, setcarName] = useState("");
@@ -50,12 +44,30 @@ export default function Customize() {
   const [carColor, setcarColor] = useState("");
   const [writeLength, setwriteLength] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [selectOpen, setselectOpen] = useState(false);
+  const [openPopover, setopenPopover] = useState(false);
+  const [anchorEl, setanchorEl] = useState(null);
+  const [colorChosen, setcolorChosen] = useState("");
   const carNameTitleRef = useRef();
   const videoRef = useRef();
+  const selectRef = useRef();
   const [user] = useAuthState(getAuth());
   const userRefDataUpdate = ref(db, `users/${user.uid}/data`);
   const userRefData = `users/${user.uid}/data`;
   const notify = useNotification();
+  const options = [
+    { Name: "Red", value: "rgb(255,0,0)" },
+    { Name: "Green", value: "rgb(0,255,0)" },
+    { Name: "Blue", value: "rgb(0,0,255)" },
+    { Name: "Cyan", value: "rgb(0,255,255)" },
+    { Name: "Dark Violet", value: "rgb(148,0,211)" },
+    { Name: "Restore To Default", value: "rgb(255,255,255)" },
+    {
+      Name: "Use custom color",
+      value: <HelpOutlineIcon />,
+      color: colorChosen,
+    },
+  ];
 
   useEffect(() => {
     get(child(query, userRefData))
@@ -100,11 +112,23 @@ export default function Customize() {
     setcarNameError("");
   }, []);
 
-  const handleColorChange = useCallback((_, nValue) => {
-    carNameTitleRef.current.style.color = nValue;
-    carNameTitleRef.current.style.transition = "0.5s all ease-out";
-    setcarColor(nValue);
-  }, []);
+  const handleColorChange = useCallback(
+    (e, nValue) => {
+      if (e.target.outerText.substring(1) === "Use custom color") {
+        setopenPopover(true);
+        setanchorEl(selectRef.current);
+      }
+      carNameTitleRef.current.style.transition = "0.5s all ease-out";
+      if (typeof nValue === "object" && colorChosen) {
+        carNameTitleRef.current.style.color = colorChosen;
+        setcarColor(colorChosen);
+      } else {
+        setcarColor(nValue);
+        carNameTitleRef.current.style.color = nValue;
+      }
+    },
+    [colorChosen]
+  );
 
   const handleconfSave = useCallback(() => {
     if (carNameError) {
@@ -134,10 +158,15 @@ export default function Customize() {
     });
   }, [carColor, carName, carNameError, writeLength, userRefDataUpdate, notify]);
 
+  const handlechangeColor = useCallback((nColor) => {
+    console.log(nColor);
+    setcolorChosen(nColor);
+    carNameTitleRef.current.style.transition = "0.5s all ease-out";
+    carNameTitleRef.current.style.color = colorChosen;
+  }, []);
   return (
     <Box>
       <CssVarsProvider />
-
       <Navbar />
       <Box sx={{ backgroundColor: "#ffe500", py: 6 }}>
         <video
@@ -148,7 +177,6 @@ export default function Customize() {
           ref={videoRef}
         ></video>
         <Typography
-          level="h1"
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -156,6 +184,7 @@ export default function Customize() {
             fontFamily: "Anton",
             mb: 2,
             textAlign: "center",
+            fontSize: "5.5vh",
           }}
         >
           Customize Your Dream Car
@@ -166,11 +195,11 @@ export default function Customize() {
             display: "flex",
             justifyContent: "center",
             color: "black",
-            fontFamily: "Montserrat",
+            fontFamily: "Inter",
             textAlign: "center",
           }}
           startDecorator={
-            <NearbyErrorIcon sx={{ display: { xs: "none", sm: "block" } }} />
+            <NearbyErrorIcon sx={{ display: { xs: "none", md: "block" } }} />
           }
         >
           Remember: You can always undo the changes
@@ -180,10 +209,13 @@ export default function Customize() {
       <Grid
         container
         alignItems="end"
-        justifyContent={{ xs: "center", sm: "space-evenly" }}
-        sx={{ py: { sm: 20 }, pb: { xs: 10, sm: 0 } }}
+        justifyContent={{ xs: "center", md: "space-evenly" }}
+        sx={{ py: { md: 20 }, pb: { xs: 0, md: 10 } }}
       >
-        <Grid item sx={{ my: { xs: 5, sm: 1 }, mb: { md: 35 } }}>
+        <Grid
+          item
+          sx={{ my: { xs: 5, sm: 1 }, mb: { xs: selectOpen ? 35 : 0, md: 35 } }}
+        >
           <ScrollAnimation
             animationName="animate__lightSpeedInLeft"
             duration={0.6}
@@ -194,19 +226,18 @@ export default function Customize() {
                   color: "#ffe500",
                   textAlign: "center",
                   fontSize: 25,
-                  fontFamily: "Anton",
+                  fontFamily: "Inter",
                 }}
               >
-                Car Configuration
+                CAR CONFIGURATION
               </Typography>
               <Divider sx={{ backgroundColor: "white", my: 2 }} />
               <Grid container direction="column" spacing={1}>
                 <Grid item>
                   <FormControl>
                     <FormLabel>
-                      {" "}
                       <Typography
-                        fontFamily="Montserrat"
+                        fontFamily="Inter"
                         sx={{ color: "#ffe500" }}
                         startDecorator={<EditIcon sx={{ color: "white" }} />}
                       >
@@ -233,12 +264,14 @@ export default function Customize() {
 
                 <Grid item>
                   <Typography
-                    sx={{ color: "#ffe500", fontFamily: "Montserrat", mb: 1 }}
+                    sx={{ color: "#ffe500", fontFamily: "Inter", mb: 1 }}
                     startDecorator={<PaletteIcon sx={{ color: "white" }} />}
                   >
                     Car Name Color
                   </Typography>
                   <Select
+                    ref={selectRef}
+                    onListboxOpenChange={() => setselectOpen((prev) => !prev)}
                     startDecorator={<OpacityIcon sx={{ color: "black" }} />}
                     defaultValue="1"
                     placeholder={
@@ -267,26 +300,52 @@ export default function Customize() {
                     {options.map((option) => (
                       <Box key={option.Name}>
                         <Option
-                          value={option.value}
+                          value={
+                            typeof option.value !== "object" ||
+                            option.color === "#ffffff"
+                              ? option.value
+                              : option.color
+                          }
                           key={option.value}
                           sx={{
                             borderRadius: 5,
-                            fontFamily: "Montserrat",
+                            fontFamily: "Inter",
                             fontWeight: 700,
                             color: "black",
                           }}
                         >
                           <ListItemDecorator>
-                            <Box
-                              sx={{
-                                backgroundColor: option.value,
-                                borderRadius: 50,
-                                width: 20,
-                                color: "rgba(0,0,0,0)",
-                              }}
-                            >
-                              h
-                            </Box>
+                            {typeof option.value === "string" ? (
+                              <Box
+                                sx={{
+                                  backgroundColor: option.value,
+                                  borderRadius: 50,
+                                  width: 20,
+                                  color: "rgba(0,0,0,0)",
+                                }}
+                              >
+                                h
+                              </Box>
+                            ) : (
+                              <Box>
+                                <Box
+                                  sx={{
+                                    backgroundColor: colorChosen,
+                                    borderRadius: 50,
+                                    width: 20,
+                                    color: "rgba(0,0,0,0)",
+                                    display: colorChosen ? "flex" : "none",
+                                  }}
+                                >
+                                  h
+                                </Box>
+                                <HelpOutlineIcon
+                                  sx={{
+                                    display: colorChosen ? "none" : "flex",
+                                  }}
+                                />
+                              </Box>
+                            )}
                           </ListItemDecorator>
                           {option.Name}
                         </Option>
@@ -304,7 +363,7 @@ export default function Customize() {
                         mt: 1,
                         width: carNameError ? "335px" : "270px",
                         borderRadius: "1",
-                        fontFamily: "Montserrat",
+                        fontFamily: "Inter",
                         fontWeight: 600,
                         fontSize: 13,
                         transition: "0.2s all ease-out",
@@ -312,9 +371,7 @@ export default function Customize() {
                       startDecorator={<SettingsIcon />}
                       onClick={handleconfSave}
                       loading
-                    >
-                      SAVE CONFIGURATION
-                    </Button>
+                    />
                   ) : (
                     <Button
                       variant="soft"
@@ -323,7 +380,7 @@ export default function Customize() {
                         mt: 1,
                         width: carNameError ? "335px" : "270px",
                         borderRadius: "1",
-                        fontFamily: "Montserrat",
+                        fontFamily: "Inter",
                         fontWeight: 600,
                         fontSize: 13,
                         transition: "0.2s all ease-out",
@@ -339,47 +396,66 @@ export default function Customize() {
             </Card>
           </ScrollAnimation>
         </Grid>
-        <ScrollAnimation animationName="animate__zoomIn">
-          <Grid item sx={{ pb: 35 }}>
-            <Grid container direction="column">
-              <Grid
-                item
-                sx={{ background: "rgba(255,228,0,0.8)", maxWidth: "100%" }}
+        <Grid
+          item
+          sx={{
+            pb: { xs: 5, md: 35 },
+          }}
+        >
+          <Grid container direction="column">
+            <Grid
+              item
+              sx={{ background: "rgba(255,228,0,0.8)", maxWidth: "100%" }}
+            >
+              <Typography
+                sx={{
+                  textAlign: "center",
+                  color: "white",
+                  fontFamily: "Anton",
+                  fontSize: 45,
+                  mb: 1,
+                  backgroundColor: "black",
+                  maxWidth: "100%",
+                }}
+                ref={carNameTitleRef}
+                level="h3"
               >
-                <Typography
-                  sx={{
-                    textAlign: "center",
-                    color: "white",
-                    fontFamily: "Anton",
-                    fontSize: 45,
-                    mb: 1,
-                    backgroundColor: "black",
-                    maxWidth: "100%",
-                  }}
-                  ref={carNameTitleRef}
-                  level="h3"
-                >
-                  {carName}
-                </Typography>
+                {carName}
+              </Typography>
 
-                <Box>
-                  <img
-                    src={robot}
-                    alt=""
-                    style={{
-                      width: "300px",
-                      display: "flex",
-                      justifyContent: "center",
-                      // animation: "rotating 10s linear infinite",
-                    }}
-                  />
-                </Box>
-              </Grid>
+              <Box>
+                <img
+                  src={robot}
+                  alt=""
+                  style={{
+                    width: "300px",
+                    display: "flex",
+                    justifyContent: "center",
+                    // animation: "rotating 10s linear infinite",
+                  }}
+                />
+              </Box>
             </Grid>
           </Grid>
-        </ScrollAnimation>
+        </Grid>
       </Grid>
       <Footer />
+      <Popover
+        open={openPopover}
+        anchorEl={anchorEl}
+        onClose={() => setopenPopover(false)}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        sx={{ p: 3 }}
+      >
+        <MuiColorInput
+          value={colorChosen}
+          onChange={handlechangeColor}
+          placeholder="#ffffff"
+        />
+      </Popover>
     </Box>
   );
 }

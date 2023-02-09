@@ -13,6 +13,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 // import trophy from "../assets/Leaderboard/trophy.png";
 import BadgeIcon from "@mui/icons-material/Badge";
 import CasinoIcon from "@mui/icons-material/Casino";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import Centered from "../features/Centered";
@@ -48,7 +49,9 @@ export default function Leaderboard() {
       <Navbar />
       <CssVarsProvider />
       <ScrollAnimation animationName="animate__fadeInTopLeft">
-        <Centered>
+        <Centered
+          style={{ border: "1px white solid", p: 2, borderRadius: "8px" }}
+        >
           <Typography
             fontFamily="Anton"
             sx={{
@@ -84,7 +87,12 @@ export default function Leaderboard() {
                   }}
                   key={userData.name}
                 >
-                  <Grid container direction="row" justifyContent="space-evenly">
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-evenly"
+                    alignItems="center"
+                  >
                     <Typography
                       sx={{
                         color: backColor,
@@ -133,6 +141,23 @@ export default function Leaderboard() {
                         startDecorator={<EmailIcon />}
                       >
                         {userData.mail || "[No email]"}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: userData.carColor
+                            ? userData.carColor
+                            : backColor,
+                          ml: 3,
+                          fontFamily: "Inter",
+                          fontWeight: 500,
+                          display: userData.carName ? "flex" : "none",
+                          WebkitTextStroke: "0.2px black",
+                        }}
+                        startDecorator={
+                          <DirectionsCarIcon sx={{ color: backColor }} />
+                        }
+                      >
+                        {userData.carName}
                       </Typography>
                     </Grid>
                   </Grid>

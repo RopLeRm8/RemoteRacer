@@ -75,7 +75,6 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
-    overflow: hidden;
 }
 #customize {
   position: fixed;

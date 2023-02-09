@@ -51,7 +51,7 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
 
   useEffect(() => {
     UpdateErrorsFound();
-  }, [nameValue, lastnameValue, emailValue]);
+  }, []);
 
   const handleChangeName = useCallback((e) => {
     setnameValue(e.target.value);

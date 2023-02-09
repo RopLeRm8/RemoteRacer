@@ -6,7 +6,13 @@ Project Description
 
 ### Todo
 
+- [ ] AFTER CONNECTING WITH SSID AND PASSWORD IT WILL SAVE IT TO FIREBASE AND ESP WILL TAKE THE SSID AND PASSWORD FROM FIREBASE AND CONNECT TO THE WIFI IF EXISTS AND IT WILL ALSO WRITE IN FIREBASE OK OR FAILED IF OK THEN IT WILL WRITE ALSO THE IP SO THE WEBSITE KNOWS THE IP AND WILL SHOW STREAM BASED ON THE IP  
+- [ ] Create canvas with a game  
+- [ ] Make esp config work  
+- [ ] Redesign leaderboard  
+- [ ] Fix google and github authentication methods  
 - [ ] Combine components to create pages folder  
+- [ ] Create custom mail verification message  
 - [ ] Finish adding custom hooks  
 - [ ] Fix shit stack error  
 - [ ] Add lazy module that optimizes the work of routing  
@@ -16,6 +22,10 @@ Project Description
 
 ### Done ✓
 
+- [x] Fix ESP Config error that popups in console  
+- [x] In customize, fix so the color shows up and updates immediately  
+- [x] Fix sign in page to load correctly for phones its broken now  
+- [x] Make upload button stop loading when pressed cancel on the input  
 - [x] Remove uselesss node modules  
 - [x] Finish with leaderboard  
 - [x] Set navbar to be static  

@@ -63,7 +63,7 @@ export default function Footer() {
           Final Project IOT - Ilya Boicov
         </Typography>
       </Grid>
-      <Grid item sx={{ mt: 5, mr: 4 }}>
+      <Grid item sx={{ mt: 5, mr: { xs: 5, md: 10 } }}>
         <List>
           {listOfSocials.map((social) => (
             <ListItemButton

@@ -16,10 +16,26 @@ import logo from "../assets/Global/logoblack.png";
 import { getAuth } from "@firebase/auth";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import BrushIcon from "@mui/icons-material/Brush";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
+import KeyIcon from "@mui/icons-material/Key";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import SignalWifi4BarIcon from "@mui/icons-material/SignalWifi4Bar";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  InputAdornment,
+  List,
+  ListItem,
+  Button as MUIButt,
+  TextField,
+} from "@mui/material";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
@@ -61,6 +77,7 @@ function Navbar() {
   useLoadFonts();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [openModal, setopenModal] = useState(false);
 
   const [user] = useAuthState(getAuth());
 
@@ -157,7 +174,11 @@ function Navbar() {
                   key={page}
                   onClick={() => handleCloseNavMenu(page[4])}
                 >
-                  <IconButton>{page[1]} </IconButton>
+                  <IconButton
+                    sx={{ color: "black", backgroundColor: "rgba(0,0,0,0)" }}
+                  >
+                    {page[1]}{" "}
+                  </IconButton>
                   <Typography
                     sx={{ color: "black", fontSize: 15 }}
                     textAlign="center"
@@ -233,7 +254,11 @@ function Navbar() {
           </Box>
 
           <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
-            <IconButton color="warning" variant="plain">
+            <IconButton
+              color="warning"
+              variant="plain"
+              onClick={() => setopenModal(true)}
+            >
               <SettingsSuggestIcon />
             </IconButton>
             <Tooltip
@@ -295,7 +320,6 @@ function Navbar() {
                   </Typography>
                   <IconButton
                     sx={{
-                      ml: setting[0] === "יציאה" ? 1 : 0,
                       color: "black",
                       backgroundColor: "rgba(0,0,0,0)",
                       "&:hover": {
@@ -311,6 +335,115 @@ function Navbar() {
           </Box>
         </Toolbar>
       </Container>
+      <Dialog open={openModal} onClose={() => setopenModal(false)}>
+        <DialogTitle
+          sx={{
+            textAlign: "center",
+            fontFamily: "Poppins",
+            py: 2,
+          }}
+        >
+          ESP CONFIGURATION
+        </DialogTitle>
+        <DialogContent>
+          <Grid
+            container
+            direction={{ xs: "column", md: "row" }}
+            spacing={{ xs: 1, md: 2 }}
+            alignItems="center"
+          >
+            <Grid item>
+              <Grid container direction="column" spacing={5}>
+                <Grid item>
+                  <TextField
+                    sx={{ maxWidth: { md: "80%" } }}
+                    variant="outlined"
+                    placeholder="ESP SSID"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SignalWifi4BarIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    type="password"
+                    label="SSID Password"
+                    variant="outlined"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <KeyIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{ mb: 2, maxWidth: { md: "80%" } }}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+            <Typography
+              sx={{
+                color: "black",
+                fontFamily: "Inter",
+                fontWeight: 500,
+                mb: { xs: 2, md: 0 },
+                mr: { md: 4 },
+              }}
+            >
+              OR
+            </Typography>
+            <Grid item>
+              <MUIButt fullWidth variant="outlined">
+                SCAN FOR NETWORKS
+              </MUIButt>
+              <List>
+                <ListItem sx={{ display: "flex", justifyContent: "center" }}>
+                  <MUIButt variant="contained" fullWidth>
+                    NETWORK #1
+                  </MUIButt>
+                </ListItem>
+                <ListItem sx={{ display: "flex", justifyContent: "center" }}>
+                  <MUIButt variant="contained" fullWidth>
+                    NETWORK #2
+                  </MUIButt>
+                </ListItem>
+                <ListItem sx={{ display: "flex", justifyContent: "center" }}>
+                  <MUIButt variant="contained" fullWidth>
+                    NETWORK #3
+                  </MUIButt>
+                </ListItem>
+              </List>
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <MUIButt
+            autoFocus
+            variant="contained"
+            color="success"
+            fullWidth
+            disableElevation
+            startIcon={<CheckIcon />}
+          >
+            ACCEPT
+          </MUIButt>
+          <MUIButt
+            autoFocus
+            variant="contained"
+            color="error"
+            fullWidth
+            disableElevation
+            startIcon={<CloseIcon />}
+            onClick={() => setopenModal(false)}
+          >
+            Cancel
+          </MUIButt>
+        </DialogActions>
+      </Dialog>
     </AppBar>
   );
 }

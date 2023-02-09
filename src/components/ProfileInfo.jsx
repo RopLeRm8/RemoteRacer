@@ -45,17 +45,6 @@ export default function ProfileInfo({ setstamProfile }) {
         ? settimeValue(snapshot.val().lastTime)
         : settimeValue(snapshot.val().newTime + " - First Entry!");
     });
-
-    const handleScroll = () => {
-      let value = window.scrollY;
-      mainbox.current.style.bottom = value * 0.3 + "px";
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, [query, userRefDB]);
   return (
     <Zoom in={true}>

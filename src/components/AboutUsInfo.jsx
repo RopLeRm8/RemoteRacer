@@ -2,13 +2,12 @@ import { Box, Stack, Typography } from "@mui/joy";
 import { useContext } from "react";
 // import { AnimationOnScroll } from "react-animation-on-scroll";
 import aboutimg from "../assets/AboutUs/aboutimg.png";
-import { AboutContext } from "./AboutUs";
+import { AboutContext } from "../pages/AboutUs";
 export default function AboutUsInfo() {
   const AnimationContext = useContext(AboutContext);
   return (
     <Box sx={{ backgroundColor: "rgba(0,0,0,0.93)" }}>
       <Typography
-        fontSize={80}
         fontFamily="Anton"
         sx={{
           display: "flex",
@@ -16,6 +15,7 @@ export default function AboutUsInfo() {
           color: "#ffe500",
           pt: 10,
           pb: 3,
+          fontSize: "3vmax",
         }}
       >
         ABOUT US
@@ -28,9 +28,14 @@ export default function AboutUsInfo() {
           direction={{ xs: "column", lg: "row" }}
         >
           <Typography
-            fontSize={20}
             fontFamily="Montserrat"
-            sx={{ color: "white", px: { xs: 3, lg: 10 }, pb: { xs: 3, lg: 0 } }}
+            sx={{
+              color: "white",
+              px: { xs: 3, lg: 10 },
+              pb: { xs: 3, lg: 0 },
+              fontSize: "120%",
+              textAlign: "center",
+            }}
           >
             We pride ourselves at being able to get our customer into the car
             that they want, and more importantly, at they price they are looking

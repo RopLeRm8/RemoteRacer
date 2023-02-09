@@ -11,14 +11,14 @@ import blackback from "../assets/Profile/blackback.png";
 import blackback2 from "../assets/Profile/blackback2.png";
 import dices from "../assets/Profile/dices.png";
 import points from "../assets/Profile/points.png";
+import Medals from "../components/Medals";
+import ProfileInfo from "../components/ProfileInfo";
 import "../css/SmoothSlide.css";
 import ScrollAnimation from "../features/ScrollAnimation";
 import { useNotification } from "../hooks/useNotification";
 import Footer from "../layouts/Footer";
 import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
-import Medals from "./Medals";
-import ProfileInfo from "./ProfileInfo";
 
 const rateToText = [
   "Didn't Like At All",
@@ -248,7 +248,7 @@ export default function Profile() {
             },
           }}
         />
-        <ScrollAnimation animationName="animate__flipInX" duration={1}>
+        <ScrollAnimation animationName="animate__flipInX" duration={0.6}>
           <Stack
             direction="column"
             alignItems="center"

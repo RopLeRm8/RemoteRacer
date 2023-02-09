@@ -138,7 +138,7 @@ export default function FormModal({
       setimageURL(URL.createObjectURL(val.target.files[0]));
       setError("");
     }
-    setUploadLoading((prev) => !prev);
+    setUploadLoading(false);
   };
 
   return (
@@ -152,6 +152,7 @@ export default function FormModal({
           setUploadLoading(false);
         }}
         open={open}
+        onFocusCapture={() => setUploadLoading(false)}
       >
         <Box
           sx={{
@@ -187,57 +188,34 @@ export default function FormModal({
                 sure its less than 8MB
               </Typography>
               <Grid item sx={{ mb: 2 }}>
-                {uploadLoading ? (
-                  <Button
-                    variant="outlined"
-                    color="warning"
-                    component="label"
-                    sx={{
-                      fontFamily: "Inter",
-                      width: "95%",
-                      color: "white",
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                    loading
-                  >
-                    <input
-                      hidden
-                      accept="image/*"
-                      multiple
-                      type="file"
-                      onChange={changeHandler}
-                    />
-                  </Button>
-                ) : (
-                  <Button
-                    variant="outlined"
-                    color="warning"
-                    component="label"
-                    sx={{
-                      fontFamily: "Inter",
-                      fontWeight: 500,
-                      width: "95%",
-                      display: "flex",
-                      justifyContent: "center",
-                      color: "white",
-                      "&:hover": {
-                        color: "black",
-                      },
-                    }}
-                    startDecorator={<ArrowUpwardIcon />}
-                    onClick={() => setUploadLoading(true)}
-                  >
-                    Upload
-                    <input
-                      hidden
-                      accept="image/*"
-                      multiple
-                      type="file"
-                      onChange={changeHandler}
-                    />
-                  </Button>
-                )}
+                <Button
+                  variant="outlined"
+                  color="warning"
+                  component="label"
+                  sx={{
+                    fontFamily: "Inter",
+                    fontWeight: 500,
+                    width: "90hmax",
+                    display: "flex",
+                    justifyContent: "center",
+                    color: "white",
+                    "&:hover": {
+                      color: "black",
+                    },
+                  }}
+                  startDecorator={<ArrowUpwardIcon />}
+                  onClick={() => setUploadLoading(true)}
+                  loading={uploadLoading}
+                >
+                  Upload
+                  <input
+                    hidden
+                    accept="image/*"
+                    multiple
+                    type="file"
+                    onChange={changeHandler}
+                  />
+                </Button>
               </Grid>
 
               {imageName && (

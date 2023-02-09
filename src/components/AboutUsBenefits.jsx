@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react";
 import CALENDAR from "../assets/AboutUs/CALENDAR.png";
 import KEYS from "../assets/AboutUs/KEY.png";
 import MAP from "../assets/AboutUs/MAP.png";
-import { AboutContext } from "./AboutUs";
+import { AboutContext } from "../pages/AboutUs";
 export default function AboutUsBenefits() {
   const AnimationContext = useContext(AboutContext);
   useEffect(() => {
@@ -17,7 +17,6 @@ export default function AboutUsBenefits() {
       <Grid container direction="column">
         <AnimationContext animationName="animate__slideInDown">
           <Typography
-            fontSize={{ xs: 50, sm: 80 }}
             fontFamily="Anton"
             sx={{
               color: "#ffe500",
@@ -26,6 +25,7 @@ export default function AboutUsBenefits() {
               textAlign: "center",
               mt: 5,
               px: { xs: 8, sm: 0 },
+              fontSize: "3vmax",
             }}
           >
             All the benefits you will
@@ -33,7 +33,6 @@ export default function AboutUsBenefits() {
         </AnimationContext>
         <AnimationContext animationName="animate__flipInX">
           <Typography
-            fontSize={{ xs: 50, sm: 80 }}
             fontFamily="Anton"
             sx={{
               color: "#ffe500",
@@ -41,6 +40,7 @@ export default function AboutUsBenefits() {
               justifyContent: "center",
               textAlign: "center",
               px: { xs: 8, sm: 0 },
+              fontSize: "3vmax",
             }}
           >
             get when you choose our services

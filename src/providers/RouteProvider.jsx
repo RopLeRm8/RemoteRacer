@@ -2,20 +2,21 @@ import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import AboutUs from "../components/AboutUs";
-import Dashboard from "../components/Dashboard";
-import Leaderboard from "../components/Leaderboard";
-import LoginPage from "../components/LoginPage";
-import Profile from "../components/Profile";
-import RegisterPage from "../components/RegisterPage";
-import WelcomePage from "../components/WelcomePage";
-import Centered from "../features/Centered";
-
 import Box from "@mui/joy/Box";
 import { Alert, Backdrop } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import loading from "../assets/Route/loading.gif";
-import Customize from "../components/Customize";
+import Dashboard from "../components/Dashboard";
+import WelcomePage from "../components/WelcomePage";
+import Centered from "../features/Centered";
+import AboutUs from "../pages/AboutUs";
+import Customize from "../pages/Customize";
+import Game from "../pages/Game";
+import Leaderboard from "../pages/Leaderboard";
+import LoginPage from "../pages/LoginPage";
+import Profile from "../pages/Profile";
+import RegisterPage from "../pages/RegisterPage";
+
 import "../css/LoginPage.css";
 import "../css/RouteProvider.css";
 import { useLoadFonts } from "./FontProvider";
@@ -56,6 +57,7 @@ export default function RouteProvider() {
               <Route path="customize" element={<Customize />} />
               <Route path="about" element={<AboutUs />} />
               <Route path="leaderboard" element={<Leaderboard />} />
+              <Route path="game" element={<Game />} />
             </Routes>
           </SnackbarProvider>
         </Box>
@@ -72,6 +74,7 @@ export default function RouteProvider() {
             <Route path="welcomepage" element={<WelcomePage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
+            <Route path="game" element={<Navigate to="/" />} />
           </Routes>
         </SnackbarProvider>
       )}
