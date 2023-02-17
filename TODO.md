@@ -6,9 +6,7 @@ Project Description
 
 ### Todo
 
-- [ ] AFTER CONNECTING WITH SSID AND PASSWORD IT WILL SAVE IT TO FIREBASE AND ESP WILL TAKE THE SSID AND PASSWORD FROM FIREBASE AND CONNECT TO THE WIFI IF EXISTS AND IT WILL ALSO WRITE IN FIREBASE OK OR FAILED IF OK THEN IT WILL WRITE ALSO THE IP SO THE WEBSITE KNOWS THE IP AND WILL SHOW STREAM BASED ON THE IP  
-- [ ] Create canvas with a game  
-- [ ] Make esp config work  
+- [ ] STYLE IDEAS - In customize + tmuna, paper shape and bigger so it fits box on the left. In footer align bitches logos to left flex start or text align. In leaderboard hide email + place 1 2 3 badges medals icons and replace name icons and do fading animation by place from 3 to 1 toda. Box is shit + do margin  
 - [ ] Redesign leaderboard  
 - [ ] Fix google and github authentication methods  
 - [ ] Combine components to create pages folder  
@@ -22,6 +20,7 @@ Project Description
 
 ### Done ✓
 
+- [x] Create canvas with a game  
 - [x] Fix ESP Config error that popups in console  
 - [x] In customize, fix so the color shows up and updates immediately  
 - [x] Fix sign in page to load correctly for phones its broken now  

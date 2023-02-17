@@ -19,7 +19,7 @@ import RegisterPage from "../pages/RegisterPage";
 
 import "../css/LoginPage.css";
 import "../css/RouteProvider.css";
-import { useLoadFonts } from "./FontProvider";
+import { useLoadFonts } from "../hooks/useLoadFonts";
 
 export default function RouteProvider() {
   useLoadFonts();
@@ -44,7 +44,6 @@ export default function RouteProvider() {
         <img src={loading} width="256" height="256" alt="" />
       </Backdrop>
     );
-
   return (
     <BrowserRouter>
       {authUser ? (

@@ -1,16 +1,16 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
-import Button from "@mui/joy/Button";
 import IconButton from "@mui/joy/IconButton";
 import Tooltip from "@mui/joy/Tooltip";
+import LoadingButton from "@mui/lab/LoadingButton";
 import AppBar from "@mui/material/AppBar";
 import Container from "@mui/material/Container";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import logo from "../assets/Global/logoblack.png";
 
 import { getAuth } from "@firebase/auth";
@@ -21,9 +21,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
 import KeyIcon from "@mui/icons-material/Key";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
+import LockIcon from "@mui/icons-material/Lock";
 import LogoutIcon from "@mui/icons-material/Logout";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import SensorsIcon from "@mui/icons-material/Sensors";
+import SettingsIcon from "@mui/icons-material/Settings";
 import SignalWifi4BarIcon from "@mui/icons-material/SignalWifi4Bar";
+import { Button, CssVarsProvider, Divider } from "@mui/joy";
 import {
   Dialog,
   DialogActions,
@@ -33,6 +36,7 @@ import {
   InputAdornment,
   List,
   ListItem,
+  ListItemIcon,
   Button as MUIButt,
   TextField,
 } from "@mui/material";
@@ -40,8 +44,9 @@ import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import "../css/NavBar.css";
+import { useNotification } from "../hooks/useNotification";
+import useSignalStrength from "../hooks/useSignalStrength";
 import { auth } from "../providers/FirebaseProvider";
-import { useLoadFonts } from "../providers/FontProvider";
 
 const pages = [
   [
@@ -68,16 +73,20 @@ const pages = [
 ];
 const settings = [
   ["Profile", <AccountBoxIcon key="accountBox" />],
-  ["Sign Out", <LogoutIcon key="Logout" />],
+  ["Settings", <SettingsIcon key="settings" />],
+  ["Sign Out", "red"],
 ];
 
 function Navbar() {
   const [scrollTop, setScrollTop] = useState(0);
   const navigate = useNavigate();
-  useLoadFonts();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [openModal, setopenModal] = useState(false);
+  const [scanLoading, setScanLoading] = useState(false);
+  const [networkList, setNetworkList] = useState([]);
+  const [passwordEntry, setPasswordEntry] = useState({});
+  const notify = useNotification();
 
   const [user] = useAuthState(getAuth());
 
@@ -95,11 +104,69 @@ function Navbar() {
   };
 
   const handleCloseUserMenu = (setting) => {
-    setting && setting === "Sign Out" && auth.signOut();
-    setting && setting === "Profile" && navigate("/profile");
+    setting && setting === "Sign Out" ? auth.signOut() : null;
+    setting && setting === "Profile" ? navigate("/profile") : null;
+    setting && setting === "Settings" ? setopenModal(true) : null;
 
     return setAnchorElUser(null);
   };
+
+  const handleScan = useCallback(() => {
+    setScanLoading(true);
+    setNetworkList([]);
+    setPasswordEntry([]);
+    fetch("http://192.168.4.1/scan", { mode: "cors" })
+      .then((response) => response.json())
+      .then((data) => {
+        setNetworkList(data);
+      })
+      .catch((err) => {
+        notify("Connection failed to ESP server, " + err, {
+          variant: "error",
+        });
+        throw new Error("Check if you are the same network as ESP");
+      })
+      .finally(() => {
+        setScanLoading(false);
+      });
+  }, [notify]);
+  // const handleConnectToWifi = useCallback((ssid, pass, encType) => {
+  //   console.log(ssid, pass, encType);
+  // }, []);
+
+  // const handleNetworkClick = (ssid, pass, encType) => () => {
+  //   handleConnectToWifi(ssid, pass, encType);
+  // };
+  const handlePasswordEntry = useCallback(
+    (ssid) => {
+      setPasswordEntry((prev) => ({
+        ...prev,
+        [ssid]: !prev[ssid],
+      }));
+      console.log(passwordEntry);
+    },
+    [passwordEntry]
+  );
+  const handleConnectToWifi = useCallback((ssid, pass) => {
+    const _connData = {
+      ssid: ssid,
+      password: pass,
+    };
+    fetch("http://192.168.4.1/connect", {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(_connData),
+    })
+      .then((resp) => {
+        console.log(resp);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   useEffect(() => {
     const handleScroll = () => {
       setScrollTop(window.scrollY);
@@ -124,6 +191,8 @@ function Navbar() {
       }}
     >
       <Container maxWidth="xl">
+        <CssVarsProvider />
+
         <Toolbar>
           <a href="/">
             <Box
@@ -195,7 +264,7 @@ function Navbar() {
               display: { xs: "flex", md: "none" },
               mr: -2,
               my: 1.2,
-              flexGrow: { xs: 0.3, md: 1 },
+              flexGrow: { xs: 0.65, sm: 0.75, md: 1 },
             }}
           >
             <a href="/">
@@ -228,11 +297,11 @@ function Navbar() {
                 }
                 key={page[3]}
               >
-                <Button
-                  variant="plain"
+                <MUIButt
+                  variant="text"
                   color="warning"
                   key={page}
-                  startDecorator={page[1]}
+                  startIcon={page[1]}
                   onClick={() => handleCloseNavMenu(page[4])}
                   sx={{
                     "&:hover": {
@@ -248,22 +317,22 @@ function Navbar() {
                   }}
                 >
                   {page[0]}
-                </Button>
+                </MUIButt>
               </Tooltip>
             ))}
           </Box>
 
           <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
-            <IconButton
-              color="warning"
-              variant="plain"
-              onClick={() => setopenModal(true)}
-            >
-              <SettingsSuggestIcon />
-            </IconButton>
             <Tooltip
+              variant="outlined"
+              sx={{ animation: "fadein 0.5s forwards" }}
               title={
-                <Typography style={{ fontSize: 13, fontFamily: "Montserrat" }}>
+                <Typography
+                  sx={{
+                    fontSize: 12,
+                    fontFamily: "Inter",
+                  }}
+                >
                   Profile Settings
                 </Typography>
               }
@@ -299,43 +368,81 @@ function Navbar() {
               keepMounted
               transformOrigin={{
                 vertical: "top",
-                horizontal: "right",
+                horizontal: "center",
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem
-                  key={setting[0]}
-                  onClick={() => handleCloseUserMenu(setting[0])}
-                >
-                  <Typography
-                    textAlign="center"
+                <Box key={setting[0]}>
+                  <MenuItem
+                    onClick={() => handleCloseUserMenu(setting[0])}
                     sx={{
-                      ml: 2,
-                      color: "black",
-                    }}
-                  >
-                    {setting[0]}
-                  </Typography>
-                  <IconButton
-                    sx={{
-                      color: "black",
-                      backgroundColor: "rgba(0,0,0,0)",
+                      display: "flex",
+                      justifyContent:
+                        typeof setting[1] === "string" ? "center" : "start",
                       "&:hover": {
-                        backgroundColor: "rgba(0,0,0,0)",
+                        backgroundColor:
+                          typeof setting[1] === "string" && "rgba(0,0,0,0)",
                       },
                     }}
                   >
-                    {setting[1]}{" "}
-                  </IconButton>
-                </MenuItem>
+                    {typeof setting[1] !== "string" ? (
+                      <>
+                        <ListItemIcon
+                          sx={{
+                            color: "black",
+                            backgroundColor: "rgba(0,0,0,0)",
+                            "&:hover": {
+                              backgroundColor: "rgba(0,0,0,0)",
+                            },
+                          }}
+                        >
+                          {setting[1]}
+                        </ListItemIcon>
+
+                        <Typography
+                          textAlign="center"
+                          sx={{
+                            color: "black",
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {setting[0]}
+                        </Typography>
+                      </>
+                    ) : (
+                      <Button
+                        variant="plain"
+                        color="danger"
+                        size="sm"
+                        startDecorator={<LogoutIcon />}
+                      >
+                        <Typography textAlign="center">{setting[0]}</Typography>
+                      </Button>
+                    )}
+                  </MenuItem>
+                  <Divider
+                    sx={{
+                      display: setting[0] === "Settings" ? "flex" : "none",
+                      mx: 1,
+                    }}
+                  />
+                </Box>
               ))}
             </Menu>
           </Box>
         </Toolbar>
       </Container>
-      <Dialog open={openModal} onClose={() => setopenModal(false)}>
+      <Dialog
+        open={openModal}
+        onClose={() => {
+          setopenModal(false);
+          setNetworkList([]);
+          setPasswordEntry([]);
+        }}
+      >
         <DialogTitle
           sx={{
             textAlign: "center",
@@ -357,8 +464,8 @@ function Navbar() {
                 <Grid item>
                   <TextField
                     sx={{ maxWidth: { md: "80%" } }}
-                    variant="outlined"
-                    placeholder="ESP SSID"
+                    variant="standard"
+                    label="SSID Password"
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -372,7 +479,7 @@ function Navbar() {
                   <TextField
                     type="password"
                     label="SSID Password"
-                    variant="outlined"
+                    variant="standard"
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -385,37 +492,83 @@ function Navbar() {
                 </Grid>
               </Grid>
             </Grid>
-            <Typography
-              sx={{
-                color: "black",
-                fontFamily: "Inter",
-                fontWeight: 500,
-                mb: { xs: 2, md: 0 },
-                mr: { md: 4 },
-              }}
-            >
-              OR
-            </Typography>
             <Grid item>
-              <MUIButt fullWidth variant="outlined">
-                SCAN FOR NETWORKS
-              </MUIButt>
+              {scanLoading ? (
+                <LoadingButton
+                  loading
+                  loadingPosition="end"
+                  variant="contained"
+                  color="secondary"
+                  fullWidth
+                  size="large"
+                  disableElevation
+                  sx={{ mr: 1 }}
+                >
+                  Scanning
+                </LoadingButton>
+              ) : (
+                <MUIButt fullWidth variant="outlined" onClick={handleScan}>
+                  SCAN FOR NETWORKS
+                </MUIButt>
+              )}
+
               <List>
-                <ListItem sx={{ display: "flex", justifyContent: "center" }}>
-                  <MUIButt variant="contained" fullWidth>
-                    NETWORK #1
-                  </MUIButt>
-                </ListItem>
-                <ListItem sx={{ display: "flex", justifyContent: "center" }}>
-                  <MUIButt variant="contained" fullWidth>
-                    NETWORK #2
-                  </MUIButt>
-                </ListItem>
-                <ListItem sx={{ display: "flex", justifyContent: "center" }}>
-                  <MUIButt variant="contained" fullWidth>
-                    NETWORK #3
-                  </MUIButt>
-                </ListItem>
+                {networkList.map((data) =>
+                  data.map((network) => (
+                    <ListItem
+                      sx={{ display: "flex", justifyContent: "center" }}
+                      key={network.ssid}
+                    >
+                      <Grid direction="column">
+                        <Grid item>
+                          <MUIButt
+                            variant="contained"
+                            startIcon={
+                              network.encryption === "closed" ? (
+                                <LockIcon />
+                              ) : null
+                            }
+                            endIcon={useSignalStrength(network.rssi)}
+                            onClick={() => handlePasswordEntry(network.ssid)}
+                          >
+                            {network.ssid}
+                          </MUIButt>
+                        </Grid>
+                        <Grid item>
+                          {passwordEntry[network.ssid] ? (
+                            <Grid container direction="column">
+                              {network.encryption === "closed" ? (
+                                <TextField
+                                  sx={{
+                                    mt: 1,
+                                  }}
+                                  variant="standard"
+                                  size="small"
+                                  label={<KeyIcon />}
+                                  type="password"
+                                />
+                              ) : null}
+
+                              <MUIButt
+                                endIcon={<SensorsIcon />}
+                                sx={{ mt: 1 }}
+                                size="small"
+                                disableElevation
+                                variant="contained"
+                                color="success"
+                                onClick={() =>
+                                  handleConnectToWifi(network.ssid, "blabla")
+                                }
+                              >
+                                CONNECT
+                              </MUIButt>
+                            </Grid>
+                          ) : null}
+                        </Grid>
+                      </Grid>
+                    </ListItem>
+                  ))
+                )}
               </List>
             </Grid>
           </Grid>

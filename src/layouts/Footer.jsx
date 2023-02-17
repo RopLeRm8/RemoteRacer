@@ -2,7 +2,8 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import { Grid, List, ListItemButton, Typography } from "@mui/joy";
+import { Grid, Typography } from "@mui/joy";
+import { List, ListItemButton } from "@mui/material";
 import logo from "../assets/Global/logo.png";
 const listOfSocials = [
   {

@@ -34,7 +34,7 @@ export default function AboutUsInfo() {
               px: { xs: 3, lg: 10 },
               pb: { xs: 3, lg: 0 },
               fontSize: "120%",
-              textAlign: "center",
+              textAlign: "justify",
             }}
           >
             We pride ourselves at being able to get our customer into the car

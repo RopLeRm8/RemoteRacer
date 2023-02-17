@@ -12,3 +12,7 @@
     min-width: 100%;
     z-index: -1;
   }
+  .noSelect{
+    user-select: none;
+    pointer-events: none;
+  }

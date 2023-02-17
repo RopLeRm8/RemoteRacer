@@ -248,40 +248,38 @@ export default function Profile() {
             },
           }}
         />
-        <ScrollAnimation animationName="animate__flipInX" duration={0.6}>
-          <Stack
-            direction="column"
-            alignItems="center"
-            sx={{ mt: 3, background: "#ffe500" }}
+        <Stack
+          direction="column"
+          alignItems="center"
+          sx={{ mt: 3, background: "#ffe500" }}
+        >
+          <Typography
+            sx={{
+              color: "black",
+              fontFamily: "Montserrat",
+              fontSize: 25,
+            }}
           >
-            <Typography
-              sx={{
-                color: "black",
-                fontFamily: "Montserrat",
-                fontSize: 25,
-              }}
-            >
-              Let us know your opinion
-            </Typography>
-            <Rating
-              value={value}
-              onChange={handleValueChange}
-              readOnly={value > 0}
-              sx={{
-                borderRadius: "5px",
-                color: "black",
-              }}
-              icon={<DirectionsCarIcon />}
-              emptyIcon={<DirectionsCarFilledOutlinedIcon />}
-            />
-            <Typography
-              level="h5"
-              sx={{ color: "black", fontFamily: "Montserrat" }}
-            >
-              {value > 0 && rateToText[value - 1]}
-            </Typography>
-          </Stack>
-        </ScrollAnimation>
+            Let us know your opinion
+          </Typography>
+          <Rating
+            value={value}
+            onChange={handleValueChange}
+            readOnly={value > 0}
+            sx={{
+              borderRadius: "5px",
+              color: "black",
+            }}
+            icon={<DirectionsCarIcon />}
+            emptyIcon={<DirectionsCarFilledOutlinedIcon />}
+          />
+          <Typography
+            level="h5"
+            sx={{ color: "black", fontFamily: "Montserrat" }}
+          >
+            {value > 0 && rateToText[value - 1]}
+          </Typography>
+        </Stack>
       </Box>
       <Footer />
     </Box>

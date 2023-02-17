@@ -1,8 +1,8 @@
 import { getAuth } from "@firebase/auth";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
-import BadgeIcon from "@mui/icons-material/Badge";
 import EditIcon from "@mui/icons-material/Edit";
 import EmailIcon from "@mui/icons-material/Email";
+import PortraitIcon from "@mui/icons-material/Portrait";
 import {
   Box,
   Button,
@@ -76,45 +76,49 @@ export default function ProfileInfo({ setstamProfile }) {
               size="md"
               variant="outlined"
             >
-              {updateLoading && open ? (
-                <Avatar
-                  className="onhoverZoom"
-                  src={user.photoURL}
-                  sx={{
-                    width: 80,
-                    height: 80,
-                    mb: 1,
-                    opacity: "70%",
-                    transition: "all 0.4s ease-in-out",
-                    "&:hover": {
-                      animation: "zoomIn .3s forwards",
+              <Box>
+                {updateLoading && open ? (
+                  <Avatar
+                    className="onhoverZoom"
+                    src={user?.photoURL}
+                    alt="Remy Sharp"
+                    sx={{
+                      width: 80,
+                      height: 80,
+                      mb: 1,
+                      opacity: "70%",
                       transition: "all 0.4s ease-in-out",
-                      cursor: "pointer",
-                    },
-                  }}
-                  ref={avatarRef}
-                  data-state={stam}
-                />
-              ) : (
-                <Avatar
-                  className="onhoverZoom"
-                  src={user.photoURL}
-                  sx={{
-                    width: 80,
-                    height: 80,
-                    mb: 1,
-                    transition: "all 0.1s ease-in-out",
-                    "&:hover": {
-                      transform: "scale(1.1)",
+                      "&:hover": {
+                        animation: "zoomIn .3s forwards",
+                        transition: "all 0.4s ease-in-out",
+                        cursor: "pointer",
+                      },
+                    }}
+                    ref={avatarRef}
+                    data-state={stam}
+                  />
+                ) : (
+                  <Avatar
+                    className="onhoverZoom"
+                    src={user?.photoURL}
+                    alt="Remy Sharp"
+                    sx={{
+                      width: 80,
+                      height: 80,
+                      mb: 1,
                       transition: "all 0.1s ease-in-out",
-                      cursor: "pointer",
-                    },
-                  }}
-                  ref={avatarRef}
-                  data-state={stam}
-                  onClick={updateProfileLoad}
-                />
-              )}
+                      "&:hover": {
+                        transform: "scale(1.1)",
+                        transition: "all 0.1s ease-in-out",
+                        cursor: "pointer",
+                      },
+                    }}
+                    ref={avatarRef}
+                    data-state={stam}
+                    onClick={updateProfileLoad}
+                  />
+                )}
+              </Box>
             </Tooltip>
             <Grid container direction="row">
               <Grid item>
@@ -132,7 +136,7 @@ export default function ProfileInfo({ setstamProfile }) {
                           fontFamily: "Montserrat",
                         }}
                         startDecorator={
-                          <BadgeIcon sx={{ my: 0.2, color: "white" }} />
+                          <PortraitIcon sx={{ my: 0.2, color: "white" }} />
                         }
                       >
                         {user.displayName}
@@ -159,12 +163,23 @@ export default function ProfileInfo({ setstamProfile }) {
                   </Tooltip>
                 </Stack>
               </Grid>
-              <Grid item sx={{ display: "flex", alignItems: "center", ml: 1 }}>
+              <Grid item sx={{ display: "flex", alignItems: "center", ml: 2 }}>
                 <IconButton
-                  variant="plain"
                   color="warning"
                   onClick={() => setopenEditValue(true)}
-                  sx={{ display: { xs: "none", md: "flex" } }}
+                  sx={{
+                    display: {
+                      xs: "none",
+                      md: "flex",
+                      color: "black",
+                      backgroundColor: "#ffe500",
+                      "&:hover": {
+                        color: "#ffe500",
+                        backgroundColor: "rgba(0,0,0,0)",
+                      },
+                      borderRadius: "20px",
+                    },
+                  }}
                 >
                   <EditIcon />
                 </IconButton>

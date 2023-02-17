@@ -14,6 +14,7 @@ export default function AboutUsVideo() {
           direction="row"
           justifyContent="space-around"
           sx={{ pt: 5 }}
+          alignItems="center"
         >
           <Typography
             fontFamily="Anton"

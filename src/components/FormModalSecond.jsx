@@ -1,5 +1,7 @@
+import EditIcon from "@mui/icons-material/Edit";
+import EmailIcon from "@mui/icons-material/Email";
+import PortraitIcon from "@mui/icons-material/Portrait";
 import {
-  Badge,
   Box,
   Button,
   Card,
@@ -13,18 +15,15 @@ import {
   Tooltip,
   Typography,
 } from "@mui/joy";
-
-import BadgeIcon from "@mui/icons-material/Badge";
-import EditIcon from "@mui/icons-material/Edit";
-import EmailIcon from "@mui/icons-material/Email";
 import { Drawer } from "@mui/material";
 import { getAuth, updateEmail, updateProfile } from "firebase/auth";
 import { useCallback, useEffect, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import "../css/FormModalSecond.css";
 import { authErrorToTitleCase } from "../helpers";
 import { useNotification } from "../hooks/useNotification";
 
-const engReg = /^[a-zA-Z ]+$/;
+const engReg = /^[a-zA-Z1-9]+$/;
 const emailReg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 export default function FormModalSecond({ open, setOpen, setStam }) {
   const [nameerror, setnameError] = useState("");
@@ -48,6 +47,8 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
   const notify = useNotification();
 
   const auth = getAuth();
+
+  const [user] = useAuthState(getAuth());
 
   useEffect(() => {
     UpdateErrorsFound();
@@ -182,20 +183,7 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
               <FormControl>
                 <FormLabel>
                   <Typography
-                    startDecorator={
-                      <Badge
-                        badgeContent="NEW"
-                        badgeInset="-20%"
-                        size="sm"
-                        color="warning"
-                        sx={{
-                          mr: 1,
-                          animation: "float 6s ease-in-out infinite",
-                        }}
-                      >
-                        <BadgeIcon />
-                      </Badge>
-                    }
+                    startDecorator={<PortraitIcon />}
                     fontFamily="Montserrat"
                   >
                     First Name
@@ -227,20 +215,7 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
               <FormControl>
                 <FormLabel>
                   <Typography
-                    startDecorator={
-                      <Badge
-                        badgeContent="NEW"
-                        badgeInset="-20%"
-                        size="sm"
-                        color="warning"
-                        sx={{
-                          mr: 1,
-                          animation: "float 6s ease-in-out infinite",
-                        }}
-                      >
-                        <BadgeIcon />
-                      </Badge>
-                    }
+                    startDecorator={<PortraitIcon />}
                     fontFamily="Montserrat"
                   >
                     Last Name
@@ -271,17 +246,7 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
           <FormControl>
             <FormLabel sx={{ mt: 3.5 }}>
               <Typography
-                startDecorator={
-                  <Badge
-                    badgeContent="NEW"
-                    badgeInset="-20%"
-                    size="sm"
-                    color="warning"
-                    sx={{ mr: 1, animation: "float 6s ease-in-out infinite" }}
-                  >
-                    <EmailIcon />
-                  </Badge>
-                }
+                startDecorator={<EmailIcon />}
                 fontFamily="Montserrat"
               >
                 Email
@@ -301,7 +266,7 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
               onChange={handleChangeMail}
               onFocus={() => setemailFocused(true)}
               onBlur={() => setemailFocused(false)}
-              placeholder="example: ropler@yahoo.com"
+              placeholder={user.email}
             />
             <FormHelperText sx={{ color: "red" }}>{emailError}</FormHelperText>
           </FormControl>

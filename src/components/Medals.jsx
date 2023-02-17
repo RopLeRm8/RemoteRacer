@@ -8,6 +8,7 @@ import {
   Grid,
   Grow,
   LinearProgress,
+  Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
@@ -42,6 +43,7 @@ export default function Medals({ stamProfile }) {
     ],
   ]);
   const [medalsahuz, setmedalsAhuz] = useState(0);
+  const [medalsLoaded, setmedalsLoaded] = useState(false);
   const totalMedals = medalsList.length;
   const [user] = useAuthState(getAuth());
   const userRefDB = `users/${user.uid}/achievements`;
@@ -162,25 +164,35 @@ export default function Medals({ stamProfile }) {
                         title={medal[2] ? medal[1] : ""}
                         key={medal[1]}
                       >
-                        <img
-                          key={medal[0]}
-                          src={medal[0]}
-                          width="80"
-                          height="80"
-                          className="medalImg"
-                          alt=""
-                          style={{
-                            borderRadius: 10,
-                            filter: !medal[2] && "blur(8px)",
-                          }}
-                        />
+                        <Box>
+                          <img
+                            key={medal[0]}
+                            src={medal[0]}
+                            width="80"
+                            height="80"
+                            className="medalImg"
+                            alt=""
+                            style={{
+                              borderRadius: 10,
+                              filter: !medal[2] && "blur(8px)",
+                              display: medalsLoaded ? "flex" : "none",
+                            }}
+                            onLoad={() => setmedalsLoaded(true)}
+                          />
+                          <Skeleton
+                            variant="rounded"
+                            width={80}
+                            height={80}
+                            sx={{ display: medalsLoaded ? "none" : "flex" }}
+                          />
+                        </Box>
                       </Tooltip>
                       {!medal[2] && (
                         <LockRoundedIcon
                           key="lockkey"
                           sx={{
                             color: "white",
-                            ml: 3,
+                            ml: 3.5,
                             mt: 2,
                           }}
                         />

@@ -414,19 +414,7 @@ export default function LoginPage() {
         </Grid>
       </Grid>
 
-      <Divider
-        sx={{
-          mt: 2,
-          color: "black",
-          px: 5,
-          mb: 3,
-          fontFamily: "Montserrat",
-          fontSize: 20,
-        }}
-      >
-        OR
-      </Divider>
-      <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
+      <Box sx={{ mb: 2, mt: 8, display: "flex", justifyContent: "center" }}>
         <Button
           size="sm"
           startDecorator={<LockResetIcon />}

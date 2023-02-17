@@ -11,10 +11,8 @@ import { onValue, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 // import trophy from "../assets/Leaderboard/trophy.png";
-import BadgeIcon from "@mui/icons-material/Badge";
 import CasinoIcon from "@mui/icons-material/Casino";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import EmailIcon from "@mui/icons-material/Email";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import Centered from "../features/Centered";
 import ScrollAnimation from "../features/ScrollAnimation";
@@ -73,7 +71,7 @@ export default function Leaderboard() {
               fontSize: "2vmax",
             }}
           >
-            See who leads know on our webiste
+            See who leads now on our website
           </Typography>
           <Grid container direction="column" alignItems="center">
             {usersData &&
@@ -127,20 +125,9 @@ export default function Leaderboard() {
                           fontFamily: "Inter",
                           fontWeight: 500,
                         }}
-                        startDecorator={<BadgeIcon />}
+                        startDecorator={<PersonPinIcon />}
                       >
                         {userData.name || "[No name]"}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          color: backColor,
-                          ml: 3,
-                          fontFamily: "Inter",
-                          fontWeight: 500,
-                        }}
-                        startDecorator={<EmailIcon />}
-                      >
-                        {userData.mail || "[No email]"}
                       </Typography>
                       <Typography
                         sx={{

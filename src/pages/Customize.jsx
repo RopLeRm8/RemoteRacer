@@ -1,4 +1,5 @@
 import { getAuth } from "@firebase/auth";
+import ConstructionIcon from "@mui/icons-material/Construction";
 import EditIcon from "@mui/icons-material/Edit";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import NearbyErrorIcon from "@mui/icons-material/NearbyError";
@@ -159,7 +160,6 @@ export default function Customize() {
   }, [carColor, carName, carNameError, writeLength, userRefDataUpdate, notify]);
 
   const handlechangeColor = useCallback((nColor) => {
-    console.log(nColor);
     setcolorChosen(nColor);
     carNameTitleRef.current.style.transition = "0.5s all ease-out";
     carNameTitleRef.current.style.color = colorChosen;
@@ -202,7 +202,7 @@ export default function Customize() {
             <NearbyErrorIcon sx={{ display: { xs: "none", md: "block" } }} />
           }
         >
-          Remember: You can always undo the changes
+          Remember: You can always undo any change
         </Typography>
       </Box>
       <Divider sx={{ backgroundColor: "white" }} />
@@ -214,20 +214,29 @@ export default function Customize() {
       >
         <Grid
           item
-          sx={{ my: { xs: 5, sm: 1 }, mb: { xs: selectOpen ? 35 : 0, md: 35 } }}
+          sx={{ my: { xs: 5, sm: 1 }, mb: { xs: selectOpen ? 40 : 5, md: 35 } }}
         >
           <ScrollAnimation
             animationName="animate__lightSpeedInLeft"
             duration={0.6}
           >
-            <Card sx={{ backgroundColor: "black" }} size="lg">
+            <Card
+              sx={{
+                backgroundColor: "black",
+                boxShadow: "3px 3px 24px 0.3px rgba(255,229,0,1)",
+              }}
+              size="lg"
+            >
               <Typography
                 sx={{
                   color: "#ffe500",
                   textAlign: "center",
                   fontSize: 25,
                   fontFamily: "Inter",
+                  display: "flex",
+                  justifyContent: "center",
                 }}
+                startDecorator={<ConstructionIcon />}
               >
                 CAR CONFIGURATION
               </Typography>
@@ -367,6 +376,7 @@ export default function Customize() {
                         fontWeight: 600,
                         fontSize: 13,
                         transition: "0.2s all ease-out",
+                        backgroundColor: "#ffe500",
                       }}
                       startDecorator={<SettingsIcon />}
                       onClick={handleconfSave}
@@ -376,14 +386,21 @@ export default function Customize() {
                     <Button
                       variant="soft"
                       color="warning"
+                      fullWidth
                       sx={{
                         mt: 1,
-                        width: carNameError ? "335px" : "270px",
+                        // width: carNameError ? "335px" : "270px",
                         borderRadius: "1",
                         fontFamily: "Inter",
                         fontWeight: 600,
                         fontSize: 13,
                         transition: "0.2s all ease-out",
+                        backgroundColor: "rgba(255,228,0,0.8)",
+                        color: "black",
+                        "&:hover": {
+                          backgroundColor: "#ffe500",
+                          color: "black",
+                        },
                       }}
                       startDecorator={<SettingsIcon />}
                       onClick={handleconfSave}
@@ -406,6 +423,7 @@ export default function Customize() {
             <Grid
               item
               sx={{ background: "rgba(255,228,0,0.8)", maxWidth: "100%" }}
+              className="noSelect"
             >
               <Typography
                 sx={{
@@ -433,6 +451,7 @@ export default function Customize() {
                     justifyContent: "center",
                     // animation: "rotating 10s linear infinite",
                   }}
+                  className="noSelect"
                 />
               </Box>
             </Grid>

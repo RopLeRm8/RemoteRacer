@@ -16,7 +16,6 @@ import {
   Card,
   Chip,
   CssVarsProvider,
-  Divider,
   Grid,
   IconButton,
   Input,
@@ -446,18 +445,7 @@ export default function SignUp() {
             </Button>
           </Box>
         )}
-        <Divider
-          sx={{
-            color: "black",
-            px: 5,
-            my: 2,
-            fontFamily: "Montserrat",
-            fontSize: 20,
-          }}
-        >
-          OR
-        </Divider>
-        <Box sx={{ mb: 4, display: "flex", justifyContent: "center" }}>
+        <Box sx={{ my: 4, display: "flex", justifyContent: "center" }}>
           <Button
             color="warning"
             variant="outlined"
