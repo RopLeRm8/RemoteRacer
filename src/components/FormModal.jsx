@@ -330,7 +330,7 @@ export default function FormModal({
               level="h3"
               sx={{ textAlign: "center", mb: 2 }}
             >
-              Image Preview
+              IMAGE PREVIEW
             </Typography>
             <Divider sx={{ bgcolor: "black", mb: 2 }} />
             <Box sx={{ display: "flex", justifyContent: "center" }}>

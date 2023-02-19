@@ -16,16 +16,16 @@ import logo from "../assets/Global/logoblack.png";
 import { getAuth } from "@firebase/auth";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import BrushIcon from "@mui/icons-material/Brush";
-import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
 import KeyIcon from "@mui/icons-material/Key";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import LockIcon from "@mui/icons-material/Lock";
 import LogoutIcon from "@mui/icons-material/Logout";
+import NetworkPingIcon from "@mui/icons-material/NetworkPing";
+import RadarIcon from "@mui/icons-material/Radar";
 import SensorsIcon from "@mui/icons-material/Sensors";
 import SettingsIcon from "@mui/icons-material/Settings";
-import SignalWifi4BarIcon from "@mui/icons-material/SignalWifi4Bar";
 import { Button, CssVarsProvider, Divider } from "@mui/joy";
 import {
   Dialog,
@@ -33,7 +33,6 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
-  InputAdornment,
   List,
   ListItem,
   ListItemIcon,
@@ -86,6 +85,8 @@ function Navbar() {
   const [scanLoading, setScanLoading] = useState(false);
   const [networkList, setNetworkList] = useState([]);
   const [passwordEntry, setPasswordEntry] = useState({});
+  const [passwordEntryValue, setPasswordEntryValue] = useState({});
+  const [connectLoading, setConnectLoading] = useState(false);
   const notify = useNotification();
 
   const [user] = useAuthState(getAuth());
@@ -115,7 +116,8 @@ function Navbar() {
     setScanLoading(true);
     setNetworkList([]);
     setPasswordEntry([]);
-    fetch("http://192.168.4.1/scan", { mode: "cors" })
+    setPasswordEntryValue([]);
+    fetch("http://192.168.4.1/scan")
       .then((response) => response.json())
       .then((data) => {
         setNetworkList(data);
@@ -130,43 +132,50 @@ function Navbar() {
         setScanLoading(false);
       });
   }, [notify]);
-  // const handleConnectToWifi = useCallback((ssid, pass, encType) => {
-  //   console.log(ssid, pass, encType);
-  // }, []);
 
-  // const handleNetworkClick = (ssid, pass, encType) => () => {
-  //   handleConnectToWifi(ssid, pass, encType);
-  // };
-  const handlePasswordEntry = useCallback(
-    (ssid) => {
-      setPasswordEntry((prev) => ({
-        ...prev,
-        [ssid]: !prev[ssid],
-      }));
-      console.log(passwordEntry);
-    },
-    [passwordEntry]
-  );
-  const handleConnectToWifi = useCallback((ssid, pass) => {
+  const handlePasswordEntry = useCallback((ssid) => {
+    setPasswordEntry((prev) => ({
+      ...prev,
+      [ssid]: !prev[ssid],
+    }));
+  }, []);
+  const handlePasswordChange = useCallback((e, ssid) => {
+    setPasswordEntryValue((prev) => ({ ...prev, [ssid]: e.target.value }));
+  }, []);
+
+  const handleConnectToWifi = (ssid) => {
+    setConnectLoading((prev) => ({ ...prev, [ssid]: true }));
+    if (!passwordEntryValue[ssid] || passwordEntryValue[ssid].length <= 0) {
+      passwordEntryValue[ssid] = "";
+    }
+    console.log(passwordEntryValue[ssid]);
     const _connData = {
       ssid: ssid,
-      password: pass,
+      password: passwordEntryValue[ssid],
     };
     fetch("http://192.168.4.1/connect", {
-      mode: "cors",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(_connData),
     })
-      .then((resp) => {
-        console.log(resp);
+      .then((resp) => resp.text())
+      .then((data) =>
+        data.substring(0, 2) === "ok"
+          ? notify(
+              `Successfully connected to AP ${ssid}! IP Address: ${data.substring(
+                3
+              )}`,
+              { variant: "success", autoHideDuration: 10000 }
+            )
+          : notify("Wrong password provided", { variant: "error" })
+      )
+      .catch(() => {
+        notify("An error occured, try again!", { variant: "error" });
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+      .finally(() => setConnectLoading((prev) => ({ ...prev, [ssid]: false })));
+  };
   useEffect(() => {
     const handleScroll = () => {
       setScrollTop(window.scrollY);
@@ -441,26 +450,27 @@ function Navbar() {
           setopenModal(false);
           setNetworkList([]);
           setPasswordEntry([]);
+          setPasswordEntryValue([]);
         }}
       >
         <DialogTitle
           sx={{
             textAlign: "center",
             fontFamily: "Poppins",
-            py: 2,
           }}
         >
-          ESP CONFIGURATION
+          ESP NETWORK CONFIGURATION
         </DialogTitle>
         <DialogContent>
           <Grid
             container
-            direction={{ xs: "column", md: "row" }}
+            direction="column"
             spacing={{ xs: 1, md: 2 }}
             alignItems="center"
+            justifyContent="space-between"
           >
             <Grid item>
-              <Grid container direction="column" spacing={5}>
+              {/* <Grid container direction="column" spacing={5}>
                 <Grid item>
                   <TextField
                     sx={{ maxWidth: { md: "80%" } }}
@@ -490,13 +500,14 @@ function Navbar() {
                     sx={{ mb: 2, maxWidth: { md: "80%" } }}
                   />
                 </Grid>
-              </Grid>
+              </Grid> */}
             </Grid>
             <Grid item>
               {scanLoading ? (
                 <LoadingButton
                   loading
                   loadingPosition="end"
+                  endIcon={<RadarIcon />}
                   variant="contained"
                   color="secondary"
                   fullWidth
@@ -507,22 +518,45 @@ function Navbar() {
                   Scanning
                 </LoadingButton>
               ) : (
-                <MUIButt fullWidth variant="outlined" onClick={handleScan}>
+                <MUIButt
+                  fullWidth
+                  variant={networkList.length > 0 ? "text" : "outlined"}
+                  onClick={handleScan}
+                >
                   SCAN FOR NETWORKS
                 </MUIButt>
               )}
 
               <List>
+                <IconButton
+                  sx={{
+                    width: "100%",
+                    mb: 1,
+                    display: networkList.length > 0 ? "flex" : "none",
+                  }}
+                  size="sm"
+                  variant="outlined"
+                >
+                  <NetworkPingIcon sx={{ mr: 1 }} />
+                  {networkList[0]?.length}
+                  {networkList[0]?.length === 1 ? " NETWORK " : " NETWORKS "}
+                  FOUND
+                </IconButton>
                 {networkList.map((data) =>
                   data.map((network) => (
                     <ListItem
                       sx={{ display: "flex", justifyContent: "center" }}
                       key={network.ssid}
                     >
-                      <Grid direction="column">
+                      <Grid container direction="column">
                         <Grid item>
                           <MUIButt
-                            variant="contained"
+                            variant={
+                              passwordEntry[network.ssid]
+                                ? "contained"
+                                : "outlined"
+                            }
+                            color="secondary"
                             startIcon={
                               network.encryption === "closed" ? (
                                 <LockIcon />
@@ -530,6 +564,7 @@ function Navbar() {
                             }
                             endIcon={useSignalStrength(network.rssi)}
                             onClick={() => handlePasswordEntry(network.ssid)}
+                            fullWidth
                           >
                             {network.ssid}
                           </MUIButt>
@@ -546,22 +581,39 @@ function Navbar() {
                                   size="small"
                                   label={<KeyIcon />}
                                   type="password"
+                                  onChange={(e) =>
+                                    handlePasswordChange(e, network.ssid)
+                                  }
                                 />
                               ) : null}
-
-                              <MUIButt
-                                endIcon={<SensorsIcon />}
-                                sx={{ mt: 1 }}
-                                size="small"
-                                disableElevation
-                                variant="contained"
-                                color="success"
-                                onClick={() =>
-                                  handleConnectToWifi(network.ssid, "blabla")
-                                }
-                              >
-                                CONNECT
-                              </MUIButt>
+                              {connectLoading[network.ssid] ? (
+                                <LoadingButton
+                                  loading
+                                  loadingPosition="end"
+                                  variant="outlined"
+                                  color="secondary"
+                                  fullWidth
+                                  size="large"
+                                  disableElevation
+                                  sx={{ mt: 1 }}
+                                >
+                                  Connecting
+                                </LoadingButton>
+                              ) : (
+                                <MUIButt
+                                  endIcon={<SensorsIcon />}
+                                  sx={{ mt: 1 }}
+                                  size="small"
+                                  disableElevation
+                                  variant="contained"
+                                  color="success"
+                                  onClick={() =>
+                                    handleConnectToWifi(network.ssid, "blabla")
+                                  }
+                                >
+                                  CONNECT
+                                </MUIButt>
+                              )}
                             </Grid>
                           ) : null}
                         </Grid>
@@ -574,16 +626,6 @@ function Navbar() {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <MUIButt
-            autoFocus
-            variant="contained"
-            color="success"
-            fullWidth
-            disableElevation
-            startIcon={<CheckIcon />}
-          >
-            ACCEPT
-          </MUIButt>
           <MUIButt
             autoFocus
             variant="contained"
