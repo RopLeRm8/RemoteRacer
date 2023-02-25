@@ -17,15 +17,22 @@ import LoginPage from "../pages/LoginPage";
 import Profile from "../pages/Profile";
 import RegisterPage from "../pages/RegisterPage";
 
+import { useEffect } from "react";
 import "../css/LoginPage.css";
 import "../css/RouteProvider.css";
 import { useLoadFonts } from "../hooks/useLoadFonts";
+import ContactUs from "../pages/ContactUs";
+import GettingStarted from "../pages/GettingStarted";
 
 export default function RouteProvider() {
+  useEffect(() => {
+    if (localStorage.getItem("ip") === null) {
+      localStorage.setItem("ip", "192.168.4.1");
+    }
+  }, []);
   useLoadFonts();
   const auth = getAuth();
   const [authUser, authLoading, authError] = useAuthState(auth);
-
   if (authError)
     return (
       <Centered>
@@ -57,6 +64,8 @@ export default function RouteProvider() {
               <Route path="about" element={<AboutUs />} />
               <Route path="leaderboard" element={<Leaderboard />} />
               <Route path="game" element={<Game />} />
+              <Route path="contact" element={<ContactUs />} />
+              <Route path="gettingstarted" element={<GettingStarted />} />
             </Routes>
           </SnackbarProvider>
         </Box>
@@ -70,10 +79,12 @@ export default function RouteProvider() {
             <Route path="customize" element={<Navigate to="/" />} />
             <Route path="about" element={<Navigate to="/" />} />
             <Route path="leaderboard" element={<Navigate to="/" />} />
+            <Route path="contact" element={<Navigate to="/" />} />
+            <Route path="gettingstarted" element={<Navigate to="/" />} />
+            <Route path="game" element={<Navigate to="/" />} />
             <Route path="welcomepage" element={<WelcomePage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
-            <Route path="game" element={<Navigate to="/" />} />
           </Routes>
         </SnackbarProvider>
       )}

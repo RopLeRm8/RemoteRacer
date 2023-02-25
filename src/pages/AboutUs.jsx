@@ -12,13 +12,14 @@ import "../css/About.css";
 import "../css/SmoothSlide.css";
 import ScrollAnimation from "../features/ScrollAnimation";
 import Footer from "../layouts/Footer";
-
+import Navbar from "../layouts/NavBar";
 export const AboutContext = createContext();
 
 export default function AboutUs() {
   const [imgLoaded, setimgLoaded] = useState(false);
   return (
     <Box>
+      <Navbar />
       <AboutUsHeader />
       <Box
         sx={{

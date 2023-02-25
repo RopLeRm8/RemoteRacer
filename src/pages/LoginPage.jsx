@@ -33,15 +33,15 @@ export default function LoginPage() {
           <Box
             sx={{
               position: "absolute",
-              top: { xs: 10, lg: 50 },
+              top: { xs: 40, lg: 80 },
               mr: { lg: 8 },
               ml: { xs: 8, md: 0 },
             }}
           >
             <img
               src={logo}
-              width="200"
-              height="125"
+              width="300"
+              height="48"
               alt=""
               id="logo"
               style={{

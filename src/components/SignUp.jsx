@@ -130,9 +130,15 @@ export default function SignUp() {
     setError("");
     setShowPanel(true);
   }
-  // useEffect(() => {
-  //   emailRef.current.focus();
-  // }, [focus]);
+
+  useEffect(() => {
+    document?.addEventListener("keyup", function (event) {
+      if (event.keyCode === 13) {
+        if (showPanel) return;
+        gifAnimCont.current.click();
+      }
+    });
+  }, []);
   useEffect(() => {
     if (!mailError) return;
     notify(mailError, {
@@ -274,6 +280,8 @@ export default function SignUp() {
               : null,
             "&:focus": {
               color: "blue",
+              outline: "none",
+              boxShadow: "none",
             },
           }}
           placeholder="Example: roplerm8@yahoo.com"
@@ -310,6 +318,12 @@ export default function SignUp() {
               animation: error
                 ? "shake-horizontal .3s cubic-bezier(.455,.03,.515,.955) both"
                 : null,
+
+              "&:focus": {
+                color: "blue",
+                outline: "none",
+                boxShadow: "none",
+              },
             }}
             placeholder="Must be 6+ characters"
             onChange={(e) => setpassValue(e.target.value)}
@@ -361,6 +375,11 @@ export default function SignUp() {
               animation: error
                 ? "shake-horizontal .3s cubic-bezier(.455,.03,.515,.955) both"
                 : null,
+              "&:focus": {
+                color: "blue",
+                outline: "none",
+                boxShadow: "none",
+              },
             }}
             placeholder="Repeat password"
             onChange={(e) => setpassfirmValue(e.target.value)}

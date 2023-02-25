@@ -1,12 +1,21 @@
 import { getAuth } from "@firebase/auth";
+import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InfoIcon from "@mui/icons-material/Info";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import VideogameAssetIcon from "@mui/icons-material/VideogameAsset";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import { Box, CssVarsProvider, Grid, Typography } from "@mui/joy";
-import { Button, List, ListItem } from "@mui/material";
+import {
+  Box,
+  Button,
+  CssVarsProvider,
+  Grid,
+  List,
+  ListItem,
+  Typography,
+} from "@mui/joy";
+import { Button as MUIButton } from "@mui/material";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
@@ -55,25 +64,32 @@ export default function Dashboard() {
       <CssVarsProvider />
       <Box>
         <Grid container alignItems="center" direction="column" spacing={-8}>
-          <Typography
-            fontFamily="Poppins"
-            sx={{
-              color: "white",
-              fontSize: "3.3vmax",
-            }}
-          >
-            REMOTE RACER
-          </Typography>
-          <Typography
-            fontFamily="Poppins"
-            sx={{
-              color: "#ffe500",
-              fontSize: "2vmax",
-              mb: { md: 7 },
-            }}
-          >
-            Welcome Back, {user?.displayName}
-          </Typography>
+          <Grid item>
+            <Typography
+              fontFamily="Poppins"
+              sx={{
+                color: "white",
+                fontSize: "2vmax",
+              }}
+            >
+              REMOTE RACER
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography
+              startDecorator={<EmojiPeopleIcon />}
+              fontFamily="Poppins"
+              sx={{
+                color: "white",
+                fontSize: "1vmax",
+                mb: { md: 7 },
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              Welcome Back, {user?.displayName.split(" ")[0]}
+            </Typography>
+          </Grid>
           <Box
             sx={{
               display: "flex",
@@ -81,7 +97,15 @@ export default function Dashboard() {
               mt: { xs: 3, md: 0 },
             }}
           >
-            <img src={background} alt="" style={{ maxWidth: "100%" }} />
+            <img
+              src={background}
+              alt=""
+              style={{
+                maxWidth: "100%",
+                pointerEvents: "none",
+                userSelect: "none",
+              }}
+            />
           </Box>
           <Typography
             sx={{
@@ -110,7 +134,7 @@ export default function Dashboard() {
             alignItems="center"
           >
             <Grid item>
-              <Button
+              <MUIButton
                 variant="contained"
                 sx={{
                   fontFamily: "Inter",
@@ -123,11 +147,11 @@ export default function Dashboard() {
                 onClick={() => navigate("/game")}
               >
                 PLAY NOW
-              </Button>
+              </MUIButton>
             </Grid>
             <Grid item>
-              <Button
-                variant="outlined"
+              <MUIButton
+                variant="contained"
                 sx={{ fontFamily: "Inter", fontSize: "2vh" }}
                 startIcon={<InfoIcon />}
                 onClick={() => {
@@ -136,7 +160,7 @@ export default function Dashboard() {
                 }}
               >
                 LEARN ABOUT THE WEBSITE
-              </Button>
+              </MUIButton>
             </Grid>
           </Grid>
           <Typography
@@ -151,8 +175,11 @@ export default function Dashboard() {
             {contacts.map((cont) => (
               <ListItem key={cont.Name} sx={{ mx: { md: 2 } }}>
                 <Button
-                  variant="text"
-                  sx={{ color: cont.color }}
+                  variant="plain"
+                  color="neutral"
+                  sx={{
+                    color: cont.color,
+                  }}
                   onClick={() => window.open(cont.link)}
                 >
                   {cont.logo}

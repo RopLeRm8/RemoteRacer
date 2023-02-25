@@ -370,7 +370,6 @@ export default function Customize() {
                       color="warning"
                       sx={{
                         mt: 1,
-                        width: carNameError ? "335px" : "270px",
                         borderRadius: "1",
                         fontFamily: "Inter",
                         fontWeight: 600,
@@ -381,6 +380,7 @@ export default function Customize() {
                       startDecorator={<SettingsIcon />}
                       onClick={handleconfSave}
                       loading
+                      fullWidth
                     />
                   ) : (
                     <Button

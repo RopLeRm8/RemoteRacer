@@ -11,11 +11,12 @@ import {
   MeshBasicMaterial,
   // MirroredRepeatWrapping,
   PerspectiveCamera,
+  PlaneGeometry,
   Scene,
-  SphereGeometry,
   TextureLoader,
   WebGLRenderer,
 } from "three";
+import coin from "../assets/Game/coin.png";
 import "../css/Game.css";
 import Centered from "../features/Centered";
 import { useNotification } from "../hooks/useNotification";
@@ -26,8 +27,15 @@ export default function Game() {
   const [points, setPoints] = useState(0);
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const ip = localStorage.getItem("ip");
   useEffect(() => {
     document.body.classList.add("nooverflow");
+    if (ip === "192.168.4.1") {
+      setError(
+        "ESP needs to have an access to the internet in order to play this game"
+      );
+      return;
+    }
     const onDocumentKeyDown = (event) => {
       if (camera === undefined) return;
       const keyCode = event.which;
@@ -39,16 +47,17 @@ export default function Game() {
           camera.position.z += 10;
           break;
         case 65:
-          camera.position.y += 10;
+          camera.position.x += 10;
           break;
         case 68:
-          camera.position.y -= 10;
+          camera.position.x -= 10;
           break;
         default:
           break;
       }
     };
     document.addEventListener("keydown", onDocumentKeyDown, false);
+
     const scene = new Scene();
     const camera = new PerspectiveCamera(
       75,
@@ -62,7 +71,7 @@ export default function Game() {
     canvas.current.appendChild(renderer.domElement);
 
     const texture = new TextureLoader().load(
-      "http://192.168.4.1:81/stream",
+      `http://${ip}:81/stream`,
       () => setimgLoading(false),
       undefined,
       () => {
@@ -70,7 +79,7 @@ export default function Game() {
           variant: "error",
         });
         setimgLoading(false);
-        setError(true);
+        setError("Failed to load stream, refresh the page to try again");
       }
     );
     const textUpdate = setInterval(() => {
@@ -78,20 +87,21 @@ export default function Game() {
     }, 100);
     scene.background = texture;
 
-    camera.position.z = 500;
+    camera.position.z = 1000;
 
-    const coinGeometry = new SphereGeometry(10, 216, 216);
-    const coinMaterial = new MeshBasicMaterial({ color: 0xffd700 });
+    const coinTexture = new TextureLoader().load(coin);
+    const coinGeometry = new PlaneGeometry(60, 60);
+    const coinMaterial = new MeshBasicMaterial({ map: coinTexture });
     const coins = [];
-    const maxCoins = 6;
+    const maxCoins = 20;
 
     const addCoin = () => {
       if (coins.length >= maxCoins) return;
 
       const coin = new Mesh(coinGeometry, coinMaterial);
-      coin.position.x = -5;
-      coin.position.y = Math.random() * 720 - 360;
-      coin.position.z = 470;
+      coin.position.x = Math.random() * 3500 - 360;
+      coin.position.y = -5;
+      coin.position.z = Math.random() * 970;
       scene.add(coin);
       coins.push(coin);
     };
@@ -103,11 +113,11 @@ export default function Game() {
     const updateCoins = () => {
       for (const coin of coins) {
         if (camera.position.distanceTo(coin.position) < 20) {
-          coin.scale.x -= 0.01;
-          coin.scale.y -= 0.01;
-          coin.scale.z -= 0.01;
+          coin.scale.x += 0.01;
+          coin.scale.y += 0.01;
+          coin.scale.z += 0.01;
 
-          if (coin.scale.x <= 0) {
+          if (coin.scale.x >= 2) {
             scene.remove(coin);
             coins.splice(coins.indexOf(coin), 1);
             setPoints((prev) => prev + 15);
@@ -132,7 +142,7 @@ export default function Game() {
       renderer.clear();
       clearInterval(textUpdate);
     };
-  }, [notify]);
+  }, [notify, ip]);
   return (
     <Box>
       <CssVarsProvider />
@@ -142,7 +152,6 @@ export default function Game() {
           alignItems="center"
           direction={{ xs: "column", md: "row" }}
           justifyContent="space-evenly"
-          sx={{ display: imgLoading ? "none" : "flex" }}
         >
           <Grid item>
             <Button
@@ -163,7 +172,7 @@ export default function Game() {
           </Grid>
         </Grid>
         <Grid container justifyContent="center" direction="column">
-          {imgLoading ? (
+          {imgLoading && !error ? (
             <Box>
               <Typography
                 sx={{
@@ -184,19 +193,29 @@ export default function Game() {
               display: error ? "none" : "flex",
             }}
           ></Box>
-          <Chip
-            startDecorator={<ErrorIcon />}
-            color="danger"
-            variant="soft"
-            size="lg"
-            sx={{
-              mb: imgLoading ? 0 : 5,
-              display: error ? "flex" : "none",
-            }}
-          >
-            An error happened! Try to reload the page
-          </Chip>
         </Grid>
+        <Typography
+          variant="overline"
+          sx={{
+            display: error ? "flex" : "none",
+            justifyContent: "center",
+          }}
+        >
+          {error}
+        </Typography>
+        <Chip
+          startDecorator={<ErrorIcon />}
+          color="danger"
+          variant="soft"
+          size="lg"
+          sx={{
+            mb: imgLoading ? 0 : 5,
+            display: error ? "flex" : "none",
+          }}
+        >
+          Errors Found. Please make sure you fixed them all before refreshing
+          the page
+        </Chip>
       </Centered>
     </Box>
   );

@@ -16,7 +16,8 @@ import logo from "../assets/Global/logoblack.png";
 import { getAuth } from "@firebase/auth";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import BrushIcon from "@mui/icons-material/Brush";
-import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
+import HistoryIcon from "@mui/icons-material/History";
 import InfoIcon from "@mui/icons-material/Info";
 import KeyIcon from "@mui/icons-material/Key";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
@@ -24,9 +25,13 @@ import LockIcon from "@mui/icons-material/Lock";
 import LogoutIcon from "@mui/icons-material/Logout";
 import NetworkPingIcon from "@mui/icons-material/NetworkPing";
 import RadarIcon from "@mui/icons-material/Radar";
+import SearchIcon from "@mui/icons-material/Search";
 import SensorsIcon from "@mui/icons-material/Sensors";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Button, CssVarsProvider, Divider } from "@mui/joy";
+import StartIcon from "@mui/icons-material/Start";
+import SupportIcon from "@mui/icons-material/Support";
+import WifiOffIcon from "@mui/icons-material/WifiOff";
+import { Autocomplete, Button, Chip, CssVarsProvider, Divider } from "@mui/joy";
 import {
   Dialog,
   DialogActions,
@@ -49,33 +54,47 @@ import { auth } from "../providers/FirebaseProvider";
 
 const pages = [
   [
-    "LeaderBoard",
+    "LEADERBOARD",
     <LeaderboardIcon key="<LeaderboardIcon />" />,
     "rgba(63, 195, 128)",
     "See who leads now",
     "/leaderboard",
   ],
   [
-    "Customize",
+    "CUSTOMIZE",
     <BrushIcon key="<BrushIcon />" />,
     "rgba(175, 65, 84)",
     "Custom car design",
     "/customize",
   ],
   [
-    "About Us",
+    "ABOUT US",
     <InfoIcon key="<InfoIcon />" />,
     "rgba(159, 90, 253)",
     "Informative Page",
     "/about",
   ],
+  [
+    "Getting started",
+    <StartIcon key="<StartIcon/>" />,
+    "rgba(241, 90, 34)",
+    "FAQ page",
+    "/gettingstarted",
+  ],
+  [
+    "SUPPORT",
+    <SupportIcon key="<SupportIcon/>" />,
+    "rgba(20, 52, 164)",
+    "Let us know if you need Getting started",
+    "/contact",
+  ],
 ];
 const settings = [
   ["Profile", <AccountBoxIcon key="accountBox" />],
-  ["Settings", <SettingsIcon key="settings" />],
+  ["Game History", <HistoryIcon key="history" />],
+  ["ESP Settings", <SettingsIcon key="settings" />],
   ["Sign Out", "red"],
 ];
-
 function Navbar() {
   const [scrollTop, setScrollTop] = useState(0);
   const navigate = useNavigate();
@@ -87,6 +106,7 @@ function Navbar() {
   const [passwordEntry, setPasswordEntry] = useState({});
   const [passwordEntryValue, setPasswordEntryValue] = useState({});
   const [connectLoading, setConnectLoading] = useState(false);
+  const [disconnectButton, setDisconnectButton] = useState(false);
   const notify = useNotification();
 
   const [user] = useAuthState(getAuth());
@@ -107,7 +127,7 @@ function Navbar() {
   const handleCloseUserMenu = (setting) => {
     setting && setting === "Sign Out" ? auth.signOut() : null;
     setting && setting === "Profile" ? navigate("/profile") : null;
-    setting && setting === "Settings" ? setopenModal(true) : null;
+    setting && setting === "ESP Settings" ? setopenModal(true) : null;
 
     return setAnchorElUser(null);
   };
@@ -117,7 +137,8 @@ function Navbar() {
     setNetworkList([]);
     setPasswordEntry([]);
     setPasswordEntryValue([]);
-    fetch("http://192.168.4.1/scan")
+    const ip = localStorage.getItem("ip");
+    fetch(`http://${ip}/scan`)
       .then((response) => response.json())
       .then((data) => {
         setNetworkList(data);
@@ -148,12 +169,12 @@ function Navbar() {
     if (!passwordEntryValue[ssid] || passwordEntryValue[ssid].length <= 0) {
       passwordEntryValue[ssid] = "";
     }
-    console.log(passwordEntryValue[ssid]);
+    const ip = localStorage.getItem("ip");
     const _connData = {
       ssid: ssid,
       password: passwordEntryValue[ssid],
     };
-    fetch("http://192.168.4.1/connect", {
+    fetch(`http://${ip}/connect`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -161,20 +182,40 @@ function Navbar() {
       body: JSON.stringify(_connData),
     })
       .then((resp) => resp.text())
-      .then((data) =>
-        data.substring(0, 2) === "ok"
-          ? notify(
-              `Successfully connected to AP ${ssid}! IP Address: ${data.substring(
-                3
-              )}`,
-              { variant: "success", autoHideDuration: 10000 }
-            )
-          : notify("Wrong password provided", { variant: "error" })
-      )
+      .then((data) => {
+        if (data.substring(0, 2) === "ok") {
+          localStorage.setItem("ip", data.substring(3));
+          localStorage.setItem("blackListSSID", ssid);
+          passwordEntry[ssid] = false;
+          notify(
+            `Successfully connected to AP ${ssid}! IP Address: ${data.substring(
+              3
+            )}`,
+            { variant: "success", autoHideDuration: 10000 }
+          );
+        } else {
+          notify("Wrong password provided", { variant: "error" });
+        }
+      })
       .catch(() => {
         notify("An error occured, try again!", { variant: "error" });
       })
       .finally(() => setConnectLoading((prev) => ({ ...prev, [ssid]: false })));
+  };
+  const handleDisconnect = () => {
+    const ip = localStorage.getItem("ip");
+    setDisconnectButton(true);
+    fetch(`http://${ip}/disconnect`)
+      .then((res) => res.text())
+      .then((text) => {
+        console.log(text);
+        localStorage.setItem("ip", "192.168.4.1");
+        localStorage.setItem("blackListSSID", null);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setDisconnectButton(false);
+      });
   };
   useEffect(() => {
     const handleScroll = () => {
@@ -209,11 +250,11 @@ function Navbar() {
                 display: { xs: "none", md: "flex" },
                 width: "100%",
                 maxHeight: "100px",
-                my: 1,
+                my: 3,
                 mr: 3,
               }}
             >
-              <img src={logo} width="130" height="80" alt="" />
+              <img src={logo} width="267.8" height="38" alt="" />
             </Box>
           </a>
 
@@ -253,12 +294,16 @@ function Navbar() {
                   onClick={() => handleCloseNavMenu(page[4])}
                 >
                   <IconButton
-                    sx={{ color: "black", backgroundColor: "rgba(0,0,0,0)" }}
+                    sx={{
+                      color: "black",
+                      backgroundColor: "rgba(0,0,0,0)",
+                      "--IconButton-size": "5px",
+                    }}
                   >
-                    {page[1]}{" "}
+                    {page[1]}
                   </IconButton>
                   <Typography
-                    sx={{ color: "black", fontSize: 15 }}
+                    sx={{ color: "black", fontSize: 9, fontFamily: "Inter" }}
                     textAlign="center"
                   >
                     {page[0]}
@@ -271,32 +316,36 @@ function Navbar() {
           <Box
             sx={{
               display: { xs: "flex", md: "none" },
-              mr: -2,
-              my: 1.2,
-              flexGrow: { xs: 0.65, sm: 0.75, md: 1 },
+              my: 2,
+              ml: 3.5,
+              flexGrow: { xs: 0, sm: 0.75, md: 1 },
             }}
           >
             <a href="/">
-              <img src={logo} width="130" height="83" alt="" />
+              <img src={logo} width="240" height="35" alt="" />
             </a>
           </Box>
 
           <Box
             sx={{
-              flexGrow: 0.87,
+              flexGrow: 0.1,
               display: { xs: "none", md: "flex" },
               justifyContent: "center",
-              mr: 7,
             }}
           >
             {pages.map((page) => (
               <Tooltip
                 variant="outlined"
-                arrow
+                sx={{
+                  display:
+                    page[0] !== "Getting started" && page[0] !== "SUPPORT"
+                      ? "flex"
+                      : "none",
+                }}
                 title={
                   <Typography
                     style={{
-                      fontSize: 13,
+                      fontSize: 14,
                       fontFamily: "Inter",
                       animation: "fadein 0.3s forwards",
                     }}
@@ -308,7 +357,7 @@ function Navbar() {
               >
                 <MUIButt
                   variant="text"
-                  color="warning"
+                  color="inherit"
                   key={page}
                   startIcon={page[1]}
                   onClick={() => handleCloseNavMenu(page[4])}
@@ -319,10 +368,22 @@ function Navbar() {
                     fontFamily: "Poppins",
                     my: 2,
                     ml: 3,
-                    color: "black",
+                    color:
+                      (page[0] === "CUSTOMIZE" &&
+                        location.pathname === "/customize") ||
+                      (page[0] === "LEADERBOARD" &&
+                        location.pathname === "/leaderboard") ||
+                      (page[0] === "ABOUT US" && location.pathname === "/about")
+                        ? page[2]
+                        : "black",
                     fontSize: 16,
                     fontWeight: 500,
                     justifyContent: "center",
+                    whiteSpace: "nowrap",
+                    display:
+                      page[0] !== "Getting started" && page[0] !== "SUPPORT"
+                        ? "flex"
+                        : "none",
                   }}
                 >
                   {page[0]}
@@ -331,7 +392,13 @@ function Navbar() {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
+          <Box
+            sx={{
+              flexGrow: 0,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <Tooltip
               variant="outlined"
               sx={{ animation: "fadein 0.5s forwards" }}
@@ -361,11 +428,98 @@ function Navbar() {
                   sx={{
                     color: "white",
                     "--Avatar-size": { xs: "35px", md: "50px" },
-                    ml: 3,
+                    mx: 3,
                   }}
                 />
               </IconButton>
             </Tooltip>
+            <Box
+              sx={{
+                flexGrow: -5,
+                display: { xs: "none", md: "flex" },
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Autocomplete
+                startDecorator={<SearchIcon />}
+                color="warning"
+                placeholder="Search players"
+                blurOnSelect
+                clearOnEscape
+                selectOnFocus
+                options={[
+                  "Call of Duty",
+                  "Fortnite",
+                  "Overwatch",
+                  "Minecraft",
+                  "League of Legends",
+                ]}
+                noOptionsText="No players found"
+                sx={{
+                  display: { xs: "none", xl: "flex" },
+                }}
+                slotProps={{
+                  listbox: {
+                    sx: {
+                      maxHeight: "200px",
+                      position: "relative",
+                    },
+                  },
+                }}
+              />
+              {pages.map((page) => (
+                <Tooltip
+                  variant="outlined"
+                  title={
+                    <Typography
+                      style={{
+                        fontSize: 14,
+                        fontFamily: "Inter",
+                        animation: "fadein 0.3s forwards",
+                      }}
+                    >
+                      {page[3]}
+                    </Typography>
+                  }
+                  key={page[3]}
+                >
+                  <MUIButt
+                    variant="contained"
+                    color="inherit"
+                    key={page}
+                    startIcon={page[1]}
+                    onClick={() => handleCloseNavMenu(page[4])}
+                    sx={{
+                      "&:hover": {
+                        color: page[2],
+                      },
+                      fontFamily: "Poppins",
+                      my: 2,
+                      ml: 2,
+                      px: 2,
+                      color:
+                        (page[0] === "Getting started" &&
+                          location.pathname === "/gettingstarted") ||
+                        (page[0] === "SUPPORT" &&
+                          location.pathname === "/contact")
+                          ? page[2]
+                          : "black",
+                      fontWeight: 500,
+                      fontSize: 16,
+                      justifyContent: "center",
+                      whiteSpace: "nowrap",
+                      display:
+                        page[0] === "Getting started" || page[0] === "SUPPORT"
+                          ? "flex"
+                          : "none",
+                    }}
+                  >
+                    {page[0]}
+                  </MUIButt>
+                </Tooltip>
+              ))}
+            </Box>
             <Menu
               sx={{ mt: "55px" }}
               id="menu-appbar"
@@ -416,6 +570,7 @@ function Navbar() {
                             color: "black",
                             display: "flex",
                             justifyContent: "center",
+                            fontSize: "1.3vh",
                           }}
                         >
                           {setting[0]}
@@ -428,13 +583,18 @@ function Navbar() {
                         size="sm"
                         startDecorator={<LogoutIcon />}
                       >
-                        <Typography textAlign="center">{setting[0]}</Typography>
+                        <Typography
+                          textAlign="center"
+                          sx={{ fontSize: "1.3vh" }}
+                        >
+                          {setting[0]}
+                        </Typography>
                       </Button>
                     )}
                   </MenuItem>
                   <Divider
                     sx={{
-                      display: setting[0] === "Settings" ? "flex" : "none",
+                      display: setting[0] === "Game History" ? "flex" : "none",
                       mx: 1,
                     }}
                   />
@@ -518,13 +678,35 @@ function Navbar() {
                   Scanning
                 </LoadingButton>
               ) : (
-                <MUIButt
-                  fullWidth
-                  variant={networkList.length > 0 ? "text" : "outlined"}
-                  onClick={handleScan}
-                >
-                  SCAN FOR NETWORKS
-                </MUIButt>
+                <>
+                  <Chip
+                    variant="outlined"
+                    startDecorator={<CheckIcon />}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      borderRadius: "5px",
+                      textAlign: "center",
+                      mb: 1,
+                    }}
+                    color="success"
+                  >
+                    Connected to
+                    {localStorage.getItem("blackListSSID") !== null &&
+                    localStorage.getItem("blackListSSID") !== "null"
+                      ? " " + localStorage.getItem("blackListSSID")
+                      : " ESP"}
+                    <br />
+                    IP Address {localStorage.getItem("ip")}
+                  </Chip>
+                  <MUIButt
+                    fullWidth
+                    variant={networkList.length > 0 ? "text" : "outlined"}
+                    onClick={handleScan}
+                  >
+                    SCAN FOR NETWORKS
+                  </MUIButt>
+                </>
               )}
 
               <List>
@@ -544,81 +726,97 @@ function Navbar() {
                 </IconButton>
                 {networkList.map((data) =>
                   data.map((network) => (
-                    <ListItem
-                      sx={{ display: "flex", justifyContent: "center" }}
-                      key={network.ssid}
-                    >
-                      <Grid container direction="column">
-                        <Grid item>
-                          <MUIButt
-                            variant={
-                              passwordEntry[network.ssid]
-                                ? "contained"
-                                : "outlined"
-                            }
-                            color="secondary"
-                            startIcon={
-                              network.encryption === "closed" ? (
-                                <LockIcon />
-                              ) : null
-                            }
-                            endIcon={useSignalStrength(network.rssi)}
-                            onClick={() => handlePasswordEntry(network.ssid)}
-                            fullWidth
-                          >
-                            {network.ssid}
-                          </MUIButt>
+                    <Box key={network.ssid}>
+                      <ListItem
+                        sx={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <Grid container direction="column">
+                          <Grid item>
+                            <MUIButt
+                              variant={
+                                passwordEntry[network.ssid]
+                                  ? "contained"
+                                  : "outlined"
+                              }
+                              color="secondary"
+                              startIcon={
+                                network.encryption === "closed" ? (
+                                  <LockIcon />
+                                ) : null
+                              }
+                              endIcon={useSignalStrength(network.rssi)}
+                              onClick={() => handlePasswordEntry(network.ssid)}
+                              disabled={
+                                localStorage.getItem("blackListSSID") ===
+                                network.ssid
+                              }
+                              fullWidth
+                            >
+                              {network.ssid}
+                            </MUIButt>
+                          </Grid>
+                          <Grid item>
+                            {passwordEntry[network.ssid] ? (
+                              <Grid container direction="column">
+                                {network.encryption === "closed" ? (
+                                  <TextField
+                                    sx={{
+                                      mt: 1,
+                                    }}
+                                    variant="standard"
+                                    size="small"
+                                    label={<KeyIcon />}
+                                    type="password"
+                                    onChange={(e) =>
+                                      handlePasswordChange(e, network.ssid)
+                                    }
+                                  />
+                                ) : null}
+                                {connectLoading[network.ssid] ? (
+                                  <LoadingButton
+                                    loading
+                                    loadingPosition="end"
+                                    endIcon={<RadarIcon />}
+                                    variant="outlined"
+                                    color="secondary"
+                                    fullWidth
+                                    size="large"
+                                    disableElevation
+                                    sx={{ mt: 1 }}
+                                  >
+                                    Connecting
+                                  </LoadingButton>
+                                ) : (
+                                  <MUIButt
+                                    endIcon={<SensorsIcon />}
+                                    sx={{
+                                      mt: 1,
+                                      display:
+                                        localStorage.getItem("ip") ===
+                                        network.ssid
+                                          ? "none"
+                                          : "flex",
+                                    }}
+                                    size="small"
+                                    disableElevation
+                                    variant="contained"
+                                    color="success"
+                                    onClick={() =>
+                                      handleConnectToWifi(
+                                        network.ssid,
+                                        "blabla"
+                                      )
+                                    }
+                                  >
+                                    CONNECT
+                                  </MUIButt>
+                                )}
+                              </Grid>
+                            ) : null}
+                          </Grid>
                         </Grid>
-                        <Grid item>
-                          {passwordEntry[network.ssid] ? (
-                            <Grid container direction="column">
-                              {network.encryption === "closed" ? (
-                                <TextField
-                                  sx={{
-                                    mt: 1,
-                                  }}
-                                  variant="standard"
-                                  size="small"
-                                  label={<KeyIcon />}
-                                  type="password"
-                                  onChange={(e) =>
-                                    handlePasswordChange(e, network.ssid)
-                                  }
-                                />
-                              ) : null}
-                              {connectLoading[network.ssid] ? (
-                                <LoadingButton
-                                  loading
-                                  loadingPosition="end"
-                                  variant="outlined"
-                                  color="secondary"
-                                  fullWidth
-                                  size="large"
-                                  disableElevation
-                                  sx={{ mt: 1 }}
-                                >
-                                  Connecting
-                                </LoadingButton>
-                              ) : (
-                                <MUIButt
-                                  endIcon={<SensorsIcon />}
-                                  sx={{ mt: 1 }}
-                                  size="small"
-                                  disableElevation
-                                  variant="contained"
-                                  color="success"
-                                  onClick={() =>
-                                    handleConnectToWifi(network.ssid, "blabla")
-                                  }
-                                >
-                                  CONNECT
-                                </MUIButt>
-                              )}
-                            </Grid>
-                          ) : null}
-                        </Grid>
-                      </Grid>
-                    </ListItem>
+                      </ListItem>
+                    </Box>
                   ))
                 )}
               </List>
@@ -626,17 +824,32 @@ function Navbar() {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <MUIButt
-            autoFocus
-            variant="contained"
-            color="error"
-            fullWidth
-            disableElevation
-            startIcon={<CloseIcon />}
-            onClick={() => setopenModal(false)}
-          >
-            Cancel
-          </MUIButt>
+          {disconnectButton ? (
+            <LoadingButton
+              variant="contained"
+              color="error"
+              fullWidth
+              loading
+              loadingPosition="end"
+              endIcon={<RadarIcon />}
+              disabled
+            >
+              Disconnecting..
+            </LoadingButton>
+          ) : (
+            <MUIButt
+              autoFocus
+              variant="contained"
+              color="error"
+              fullWidth
+              disableElevation
+              startIcon={<WifiOffIcon />}
+              onClick={handleDisconnect}
+              disabled={localStorage.getItem("ip") === "192.168.4.1"}
+            >
+              DISCONNECT
+            </MUIButt>
+          )}
         </DialogActions>
       </Dialog>
     </AppBar>

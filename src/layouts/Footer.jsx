@@ -1,3 +1,4 @@
+import CopyrightIcon from "@mui/icons-material/Copyright";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -40,10 +41,14 @@ export default function Footer() {
       direction="row"
       alignItems="center"
     >
-      <Grid item>
-        <img src={logo} alt="" width="225" height="140" />
+      <Grid item sx={{ mb: { xs: 3, md: 0 } }}>
+        <img src={logo} alt="" width="350" height="58" />
+        <br />
+        <Typography sx={{ color: "white" }} endDecorator={<CopyrightIcon />}>
+          Copyrights reserved 2023
+        </Typography>
       </Grid>
-      <Grid item>
+      {/* <Grid item>
         <Typography
           sx={{
             color: "#ffe500",
@@ -63,7 +68,7 @@ export default function Footer() {
         >
           Final Project IOT - Ilya Boicov
         </Typography>
-      </Grid>
+      </Grid> */}
       <Grid item sx={{ mt: 5, mr: { xs: 5, md: 10 } }}>
         <List>
           {listOfSocials.map((social) => (

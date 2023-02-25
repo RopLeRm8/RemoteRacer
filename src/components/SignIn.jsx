@@ -1,5 +1,4 @@
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import CheckIcon from "@mui/icons-material/Check";
 import EmailIcon from "@mui/icons-material/Email";
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -11,6 +10,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import MailIcon from "@mui/icons-material/Mail";
 import PasswordIcon from "@mui/icons-material/Password";
 import ReportIcon from "@mui/icons-material/Report";
+import SendIcon from "@mui/icons-material/Send";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
@@ -31,7 +31,7 @@ import {
 } from "@mui/joy";
 import { Slide } from "@mui/material";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/SignUpLoginWindow/logo.gif";
 import star from "../assets/SignUpLoginWindow/star.png";
@@ -39,7 +39,6 @@ import { useAuth } from "../contexts/AuthLogic";
 import "../css/LoginPage.css";
 import { authErrorToTitleCase } from "../helpers";
 import { gitauth, googleauth } from "../providers/FirebaseProvider";
-
 export default function LoginPage() {
   const gifAnimCont = useRef();
   const [error, setError] = useState(false);
@@ -107,9 +106,14 @@ export default function LoginPage() {
       .finally(() => setLoading(false));
   };
 
-  // useEffect(() => {
-  //   emailRef.current.focus();
-  // }, [focus]);
+  useEffect(() => {
+    document?.addEventListener("keyup", function (event) {
+      if (event.keyCode === 13) {
+        if (showPanel) return;
+        gifAnimCont?.current.click();
+      }
+    });
+  }, []);
   return (
     <Card
       sx={{
@@ -240,6 +244,8 @@ export default function LoginPage() {
             : null,
           "&:focus": {
             color: "blue",
+            outline: "none",
+            boxShadow: "none",
           },
         }}
         placeholder="Example: roplerm8@yahoo.com"
@@ -303,8 +309,8 @@ export default function LoginPage() {
 
       {loading ? (
         <Button
-          color="success"
-          variant="outlined"
+          color="warning"
+          variant="solid"
           loading
           type="submit"
           sx={{
@@ -547,6 +553,8 @@ export default function LoginPage() {
                 "--Input-decorator-childHeight": "44px",
                 "&:focus": {
                   color: "blue",
+                  outline: "none",
+                  boxShadow: "none",
                 },
               }}
               placeholder="Email to reset the password for"
@@ -618,21 +626,19 @@ export default function LoginPage() {
             )}
             {resetLoading ? (
               <Button
-                startDecorator={<ArrowUpwardIcon />}
+                loading
+                startDecorator={<SendIcon />}
                 variant="solid"
                 color="warning"
-                loading
-                sx={{
-                  width: "100%",
-                }}
-              />
+                fullWidth
+              >
+                Scanning
+              </Button>
             ) : (
               <Button
-                sx={{
-                  width: "100%",
-                }}
-                startDecorator={<ArrowUpwardIcon />}
-                variant="soft"
+                fullWidth
+                startDecorator={<SendIcon />}
+                variant="solid"
                 color="warning"
                 onClick={(e) => ResetPassword(e, MailVerifi)}
               >
@@ -642,6 +648,7 @@ export default function LoginPage() {
                     fontSize: 15,
                     fontWeight: 500,
                     mr: 3,
+                    color: "black",
                   }}
                 >
                   Submit code

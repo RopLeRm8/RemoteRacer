@@ -6,6 +6,11 @@ Project Description
 
 ### Todo
 
+- [ ] Finish game history page  
+- [ ] Finish help page  
+- [ ] Finish support page  
+- [ ] Finish the autocomplete  
+- [ ] (OPTIONALLY) Add displayname required on register  
 - [ ] STYLE IDEAS - In customize + tmuna, paper shape and bigger so it fits box on the left. In footer align bitches logos to left flex start or text align. In leaderboard hide email + place 1 2 3 badges medals icons and replace name icons and do fading animation by place from 3 to 1 toda. Box is shit + do margin  
 - [ ] Redesign leaderboard  
 - [ ] Fix google and github authentication methods  

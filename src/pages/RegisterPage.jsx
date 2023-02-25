@@ -44,15 +44,15 @@ export default function RegisterPage() {
             <Box
               sx={{
                 position: "absolute",
-                top: { xs: 15, lg: 50 },
+                top: { xs: 45, lg: 90 },
                 mr: { lg: 8 },
                 // display: { xs: "none", lg: "flex" },
               }}
             >
               <img
                 src={logo}
-                width="200"
-                height="125"
+                width="300"
+                height="48"
                 alt=""
                 id="logo"
                 style={{
