@@ -47,7 +47,7 @@ export default function GettingStartedTabs() {
         direction={{ xs: "row", lg: "column" }}
         sx={{
           height: "85vh",
-          maxWidth: { xs: "80%", lg: "90%" },
+          maxWidth: { xs: "80%", lg: "95%" },
           my: { xs: 5, lg: 0 },
         }}
       >
@@ -70,13 +70,18 @@ export default function GettingStartedTabs() {
           </Grid>
           <Grid item>
             <Box
-              sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                mt: 1,
+              }}
             >
               <LazyLoad>
                 <img
                   src={tabs[activeStep]?.img}
                   alt=""
-                  style={{ maxWidth: "40vh" }}
+                  style={{ maxWidth: "13vmax" }}
                 />
               </LazyLoad>
             </Box>
@@ -130,7 +135,7 @@ export default function GettingStartedTabs() {
                   disabled={activeStep === 5}
                 >
                   Next
-                  <KeyboardArrowRightIcon />
+                  <KeyboardArrowRightIcon sx={{ mb: 0.55 }} />
                 </Button>
               }
               backButton={
@@ -139,7 +144,7 @@ export default function GettingStartedTabs() {
                   onClick={() => handleStep("prev")}
                   disabled={activeStep === 0}
                 >
-                  <KeyboardArrowLeftIcon />
+                  <KeyboardArrowLeftIcon sx={{ mb: 0.55 }} />
                   Back
                 </Button>
               }
