@@ -7,6 +7,8 @@ import OpacityIcon from "@mui/icons-material/Opacity";
 import PaletteIcon from "@mui/icons-material/Palette";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+import LazyLoad from "react-lazyload";
+
 import {
   Box,
   Button,
@@ -34,7 +36,7 @@ import robot from "../assets/Customize/robot.png";
 import "../css/Customize.css";
 import ScrollAnimation from "../features/ScrollAnimation";
 import { useNotification } from "../hooks/useNotification";
-import Footer from "../layouts/Footer";
+// import Footer from "../layouts/Footer";
 import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
 const englishchars = /^[A-Za-z0-9 ]*$/;
@@ -169,13 +171,15 @@ export default function Customize() {
       <CssVarsProvider />
       <Navbar />
       <Box sx={{ backgroundColor: "#ffe500", py: 6 }}>
-        <video
-          id="customize"
-          src={CustomizeVideo}
-          autoPlay
-          muted
-          ref={videoRef}
-        ></video>
+        <LazyLoad>
+          <video
+            id="customize"
+            src={CustomizeVideo}
+            autoPlay
+            muted
+            ref={videoRef}
+          />
+        </LazyLoad>
         <Typography
           sx={{
             display: "flex",
@@ -197,6 +201,7 @@ export default function Customize() {
             color: "black",
             fontFamily: "Inter",
             textAlign: "center",
+            mb: 1,
           }}
           startDecorator={
             <NearbyErrorIcon sx={{ display: { xs: "none", md: "block" } }} />
@@ -216,10 +221,7 @@ export default function Customize() {
           item
           sx={{ my: { xs: 5, sm: 1 }, mb: { xs: selectOpen ? 40 : 5, md: 35 } }}
         >
-          <ScrollAnimation
-            animationName="animate__lightSpeedInLeft"
-            duration={0.6}
-          >
+          <ScrollAnimation animationName="animate__bounceIn">
             <Card
               sx={{
                 backgroundColor: "black",
@@ -440,25 +442,26 @@ export default function Customize() {
               >
                 {carName}
               </Typography>
-
-              <Box>
-                <img
-                  src={robot}
-                  alt=""
-                  style={{
-                    width: "300px",
-                    display: "flex",
-                    justifyContent: "center",
-                    // animation: "rotating 10s linear infinite",
-                  }}
-                  className="noSelect"
-                />
-              </Box>
+              <LazyLoad>
+                <Box>
+                  <img
+                    src={robot}
+                    alt=""
+                    style={{
+                      width: "300px",
+                      display: "flex",
+                      justifyContent: "center",
+                      // animation: "rotating 10s linear infinite",
+                    }}
+                    className="noSelect"
+                  />
+                </Box>
+              </LazyLoad>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-      <Footer />
+      {/* <Footer /> */}
       <Popover
         open={openPopover}
         anchorEl={anchorEl}

@@ -16,7 +16,8 @@ import ProfileInfo from "../components/ProfileInfo";
 import "../css/SmoothSlide.css";
 import ScrollAnimation from "../features/ScrollAnimation";
 import { useNotification } from "../hooks/useNotification";
-import Footer from "../layouts/Footer";
+// import Footer from "../layouts/Footer";
+import LazyLoad from "react-lazyload";
 import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
 
@@ -68,32 +69,19 @@ export default function Profile() {
     <Box>
       <CssVarsProvider />
       <Navbar />
-      <Box
-        sx={{
-          backgroundImage: `url(${blackback})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          height: "100%",
-        }}
-      >
-        <ProfileInfo setstamProfile={setstamProfile} /> {/*מידע על המשתמש*/}
-        <Medals stamProfile={stamProfile} />
-      </Box>
-
-      {/* {fbvalue.map((val) => (
-        <Box key={val.value}>
-          כאן יש תמונת ESP
-          {val.value === "ip" && (
-            <img
-              src={"http://" + val.data + "/capture"}
-              alt=""
-              width="128"
-              height="128"
-            />
-          )}
+      <LazyLoad>
+        <Box
+          sx={{
+            backgroundImage: `url(${blackback})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            height: "100%",
+          }}
+        >
+          <ProfileInfo setstamProfile={setstamProfile} /> {/*מידע על המשתמש*/}
+          <Medals stamProfile={stamProfile} />
         </Box>
-      ))} */}
-
+      </LazyLoad>
       <Box
         sx={{
           backgroundImage: `url(${blackback2})`,
@@ -124,19 +112,21 @@ export default function Profile() {
               direction={{ xs: "column", sm: "column", md: "row-reverse" }}
               spacing={{ xs: 1, sm: 3, md: 0 }}
             >
-              <Box
-                sx={{
-                  "@media screen and (min-width: 90em)": {
-                    mt: 10,
-                  },
+              <LazyLoad>
+                <Box
+                  sx={{
+                    "@media screen and (min-width: 90em)": {
+                      mt: 10,
+                    },
 
-                  borderRadius: "50%",
-                  background: "linear-gradient(145deg, #cacaca, #ffffff)",
-                  boxShadow: "8px 8px 30px #ffffff,-8px -8px 30px #ffffff",
-                }}
-              >
-                <img src={dices} width="166" height="166" alt="" />
-              </Box>
+                    borderRadius: "50%",
+                    background: "linear-gradient(145deg, #cacaca, #ffffff)",
+                    boxShadow: "8px 8px 30px #ffffff,-8px -8px 30px #ffffff",
+                  }}
+                >
+                  <img src={dices} width="166" height="166" alt="" />
+                </Box>
+              </LazyLoad>
               <Box>
                 <Typography
                   level="h2"
@@ -200,18 +190,20 @@ export default function Profile() {
               direction={{ xs: "column", sm: "column", md: "row-reverse" }}
               spacing={{ xs: 1, sm: 3, md: 5 }}
             >
-              <Box
-                sx={{
-                  "@media screen and (min-width: 90em)": {
-                    mt: 10,
-                  },
-                  borderRadius: "50%",
-                  background: "linear-gradient(145deg, #cacaca, #ffe500)",
-                  boxShadow: "8px 8px 30px #ffe500,-8px -8px 30px #ffe500",
-                }}
-              >
-                <img src={points} width="166" height="166" alt="" />
-              </Box>
+              <LazyLoad>
+                <Box
+                  sx={{
+                    "@media screen and (min-width: 90em)": {
+                      mt: 10,
+                    },
+                    borderRadius: "50%",
+                    background: "linear-gradient(145deg, #cacaca, #ffe500)",
+                    boxShadow: "8px 8px 30px #ffe500,-8px -8px 30px #ffe500",
+                  }}
+                >
+                  <img src={points} width="166" height="166" alt="" />
+                </Box>
+              </LazyLoad>
               <Box>
                 <Typography
                   level="h2"
@@ -281,7 +273,7 @@ export default function Profile() {
           </Typography>
         </Stack>
       </Box>
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 }

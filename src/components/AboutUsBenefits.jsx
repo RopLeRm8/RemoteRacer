@@ -1,8 +1,10 @@
 import { Box, Grid, Tooltip, Typography } from "@mui/joy";
 import { useContext, useEffect } from "react";
+import LazyLoad from "react-lazyload";
 import CALENDAR from "../assets/AboutUs/CALENDAR.png";
 import KEYS from "../assets/AboutUs/KEY.png";
 import MAP from "../assets/AboutUs/MAP.png";
+
 import { AboutContext } from "../pages/AboutUs";
 export default function AboutUsBenefits() {
   const AnimationContext = useContext(AboutContext);
@@ -58,11 +60,17 @@ export default function AboutUsBenefits() {
               mb: { xs: 1, sm: 0 },
             }}
           >
-            <Box
-              sx={{ display: "flex", justifyContent: "center", width: "95%" }}
-            >
-              <img src={KEYS} alt="" style={{ maxWidth: "55%" }} />
-            </Box>
+            <LazyLoad>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                <img src={KEYS} alt="" style={{ maxWidth: "40%" }} />
+              </Box>
+            </LazyLoad>
             <Typography
               fontFamily="Anton"
               fontSize={30}
@@ -96,11 +104,17 @@ export default function AboutUsBenefits() {
               mb: { xs: 1, sm: 0 },
             }}
           >
-            <Box
-              sx={{ display: "flex", justifyContent: "center", width: "95%" }}
-            >
-              <img src={CALENDAR} alt="" style={{ maxWidth: "60%" }} />
-            </Box>
+            <LazyLoad>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                <img src={CALENDAR} alt="" style={{ maxWidth: "45%" }} />
+              </Box>
+            </LazyLoad>
             <Typography
               fontFamily="Anton"
               fontSize={30}
@@ -128,11 +142,18 @@ export default function AboutUsBenefits() {
           <Box
             sx={{ backgroundColor: "#103c8c", p: 5, borderRadius: 15, mx: 1 }}
           >
-            <Box
-              sx={{ display: "flex", justifyContent: "center", width: "100%" }}
-            >
-              <img src={MAP} alt="" style={{ maxWidth: "48%" }} />
-            </Box>
+            <LazyLoad>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                <img src={MAP} alt="" style={{ maxWidth: "35%" }} />
+              </Box>
+            </LazyLoad>
+
             <Typography
               fontFamily="Anton"
               fontSize={30}

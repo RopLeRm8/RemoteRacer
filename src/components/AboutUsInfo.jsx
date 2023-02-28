@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from "@mui/joy";
 import { useContext } from "react";
 // import { AnimationOnScroll } from "react-animation-on-scroll";
+import LazyLoad from "react-lazyload";
 import aboutimg from "../assets/AboutUs/aboutimg.png";
 import { AboutContext } from "../pages/AboutUs";
 export default function AboutUsInfo() {
@@ -60,7 +61,9 @@ export default function AboutUsInfo() {
               justifyContent: "center",
             }}
           >
-            <img src={aboutimg} style={{ maxWidth: "100%" }} alt="" />
+            <LazyLoad>
+              <img src={aboutimg} style={{ maxWidth: "100%" }} alt="" />
+            </LazyLoad>
           </Box>
         </Stack>
       </AnimationContext>

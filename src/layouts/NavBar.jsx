@@ -10,11 +10,12 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import logo from "../assets/Global/logoblack.png";
 
 import { getAuth } from "@firebase/auth";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import BrushIcon from "@mui/icons-material/Brush";
 import CheckIcon from "@mui/icons-material/Check";
 import HistoryIcon from "@mui/icons-material/History";
@@ -23,6 +24,7 @@ import KeyIcon from "@mui/icons-material/Key";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import LockIcon from "@mui/icons-material/Lock";
 import LogoutIcon from "@mui/icons-material/Logout";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import NetworkPingIcon from "@mui/icons-material/NetworkPing";
 import RadarIcon from "@mui/icons-material/Radar";
 import SearchIcon from "@mui/icons-material/Search";
@@ -31,7 +33,15 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import StartIcon from "@mui/icons-material/Start";
 import SupportIcon from "@mui/icons-material/Support";
 import WifiOffIcon from "@mui/icons-material/WifiOff";
-import { Autocomplete, Button, Chip, CssVarsProvider, Divider } from "@mui/joy";
+import {
+  Autocomplete,
+  Button,
+  Chip,
+  CssVarsProvider,
+  Divider,
+  FormControl,
+  FormLabel,
+} from "@mui/joy";
 import {
   Dialog,
   DialogActions,
@@ -88,11 +98,20 @@ const pages = [
     "Let us know if you need Getting started",
     "/contact",
   ],
+  ["MORE", <MoreHorizIcon key="<MoreHorizIcon/>" />],
 ];
 const settings = [
   ["Profile", <AccountBoxIcon key="accountBox" />],
   ["Game History", <HistoryIcon key="history" />],
-  ["ESP Settings", <SettingsIcon key="settings" />],
+  [
+    "ESP Settings",
+    <SettingsIcon
+      sx={{
+        animation: "rotate 5s linear infinite",
+      }}
+      key="settings"
+    />,
+  ],
   ["Sign Out", "red"],
 ];
 function Navbar() {
@@ -107,6 +126,9 @@ function Navbar() {
   const [passwordEntryValue, setPasswordEntryValue] = useState({});
   const [connectLoading, setConnectLoading] = useState(false);
   const [disconnectButton, setDisconnectButton] = useState(false);
+  const [isRotated, setIsRotated] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const moreRef = useRef();
   const notify = useNotification();
 
   const [user] = useAuthState(getAuth());
@@ -118,9 +140,15 @@ function Navbar() {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = (page) => {
+  const handleCloseNavMenu = (page, pageName) => {
+    if (pageName === "MORE") {
+      setIsRotated((prev) => !prev);
+      if (anchorEl === null) {
+        setAnchorEl(moreRef.current);
+      } else setAnchorEl(null);
+    }
     setAnchorElNav(null);
-    if (typeof page === "object") return;
+    if (typeof page === "object" || page === null) return;
     navigate(page);
   };
 
@@ -291,7 +319,7 @@ function Navbar() {
               {pages.map((page) => (
                 <MenuItem
                   key={page}
-                  onClick={() => handleCloseNavMenu(page[4])}
+                  onClick={() => handleCloseNavMenu(page[4], page[0])}
                 >
                   <IconButton
                     sx={{
@@ -303,10 +331,59 @@ function Navbar() {
                     {page[1]}
                   </IconButton>
                   <Typography
-                    sx={{ color: "black", fontSize: 9, fontFamily: "Inter" }}
+                    sx={{
+                      color: "black",
+                      fontSize: 12,
+                      fontFamily: "Inter",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
                     textAlign="center"
                   >
                     {page[0]}
+
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={() => {
+                        setAnchorEl(null);
+                        setIsRotated(false);
+                      }}
+                    >
+                      <MenuItem
+                        onClick={(e) => e.stopPropagation()}
+                        disableRipple
+                        sx={{
+                          zIndex: 1650,
+                        }}
+                      >
+                        <Autocomplete
+                          startDecorator={<SearchIcon />}
+                          color="warning"
+                          placeholder="Search players"
+                          blurOnSelect
+                          clearOnEscape
+                          selectOnFocus
+                          options={[
+                            "Call of Duty",
+                            "Fortnite",
+                            "Overwatch",
+                            "Minecraft",
+                            "League of Legends",
+                          ]}
+                          noOptionsText="No players found"
+                          slotProps={{
+                            listbox: {
+                              sx: {
+                                maxHeight: "200px",
+                                position: "relative",
+                                zIndex: 1850,
+                              },
+                            },
+                          }}
+                        />
+                      </MenuItem>
+                    </Menu>
                   </Typography>
                 </MenuItem>
               ))}
@@ -334,61 +411,37 @@ function Navbar() {
             }}
           >
             {pages.map((page) => (
-              <Tooltip
-                variant="outlined"
+              <MUIButt
+                variant={location.pathname === page[4] ? "contained" : "text"}
+                color="inherit"
+                key={page}
+                startIcon={page[1]}
+                onClick={() => handleCloseNavMenu(page[4])}
                 sx={{
+                  fontFamily: "Poppins",
+                  my: 2,
+                  ml: 3,
+                  px: 1.5,
+                  color: location.pathname === page[4] ? "white" : "black",
+                  background: location.pathname === page[4] ? "black" : "",
+                  "&:hover": {
+                    background:
+                      location.pathname === page[4] ? "rgba(0,0,0,0.8)" : "",
+                  },
+                  fontSize: 16,
+                  fontWeight: 500,
+                  justifyContent: "center",
+                  whiteSpace: "nowrap",
                   display:
-                    page[0] !== "Getting started" && page[0] !== "SUPPORT"
+                    page[0] !== "Getting started" &&
+                    page[0] !== "SUPPORT" &&
+                    page[0] !== "MORE"
                       ? "flex"
                       : "none",
                 }}
-                title={
-                  <Typography
-                    style={{
-                      fontSize: 14,
-                      fontFamily: "Inter",
-                      animation: "fadein 0.3s forwards",
-                    }}
-                  >
-                    {page[3]}
-                  </Typography>
-                }
-                key={page[3]}
               >
-                <MUIButt
-                  variant="text"
-                  color="inherit"
-                  key={page}
-                  startIcon={page[1]}
-                  onClick={() => handleCloseNavMenu(page[4])}
-                  sx={{
-                    "&:hover": {
-                      color: page[2],
-                    },
-                    fontFamily: "Poppins",
-                    my: 2,
-                    ml: 3,
-                    color:
-                      (page[0] === "CUSTOMIZE" &&
-                        location.pathname === "/customize") ||
-                      (page[0] === "LEADERBOARD" &&
-                        location.pathname === "/leaderboard") ||
-                      (page[0] === "ABOUT US" && location.pathname === "/about")
-                        ? page[2]
-                        : "black",
-                    fontSize: 16,
-                    fontWeight: 500,
-                    justifyContent: "center",
-                    whiteSpace: "nowrap",
-                    display:
-                      page[0] !== "Getting started" && page[0] !== "SUPPORT"
-                        ? "flex"
-                        : "none",
-                  }}
-                >
-                  {page[0]}
-                </MUIButt>
-              </Tooltip>
+                {page[0]}
+              </MUIButt>
             ))}
           </Box>
 
@@ -399,125 +452,119 @@ function Navbar() {
               alignItems: "center",
             }}
           >
-            <Tooltip
-              variant="outlined"
-              sx={{ animation: "fadein 0.5s forwards" }}
-              title={
-                <Typography
-                  sx={{
-                    fontSize: 12,
-                    fontFamily: "Inter",
-                  }}
-                >
-                  Profile Settings
-                </Typography>
-              }
-            >
-              <IconButton
-                onClick={handleOpenUserMenu}
-                sx={{
-                  backgroundColor: "rgba(0,0,0,0)",
-                  "&:hover": {
-                    backgroundColor: "rgba(0,0,0,0)",
-                  },
-                }}
-              >
-                <Avatar
-                  alt="Remy Sharp"
-                  src={user?.photoURL}
-                  sx={{
-                    color: "white",
-                    "--Avatar-size": { xs: "35px", md: "50px" },
-                    mx: 3,
-                  }}
-                />
-              </IconButton>
-            </Tooltip>
             <Box
               sx={{
                 flexGrow: -5,
                 display: { xs: "none", md: "flex" },
                 justifyContent: "center",
                 alignItems: "center",
+                mx: 1,
               }}
             >
-              <Autocomplete
-                startDecorator={<SearchIcon />}
-                color="warning"
-                placeholder="Search players"
-                blurOnSelect
-                clearOnEscape
-                selectOnFocus
-                options={[
-                  "Call of Duty",
-                  "Fortnite",
-                  "Overwatch",
-                  "Minecraft",
-                  "League of Legends",
-                ]}
-                noOptionsText="No players found"
-                sx={{
-                  display: { xs: "none", xl: "flex" },
-                }}
-                slotProps={{
-                  listbox: {
-                    sx: {
-                      maxHeight: "200px",
-                      position: "relative",
-                    },
-                  },
-                }}
-              />
               {pages.map((page) => (
-                <Tooltip
-                  variant="outlined"
-                  title={
-                    <Typography
-                      style={{
-                        fontSize: 14,
-                        fontFamily: "Inter",
-                        animation: "fadein 0.3s forwards",
-                      }}
-                    >
-                      {page[3]}
-                    </Typography>
-                  }
-                  key={page[3]}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                  key={page[0]}
                 >
                   <MUIButt
-                    variant="contained"
+                    variant={
+                      location.pathname === page[4] ? "contained" : "text"
+                    }
                     color="inherit"
+                    ref={moreRef}
                     key={page}
+                    disabled={page[0] === "MORE" && isRotated}
                     startIcon={page[1]}
-                    onClick={() => handleCloseNavMenu(page[4])}
+                    onClick={() => handleCloseNavMenu(page[4], page[0])}
                     sx={{
-                      "&:hover": {
-                        color: page[2],
-                      },
                       fontFamily: "Poppins",
                       my: 2,
-                      ml: 2,
-                      px: 2,
-                      color:
-                        (page[0] === "Getting started" &&
-                          location.pathname === "/gettingstarted") ||
-                        (page[0] === "SUPPORT" &&
-                          location.pathname === "/contact")
-                          ? page[2]
-                          : "black",
+                      px: 1.5,
+                      ml: page[0] !== "Getting started" ? 2 : 0,
+                      color: location.pathname === page[4] ? "white" : "black",
+                      background: location.pathname === page[4] ? "black" : "",
+                      "&:hover": {
+                        background:
+                          location.pathname === page[4]
+                            ? "rgba(0,0,0,0.8)"
+                            : "rgba(0,0,0,0.1)",
+                      },
                       fontWeight: 500,
                       fontSize: 16,
                       justifyContent: "center",
                       whiteSpace: "nowrap",
                       display:
-                        page[0] === "Getting started" || page[0] === "SUPPORT"
+                        page[0] === "Getting started" ||
+                        page[0] === "SUPPORT" ||
+                        page[0] === "MORE"
                           ? "flex"
                           : "none",
                     }}
                   >
                     {page[0]}
+                    {page[0] === "MORE" ? (
+                      <ArrowBackIcon
+                        sx={{
+                          transition: "transform 0.2s ease-in-out",
+                          transform: isRotated ? "rotate(-90deg)" : "",
+                          fontSize: "100%",
+                          ml: 0.5,
+                        }}
+                      />
+                    ) : null}
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={() => {
+                        setAnchorEl(null);
+                        setIsRotated(false);
+                      }}
+                    >
+                      <MenuItem
+                        onClick={(e) => e.stopPropagation()}
+                        disableRipple
+                        sx={{
+                          zIndex: 1650,
+                        }}
+                      >
+                        <FormControl>
+                          <FormLabel sx={{ fontFamily: "Inter" }}>
+                            Seek for new players
+                          </FormLabel>
+                          <Autocomplete
+                            startDecorator={<SearchIcon />}
+                            color="warning"
+                            placeholder="Search players"
+                            blurOnSelect
+                            clearOnEscape
+                            selectOnFocus
+                            options={[
+                              "Call of Duty",
+                              "Fortnite",
+                              "Overwatch",
+                              "Minecraft",
+                              "League of Legends",
+                            ]}
+                            noOptionsText="No players found"
+                            slotProps={{
+                              listbox: {
+                                sx: {
+                                  maxHeight: "200px",
+                                  position: "relative",
+                                  zIndex: 1850,
+                                },
+                              },
+                            }}
+                          />
+                        </FormControl>
+                      </MenuItem>
+                    </Menu>
                   </MUIButt>
-                </Tooltip>
+                </Box>
               ))}
             </Box>
             <Menu
@@ -570,7 +617,7 @@ function Navbar() {
                             color: "black",
                             display: "flex",
                             justifyContent: "center",
-                            fontSize: "1.3vh",
+                            fontSize: "1.5vh",
                           }}
                         >
                           {setting[0]}
@@ -585,7 +632,7 @@ function Navbar() {
                       >
                         <Typography
                           textAlign="center"
-                          sx={{ fontSize: "1.3vh" }}
+                          sx={{ fontSize: "1.5vh" }}
                         >
                           {setting[0]}
                         </Typography>
@@ -594,13 +641,47 @@ function Navbar() {
                   </MenuItem>
                   <Divider
                     sx={{
-                      display: setting[0] === "Game History" ? "flex" : "none",
+                      display: setting[0] === "ESP Settings" ? "flex" : "none",
                       mx: 1,
                     }}
                   />
                 </Box>
               ))}
             </Menu>
+            <Tooltip
+              variant="outlined"
+              sx={{ animation: "fadein 0.5s forwards" }}
+              title={
+                <Typography
+                  sx={{
+                    fontSize: 12,
+                    fontFamily: "Inter",
+                  }}
+                >
+                  Profile Settings
+                </Typography>
+              }
+            >
+              <IconButton
+                onClick={handleOpenUserMenu}
+                sx={{
+                  backgroundColor: "rgba(0,0,0,0)",
+                  "&:hover": {
+                    backgroundColor: "rgba(0,0,0,0)",
+                  },
+                }}
+              >
+                <Avatar
+                  alt="Remy Sharp"
+                  src={user?.photoURL}
+                  sx={{
+                    color: "white",
+                    "--Avatar-size": { xs: "35px", md: "50px" },
+                    ml: 3,
+                  }}
+                />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Toolbar>
       </Container>

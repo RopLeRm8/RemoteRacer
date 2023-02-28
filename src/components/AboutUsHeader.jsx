@@ -10,7 +10,8 @@ export default function HeeaderAboutUs() {
         display: "flex",
         backgroundColor: "#ffe500",
         justifyContent: "center",
-        py: { xs: 5, md: 10 },
+        pb: { xs: 5, md: 10 },
+        pt: { xs: 5, md: 6 },
         px: { xs: 4 },
       }}
     >
@@ -62,9 +63,9 @@ export default function HeeaderAboutUs() {
             color="neutral"
             sx={{
               mt: 2,
-              fontSize: "1.3vh",
-              fontFamily: "Anton",
-              fontWeight: 500,
+              fontSize: "1.2vh",
+              fontFamily: "Poppins",
+              fontWeight: 300,
               backgroundColor: "black",
               letterSpacing: 1,
               "&:hover": {
@@ -83,9 +84,9 @@ export default function HeeaderAboutUs() {
             color="neutral"
             sx={{
               mt: 2,
-              fontSize: "1.3vh",
-              fontFamily: "Anton",
-              fontWeight: 500,
+              fontSize: "1.2vh",
+              fontFamily: "Poppins",
+              fontWeight: 300,
               backgroundColor: "black",
               letterSpacing: 1,
               "&:hover": {

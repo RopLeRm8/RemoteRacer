@@ -1,5 +1,6 @@
 import { Box, Grid, Typography } from "@mui/joy";
 import { useContext } from "react";
+import LazyLoad from "react-lazyload";
 import Poster from "../assets/AboutUs/Poster.png";
 import videoshowcase from "../assets/AboutUs/video.mp4";
 import "../css/About.css";
@@ -51,14 +52,16 @@ export default function AboutUsVideo() {
         </Grid>
       </AnimationContext>
       <AnimationContext animationName="animate__slideInUp" duration={0.5}>
-        <Box sx={{ display: "flex", justifyContent: "center", py: 5, px: 2 }}>
-          <video
-            src={videoshowcase}
-            controls
-            style={{ maxWidth: "100%" }}
-            poster={Poster}
-          />
-        </Box>
+        <LazyLoad>
+          <Box sx={{ display: "flex", justifyContent: "center", py: 5, px: 2 }}>
+            <video
+              src={videoshowcase}
+              controls
+              style={{ maxWidth: "100%" }}
+              poster={Poster}
+            />
+          </Box>
+        </LazyLoad>
       </AnimationContext>
     </Box>
   );
