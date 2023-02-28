@@ -1,4 +1,5 @@
-import CircleIcon from '@mui/icons-material/Circle';
+import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Grid, Typography } from "@mui/joy";
@@ -95,17 +96,22 @@ export default function GettingStartedTabs() {
             </Typography>
             {tabs[activeStep]?.steps ? (
               <Stepper
+                alternativeLabel
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
                   my: 5,
-                  maxWidth: "80%",
                 }}
                 activeStep={tabs[activeStep]?.steps.length}
               >
                 {tabs[activeStep]?.steps.map((step, index) => (
                   <Step key={index}>
-                    <StepLabel StepIconComponent={<CircleIcon sx = {{color:"white"}}/>}>
+                    <StepLabel
+                      StepIconComponent={
+                        index === tabs[activeStep]?.steps.length - 1
+                          ? ExpandCircleDownIcon
+                          : ArrowCircleRightIcon
+                      }
+                      StepIconProps={{ sx: { color: "white" } }}
+                    >
                       <Typography sx={{ color: "white" }}>{step}</Typography>
                     </StepLabel>
                   </Step>

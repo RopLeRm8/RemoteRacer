@@ -1,5 +1,5 @@
 import first from "../assets/GettingStarted/first.jpg";
-
+import second from "../assets/GettingStarted/second.jpg";
 export default function useTabs() {
   return [
     {
@@ -12,12 +12,12 @@ export default function useTabs() {
       title: "Setting up profile",
       content:
         "Configuring your profile is an important step in getting the most out of our platform. Here are the steps you can follow to configure your profile.",
-      img: first,
+      img: second,
       steps: [
         "Log in to your account",
         "Go to the 'Profile' page",
-        "Click on the profile picture to change it",
-        "Click on 'pencil' icon or 'update profile' button to change the basic account settings",
+        "Click on the profile picture to update it",
+        "Update account settings with pencil icon or 'update profile' button",
       ],
     },
   ];
