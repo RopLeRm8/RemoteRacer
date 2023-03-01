@@ -11,7 +11,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import React, { useCallback, useRef, useState } from "react";
-import logo from "../assets/Global/logoblack.png";
+import logo from "../assets/Global/logo.png";
+import logoblack from "../assets/Global/logoblack.png";
 
 import { getAuth } from "@firebase/auth";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
@@ -261,6 +262,7 @@ function Navbar() {
     <AppBar
       position="sticky"
       sx={{
+        maxWidth: "100%",
         bgcolor: "#ffe500",
         animation:
           scrollTop > window.innerHeight * 0.2 ? "fadein 0.4s forwards" : null,
@@ -276,13 +278,21 @@ function Navbar() {
             <Box
               sx={{
                 display: { xs: "none", md: "flex" },
-                width: "100%",
+                width: "88%",
                 maxHeight: "100px",
                 my: 3,
                 mr: 3,
+                background: location.pathname === "/dashboard" ? "black" : "",
+                borderRadius: "5px",
+                p: location.pathname === "/dashboard" ? 1 : 0,
               }}
             >
-              <img src={logo} width="267.8" height="38" alt="" />
+              <img
+                src={location.pathname === "/dashboard" ? logo : logoblack}
+                width="267.8"
+                height="32"
+                alt=""
+              />
             </Box>
           </a>
 
@@ -394,12 +404,12 @@ function Navbar() {
             sx={{
               display: { xs: "flex", md: "none" },
               my: 2,
-              ml: 3.5,
+              ml: 5,
               flexGrow: { xs: 0, sm: 0.75, md: 1 },
             }}
           >
             <a href="/">
-              <img src={logo} width="240" height="35" alt="" />
+              <img src={logo} height="25" alt="" style={{ maxWidth: "100%" }} />
             </a>
           </Box>
 
@@ -421,7 +431,7 @@ function Navbar() {
                   fontFamily: "Poppins",
                   my: 2,
                   ml: 3,
-                  px: 1.5,
+                  px: { lg: 1.5 },
                   color: location.pathname === page[4] ? "white" : "black",
                   background: location.pathname === page[4] ? "black" : "",
                   "&:hover": {
@@ -455,7 +465,7 @@ function Navbar() {
             <Box
               sx={{
                 flexGrow: -5,
-                display: { xs: "none", md: "flex" },
+                display: { xs: "none", xl: "flex" },
                 justifyContent: "center",
                 alignItems: "center",
                 mx: 1,
@@ -483,7 +493,7 @@ function Navbar() {
                     sx={{
                       fontFamily: "Poppins",
                       my: 2,
-                      px: 1.5,
+                      px: { lg: 1.5 },
                       ml: page[0] !== "Getting started" ? 2 : 0,
                       color: location.pathname === page[4] ? "white" : "black",
                       background: location.pathname === page[4] ? "black" : "",

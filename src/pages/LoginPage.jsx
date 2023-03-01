@@ -40,12 +40,14 @@ export default function LoginPage() {
           >
             <img
               src={logo}
-              width="300"
-              height="48"
+              width="320"
+              height="38"
               alt=""
               id="logo"
               style={{
                 animation: "rotationAndZoom 1s forwards",
+                display: "flex",
+                justifyContent: "center",
               }}
             />
             <Divider
@@ -53,7 +55,7 @@ export default function LoginPage() {
                 backgroundColor: "white",
                 p: 0.1,
                 minHeight: "30vmax",
-                ml: 11,
+                ml: 18,
                 mt: 5,
                 display: { xs: "none", md: "flex" },
               }}

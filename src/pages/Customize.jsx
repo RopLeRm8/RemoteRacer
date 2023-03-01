@@ -26,7 +26,7 @@ import {
   Select,
   Typography,
 } from "@mui/joy";
-import { FormHelperText, Popover } from "@mui/material";
+import { FormHelperText, Paper, Popover } from "@mui/material";
 import { child, get, ref, update } from "firebase/database";
 import { MuiColorInput } from "mui-color-input";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -170,8 +170,8 @@ export default function Customize() {
     <Box>
       <CssVarsProvider />
       <Navbar />
-      <Box sx={{ backgroundColor: "#ffe500", py: 6 }}>
-        <LazyLoad>
+      <LazyLoad>
+        <Box sx={{ backgroundColor: "#ffe500", py: 6 }}>
           <video
             id="customize"
             src={CustomizeVideo}
@@ -179,42 +179,43 @@ export default function Customize() {
             muted
             ref={videoRef}
           />
-        </LazyLoad>
-        <Typography
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            color: "black",
-            fontFamily: "Anton",
-            mb: 2,
-            textAlign: "center",
-            fontSize: "5.5vh",
-          }}
-        >
-          Customize Your Dream Car
-        </Typography>
-        <Typography
-          level="h6"
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            color: "black",
-            fontFamily: "Inter",
-            textAlign: "center",
-            mb: 1,
-          }}
-          startDecorator={
-            <NearbyErrorIcon sx={{ display: { xs: "none", md: "block" } }} />
-          }
-        >
-          Remember: You can always undo any change
-        </Typography>
-      </Box>
+          <Typography
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              color: "black",
+              fontFamily: "Anton",
+              mb: 2,
+              textAlign: "center",
+              fontSize: "5.5vh",
+            }}
+          >
+            Customize Your Dream Car
+          </Typography>
+          <Typography
+            level="h6"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              color: "black",
+              fontFamily: "Inter",
+              textAlign: "center",
+              mb: 1,
+            }}
+            startDecorator={
+              <NearbyErrorIcon sx={{ display: { xs: "none", md: "block" } }} />
+            }
+          >
+            Remember: You can always undo any change
+          </Typography>
+        </Box>
+      </LazyLoad>
+
       <Divider sx={{ backgroundColor: "white" }} />
       <Grid
         container
         alignItems="end"
-        justifyContent={{ xs: "center", md: "space-evenly" }}
+        justifyContent={{ xs: "center", sm: "space-evenly" }}
         sx={{ py: { md: 20 }, pb: { xs: 0, md: 10 } }}
       >
         <Grid
@@ -418,46 +419,53 @@ export default function Customize() {
         <Grid
           item
           sx={{
-            pb: { xs: 5, md: 35 },
+            pb: { xs: 5, md: 34.5 },
           }}
         >
           <Grid container direction="column">
-            <Grid
-              item
-              sx={{ background: "rgba(255,228,0,0.8)", maxWidth: "100%" }}
-              className="noSelect"
-            >
-              <Typography
+            <Paper elevation={20}>
+              <Grid
+                item
                 sx={{
-                  textAlign: "center",
-                  color: "white",
-                  fontFamily: "Anton",
-                  fontSize: 45,
-                  mb: 1,
-                  backgroundColor: "black",
+                  background: "rgba(255,228,0,0.8)",
+                  borderRadius: "5px",
                   maxWidth: "100%",
+                  boxShadow: "3px 3px 24px 0.3px rgba(255,229,0,1)",
                 }}
-                ref={carNameTitleRef}
-                level="h3"
+                className="noSelect"
               >
-                {carName}
-              </Typography>
-              <LazyLoad>
-                <Box>
-                  <img
-                    src={robot}
-                    alt=""
-                    style={{
-                      width: "300px",
-                      display: "flex",
-                      justifyContent: "center",
-                      // animation: "rotating 10s linear infinite",
-                    }}
-                    className="noSelect"
-                  />
-                </Box>
-              </LazyLoad>
-            </Grid>
+                <Typography
+                  sx={{
+                    textAlign: "center",
+                    color: "white",
+                    fontFamily: "Anton",
+                    fontSize: 45,
+                    mb: 1,
+                    backgroundColor: "black",
+                    maxWidth: "100%",
+                  }}
+                  ref={carNameTitleRef}
+                  level="h3"
+                >
+                  {carName}
+                </Typography>
+                <LazyLoad>
+                  <Box>
+                    <img
+                      src={robot}
+                      alt=""
+                      style={{
+                        width: "40vh",
+                        display: "flex",
+                        justifyContent: "center",
+                        // animation: "rotating 10s linear infinite",
+                      }}
+                      className="noSelect"
+                    />
+                  </Box>
+                </LazyLoad>
+              </Grid>
+            </Paper>
           </Grid>
         </Grid>
       </Grid>

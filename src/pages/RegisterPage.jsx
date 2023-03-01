@@ -45,14 +45,14 @@ export default function RegisterPage() {
               sx={{
                 position: "absolute",
                 top: { xs: 45, lg: 90 },
-                mr: { lg: 8 },
+                mr: { lg: 15 },
                 // display: { xs: "none", lg: "flex" },
               }}
             >
               <img
                 src={logo}
-                width="300"
-                height="48"
+                width="320"
+                height="38"
                 alt=""
                 id="logo"
                 style={{
@@ -66,7 +66,7 @@ export default function RegisterPage() {
                   backgroundColor: "white",
                   p: 0.1,
                   minHeight: "30vmax",
-                  ml: 11,
+                  ml: 18,
                   mt: 5,
                   display: { xs: "none", md: "flex" },
                 }}

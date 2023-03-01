@@ -28,14 +28,11 @@ export default function GettingStartedTabs() {
   const bodyToBlack = useBodyColorChange();
   const tab = useRef();
   useEffect(() => {
-    bodyToBlack();
-  }, [bodyToBlack]);
-  useEffect(() => {
     const handleAnimation = () => {
       animHandler(tab, "animated", 3, tab);
     };
     handleAnimation();
-  }, [activeStep, animHandler]);
+  }, [activeStep, animHandler, bodyToBlack]);
   const handleStep = (step) => {
     stepHandler(step);
   };
@@ -44,11 +41,11 @@ export default function GettingStartedTabs() {
       <Grid
         container
         justifyContent="center"
-        direction={{ xs: "row", lg: "column" }}
+        direction={{ xs: "row", sm: "column" }}
         sx={{
-          height: "85vh",
-          maxWidth: { xs: "80%", lg: "95%" },
-          my: { xs: 5, lg: 0 },
+          height: "80vh",
+          maxWidth: { xs: "90%", lg: "95%" },
+          my: 5,
         }}
       >
         <Box sx={{ border: "0.5px white solid" }}>
