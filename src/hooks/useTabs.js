@@ -1,6 +1,8 @@
+import fifth from "../assets/GettingStarted/fifth.png";
 import first from "../assets/GettingStarted/first.jpg";
 import fourth from "../assets/GettingStarted/fourth.png";
 import second from "../assets/GettingStarted/second.jpg";
+import sixth from "../assets/GettingStarted/sixth.png";
 import third from "../assets/GettingStarted/third.jpg";
 export default function useTabs() {
   return [
@@ -45,6 +47,32 @@ export default function useTabs() {
         "Click on the 'ESP Settings' tab",
         "Scan for networks nearby",
         "Connect to a network and enjoy!",
+      ],
+    },
+    {
+      title: "Contacting Support",
+      content:
+        "If you are a client of a website and you encounter an issue or have a question that needs to be addressed, it's important to know how to contact the website's support team. Most websites have a dedicated support team that is available to assist users with any issues they may encounter.",
+      img: fifth,
+      steps: [
+        "Log in to your account",
+        "Open the SUPPORT tab",
+        "Create a new ticket",
+        "Click the SEND button",
+        "We will contact you soon!",
+      ],
+    },
+    {
+      title: "Start playing the game",
+      content:
+        "If you're eager to start playing a new game, you may be wondering how to get started. Luckily, most games have a simple process for getting started, and it usually involves downloading the game, creating an account, and launching the game. On our website, no additional resource needs to be downloaded since the game is played directly on the WEB.",
+      img: sixth,
+      steps: [
+        "Log in to your account",
+        "Open the home page",
+        "Click on 'PLAY'",
+        "Make sure ESP is connected to WiFi",
+        "Enjoy!",
       ],
     },
   ];

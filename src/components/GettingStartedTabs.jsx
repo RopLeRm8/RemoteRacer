@@ -44,16 +44,16 @@ export default function GettingStartedTabs() {
         direction={{ xs: "row", sm: "column" }}
         sx={{
           height: "80vh",
-          maxWidth: { xs: "90%", lg: "95%" },
+          maxWidth: "99%",
           my: 5,
         }}
       >
-        <Box sx={{ border: "0.5px white solid" }}>
+        <Box sx={{ border: "0.5px #ffe500 solid" }}>
           <Grid item>
             <Paper
               variant="elevation"
               elevation={1}
-              sx={{ borderRadius: "0px" }}
+              sx={{ borderRadius: "0px", background: "#ffe500" }}
             >
               <Typography
                 textAlign="center"
@@ -114,7 +114,9 @@ export default function GettingStartedTabs() {
                       }
                       StepIconProps={{ sx: { color: "white" } }}
                     >
-                      <Typography sx={{ color: "white" }}>{step}</Typography>
+                      <Typography fontFamily="Inter" sx={{ color: "white" }}>
+                        {step}
+                      </Typography>
                     </StepLabel>
                   </Step>
                 ))}
@@ -125,11 +127,17 @@ export default function GettingStartedTabs() {
               steps={6}
               position="static"
               activeStep={activeStep}
+              sx={{
+                background: "#ffe500",
+                ".MuiMobileStepper-dot": { backgroundColor: "black" },
+                ".MuiMobileStepper-dotActive": { backgroundColor: "orange" },
+              }}
               nextButton={
                 <Button
                   size="small"
                   onClick={() => handleStep("next")}
                   disabled={activeStep === 5}
+                  sx={{ color: "black" }}
                 >
                   Next
                   <KeyboardArrowRightIcon sx={{ mb: 0.55 }} />
@@ -140,6 +148,7 @@ export default function GettingStartedTabs() {
                   size="small"
                   onClick={() => handleStep("prev")}
                   disabled={activeStep === 0}
+                  sx={{ color: "black" }}
                 >
                   <KeyboardArrowLeftIcon sx={{ mb: 0.55 }} />
                   Back

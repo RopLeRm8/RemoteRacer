@@ -652,7 +652,7 @@ function Navbar() {
                   <Divider
                     sx={{
                       display: setting[0] === "ESP Settings" ? "flex" : "none",
-                      mx: 1,
+                      mx: 2,
                     }}
                   />
                 </Box>

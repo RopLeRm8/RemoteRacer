@@ -243,7 +243,7 @@ export default function Customize() {
               >
                 CAR CONFIGURATION
               </Typography>
-              <Divider sx={{ backgroundColor: "white", my: 2 }} />
+              <Divider sx={{ backgroundColor: "white", my: 2, mx: 0.5 }} />
               <Grid container direction="column" spacing={1}>
                 <Grid item>
                   <FormControl>
@@ -443,6 +443,7 @@ export default function Customize() {
                     mb: 1,
                     backgroundColor: "black",
                     maxWidth: "100%",
+                    borderRadius: "4px",
                   }}
                   ref={carNameTitleRef}
                   level="h3"
