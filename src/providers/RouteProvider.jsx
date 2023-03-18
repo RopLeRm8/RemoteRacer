@@ -6,11 +6,11 @@ import Box from "@mui/joy/Box";
 import { Alert, Backdrop } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import loading from "../assets/Route/loading.gif";
-import Dashboard from "../components/Dashboard";
 import WelcomePage from "../components/WelcomePage";
 import Centered from "../features/Centered";
 import AboutUs from "../pages/AboutUs";
 import Customize from "../pages/Customize";
+import Dashboard from "../pages/Dashboard";
 import Game from "../pages/Game";
 import Leaderboard from "../pages/Leaderboard";
 import LoginPage from "../pages/LoginPage";
@@ -45,10 +45,18 @@ export default function RouteProvider() {
   if (authLoading)
     return (
       <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
         open={true}
       >
-        <img src={loading} width="256" height="256" alt="" />
+        <img
+          src={loading}
+          style={{ filter: "invert(100%)" }}
+          width="256"
+          height="256"
+          alt=""
+        />
       </Backdrop>
     );
   return (

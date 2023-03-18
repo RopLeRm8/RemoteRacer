@@ -37,6 +37,8 @@ import "../css/Customize.css";
 import ScrollAnimation from "../features/ScrollAnimation";
 import { useNotification } from "../hooks/useNotification";
 // import Footer from "../layouts/Footer";
+import { CustomButtonJoy } from "../features/CustomButton";
+import LogoMaker from "../features/LogoMaker";
 import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
 const englishchars = /^[A-Za-z0-9 ]*$/;
@@ -161,17 +163,20 @@ export default function Customize() {
     });
   }, [carColor, carName, carNameError, writeLength, userRefDataUpdate, notify]);
 
-  const handlechangeColor = useCallback((nColor) => {
-    setcolorChosen(nColor);
-    carNameTitleRef.current.style.transition = "0.5s all ease-out";
-    carNameTitleRef.current.style.color = colorChosen;
-  }, []);
+  const handlechangeColor = useCallback(
+    (nColor) => {
+      setcolorChosen(nColor);
+      carNameTitleRef.current.style.transition = "0.5s all ease-out";
+      carNameTitleRef.current.style.color = colorChosen;
+    },
+    [colorChosen]
+  );
   return (
     <Box>
       <CssVarsProvider />
       <Navbar />
       <LazyLoad>
-        <Box sx={{ backgroundColor: "#ffe500", py: 6 }}>
+        <Box sx={{ backgroundColor: "rgba(0,0,0,0)", py: 6 }}>
           <video
             id="customize"
             src={CustomizeVideo}
@@ -183,12 +188,14 @@ export default function Customize() {
             sx={{
               display: "flex",
               justifyContent: "center",
-              color: "black",
+              color: "white",
               fontFamily: "Anton",
               mb: 2,
               textAlign: "center",
-              fontSize: "5.5vh",
+              fontSize: { xs: "180%", lg: "280%" },
+              ml: { xs: 2, lg: 0 },
             }}
+            endDecorator={<LogoMaker />}
           >
             Customize Your Dream Car
           </Typography>
@@ -197,7 +204,7 @@ export default function Customize() {
             sx={{
               display: "flex",
               justifyContent: "center",
-              color: "black",
+              color: "white",
               fontFamily: "Inter",
               textAlign: "center",
               mb: 1,
@@ -226,13 +233,13 @@ export default function Customize() {
             <Card
               sx={{
                 backgroundColor: "black",
-                boxShadow: "3px 3px 24px 0.3px rgba(255,229,0,1)",
+                boxShadow: "3px 3px 24px 0.3px orange",
               }}
               size="lg"
             >
               <Typography
                 sx={{
-                  color: "#ffe500",
+                  color: "white",
                   textAlign: "center",
                   fontSize: 25,
                   fontFamily: "Inter",
@@ -250,7 +257,7 @@ export default function Customize() {
                     <FormLabel>
                       <Typography
                         fontFamily="Inter"
-                        sx={{ color: "#ffe500" }}
+                        sx={{ color: "white" }}
                         startDecorator={<EditIcon sx={{ color: "white" }} />}
                       >
                         {"Car Name (" + writeLength + ")"}
@@ -276,7 +283,7 @@ export default function Customize() {
 
                 <Grid item>
                   <Typography
-                    sx={{ color: "#ffe500", fontFamily: "Inter", mb: 1 }}
+                    sx={{ color: "white", fontFamily: "Inter", mb: 1 }}
                     startDecorator={<PaletteIcon sx={{ color: "white" }} />}
                   >
                     Car Name Color
@@ -378,7 +385,7 @@ export default function Customize() {
                         fontWeight: 600,
                         fontSize: 13,
                         transition: "0.2s all ease-out",
-                        backgroundColor: "#ffe500",
+                        backgroundColor: "orange",
                       }}
                       startDecorator={<SettingsIcon />}
                       onClick={handleconfSave}
@@ -386,30 +393,21 @@ export default function Customize() {
                       fullWidth
                     />
                   ) : (
-                    <Button
+                    <CustomButtonJoy
                       variant="soft"
                       color="warning"
                       fullWidth
+                      text="SAVE CONFIGURATION"
                       sx={{
                         mt: 1,
-                        // width: carNameError ? "335px" : "270px",
                         borderRadius: "1",
                         fontFamily: "Inter",
                         fontWeight: 600,
                         fontSize: 13,
-                        transition: "0.2s all ease-out",
-                        backgroundColor: "rgba(255,228,0,0.8)",
-                        color: "black",
-                        "&:hover": {
-                          backgroundColor: "#ffe500",
-                          color: "black",
-                        },
                       }}
                       startDecorator={<SettingsIcon />}
-                      onClick={handleconfSave}
-                    >
-                      SAVE CONFIGURATION
-                    </Button>
+                      onClickFunc={handleconfSave}
+                    />
                   )}
                 </Grid>
               </Grid>
@@ -427,10 +425,10 @@ export default function Customize() {
               <Grid
                 item
                 sx={{
-                  background: "rgba(255,228,0,0.8)",
+                  background: "orange",
                   borderRadius: "5px",
                   maxWidth: "100%",
-                  boxShadow: "3px 3px 24px 0.3px rgba(255,229,0,1)",
+                  boxShadow: "3px 3px 24px 0.3px orange",
                 }}
                 className="noSelect"
               >

@@ -99,7 +99,7 @@ export default function Medals({ stamProfile }) {
               border: 0,
               backgroundColor: "rgba(0,0,0,0.7)",
               borderRadius: 10,
-              boxShadow: "0px 0px 25px 1px #ffe500",
+              boxShadow: "0px 0px 25px 1px orange",
             }}
           >
             <Card
@@ -117,14 +117,14 @@ export default function Medals({ stamProfile }) {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  color: "#ffe500",
+                  color: "white",
                   letterSpacing: { sm: 5 },
                   animation:
                     "tracking-in-expand 1s cubic-bezier(.215,.61,.355,1.000) both",
                 }}
               >
                 <EmojiEventsIcon
-                  sx={{ ml: 1, fontSize: 45, color: "#ffe500" }}
+                  sx={{ ml: 1, fontSize: 45, color: "orange" }}
                 />
                 ACHIEVEMENTS
               </Typography>
@@ -233,7 +233,7 @@ export default function Medals({ stamProfile }) {
                 sx={{
                   ml: 3,
                   fontSize: 25,
-                  color: "#ffe500",
+                  color: "white",
                   fontFamily: "Poppins",
                 }}
               >
@@ -245,11 +245,12 @@ export default function Medals({ stamProfile }) {
                 <Typography
                   dir="rtl"
                   sx={{
-                    fontFamily: "Montserrat",
-                    fontSize: 30,
+                    fontFamily: "Poppins",
+                    fontSize: "150%",
                     mt: 2,
                     mr: 3,
-                    color: "#ffe500",
+                    color: "orange",
+                    textAlign: "center",
                   }}
                 >
                   Good job! You've earned all the achievements so far

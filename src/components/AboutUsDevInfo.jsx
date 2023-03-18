@@ -10,7 +10,7 @@ export default function DevInfo() {
       container
       alignItems="center"
       direction="column"
-      sx={{ px: { xs: 5, sm: 10, md: 0, backgroundColor: "#ffe500" } }}
+      sx={{ px: { xs: 5, sm: 10, md: 0, backgroundColor: "black" } }}
     >
       {/* <AnimationContext animationName="animate__zoomIn"> */}
       <Grid item>
@@ -31,7 +31,7 @@ export default function DevInfo() {
       <Grid item>
         <Typography
           fontSize={{ xs: 12, sm: 20 }}
-          sx={{ textAlign: "center" }}
+          sx={{ textAlign: "center", color: "rgba(231,120,22,0.6)" }}
           fontFamily="Anton"
         >
           Our first and the only guy that works hard on the project to give you
@@ -44,7 +44,7 @@ export default function DevInfo() {
         <Typography
           fontFamily="Anton"
           fontSize={{ xs: 12, sm: 18 }}
-          sx={{ textAlign: "center" }}
+          sx={{ textAlign: "center", color: "rgba(231,120,22,0.6)" }}
         >
           Props to this guy for updating the website very frequently
         </Typography>
@@ -55,7 +55,11 @@ export default function DevInfo() {
         <Typography
           fontFamily="Anton"
           fontWeight={800}
-          sx={{ letterSpacing: 1, fontSize: "3vh" }}
+          sx={{
+            letterSpacing: 1,
+            fontSize: "3vh",
+            color: "rgba(230,120,21,0.8)",
+          }}
         >
           ilya
         </Typography>
@@ -66,7 +70,7 @@ export default function DevInfo() {
         <Typography
           fontFamily="Anton"
           fontWeight={300}
-          sx={{ letterSpacing: 3, fontSize: "3.5vh" }}
+          sx={{ letterSpacing: 3, fontSize: "3.5vh", color: "rgb(231,121,23)" }}
         >
           DEVELOPER
         </Typography>

@@ -75,7 +75,6 @@ export default function Profile() {
             backgroundImage: `url(${blackback})`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
-            height: "100%",
           }}
         >
           <ProfileInfo setstamProfile={setstamProfile} /> {/*מידע על המשתמש*/}
@@ -131,7 +130,7 @@ export default function Profile() {
                 <Typography
                   level="h2"
                   sx={{
-                    color: "#ffe500",
+                    color: "orange",
                     fontFamily: "Anton",
                     textAlign: "center",
                   }}
@@ -197,8 +196,8 @@ export default function Profile() {
                       mt: 10,
                     },
                     borderRadius: "50%",
-                    background: "linear-gradient(145deg, #cacaca, #ffe500)",
-                    boxShadow: "8px 8px 30px #ffe500,-8px -8px 30px #ffe500",
+                    background: "linear-gradient(145deg, #cacaca, orange)",
+                    boxShadow: "8px 8px 30px orange,-8px -8px 30px orange",
                   }}
                 >
                   <img src={points} width="166" height="166" alt="" />
@@ -208,7 +207,7 @@ export default function Profile() {
                 <Typography
                   level="h2"
                   sx={{
-                    color: "#ffe500",
+                    color: "orange",
                     fontFamily: "Anton",
                     textAlign: "center",
                   }}
@@ -243,7 +242,7 @@ export default function Profile() {
         <Stack
           direction="column"
           alignItems="center"
-          sx={{ mt: 3, background: "#ffe500" }}
+          sx={{ mt: 3, background: "orange" }}
         >
           <Typography
             sx={{

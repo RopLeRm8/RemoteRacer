@@ -19,7 +19,7 @@ import ScrollAnimation from "../features/ScrollAnimation";
 import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
 const backColor = "black";
-const secondaryColor = "#ffe500";
+const secondaryColor = "orange";
 const usersRef = ref(db, "users/");
 let arr = [];
 // const ENUM = {

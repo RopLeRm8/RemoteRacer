@@ -34,7 +34,9 @@ export default function Game() {
       setError(
         "ESP needs to have an access to the internet in order to play this game"
       );
-      return;
+      return () => {
+        document.body.classList.remove("nooverflow");
+      };
     }
     const onDocumentKeyDown = (event) => {
       if (camera === undefined) return;

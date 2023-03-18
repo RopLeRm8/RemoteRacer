@@ -61,10 +61,10 @@ export default function ProfileInfo({ setstamProfile }) {
           className="Card"
           sx={{
             border: "5",
-            borderColor: "#ffe500",
+            borderColor: "orange",
             backgroundColor: "rgba(0,0,0,0.3)",
             borderRadius: 7,
-            boxShadow: "0px 0px 10px 1px #ffe500",
+            boxShadow: "0px 0px 10px 1px orange",
           }}
           variant="outlined"
           ref={mainbox}
@@ -165,16 +165,15 @@ export default function ProfileInfo({ setstamProfile }) {
               </Grid>
               <Grid item sx={{ display: "flex", alignItems: "center", ml: 2 }}>
                 <IconButton
-                  color="warning"
                   onClick={() => setopenEditValue(true)}
                   sx={{
                     display: {
                       xs: "none",
                       md: "flex",
                       color: "black",
-                      backgroundColor: "#ffe500",
+                      backgroundColor: "orange",
                       "&:hover": {
-                        color: "#ffe500",
+                        color: "orange",
                         backgroundColor: "rgba(0,0,0,0)",
                       },
                       borderRadius: "20px",

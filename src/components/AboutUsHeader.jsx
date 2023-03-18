@@ -1,14 +1,16 @@
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import Person2RoundedIcon from "@mui/icons-material/Person2Rounded";
-import { Box, Button, CssVarsProvider, Grid, Typography } from "@mui/joy";
+import { Box, CssVarsProvider, Grid, Typography } from "@mui/joy";
 import { useNavigate } from "react-router-dom";
+import { CustomButtonJoy } from "../features/CustomButton";
+import LogoMaker from "../features/LogoMaker";
 export default function HeeaderAboutUs() {
   const navigate = useNavigate();
   return (
     <Box
       sx={{
         display: "flex",
-        backgroundColor: "#ffe500",
+        backgroundColor: "black",
         justifyContent: "center",
         pb: { xs: 5, md: 10 },
         pt: { xs: 5, md: 6 },
@@ -21,12 +23,19 @@ export default function HeeaderAboutUs() {
         spacing={{ md: 2 }}
         direction="column"
         alignItems="center"
+        justifyContent="center"
       >
         <Grid item>
           <Typography
-            dir="rtl"
             fontWeight={400}
-            sx={{ fontSize: "250%", fontFamily: "Anton" }}
+            sx={{
+              fontSize: "250%",
+              fontFamily: "Anton",
+              color: "white",
+              textAlign: "center",
+              ml: { xs: 4, lg: 0 },
+            }}
+            endDecorator={<LogoMaker />}
           >
             REMOTE RACER
           </Typography>
@@ -37,6 +46,7 @@ export default function HeeaderAboutUs() {
               fontFamily: "Anton",
               textAlign: "center",
               fontSize: "2.2vh",
+              color: "white",
             }}
           >
             We help you to do the first step into the new era that includes
@@ -49,6 +59,7 @@ export default function HeeaderAboutUs() {
               fontFamily: "Anton",
               textAlign: "center",
               fontSize: "2.2vh",
+              color: "rgba(255,255,255,0.7)",
             }}
           >
             The company provides fun and innovative technologies for free
@@ -56,48 +67,35 @@ export default function HeeaderAboutUs() {
         </Grid>
 
         <Grid item display="flex">
-          <Button
-            onClick={() => navigate("/")}
+          <CustomButtonJoy
+            onClickFunc={() => navigate("/")}
             startDecorator={<KeyboardBackspaceIcon />}
-            variant="solid"
-            color="neutral"
+            text="BACK TO MAIN PAGE"
             sx={{
               mt: 2,
               fontSize: "1.2vh",
-              fontFamily: "Poppins",
-              fontWeight: 300,
-              backgroundColor: "black",
+              fontFamily: "Montserrat",
+              fontWeight: 600,
               letterSpacing: 1,
-              "&:hover": {
-                backgroundColor: "white",
-                color: "black",
-              },
               mr: 3,
             }}
-          >
-            BACK TO MAIN PAGE
-          </Button>
-          <Button
-            onClick={() => navigate("/profile")}
+          />
+          <CustomButtonJoy
+            onClickFunc={() => navigate("/profile")}
             startDecorator={<Person2RoundedIcon />}
             variant="solid"
             color="neutral"
+            text="MY PROFILE"
             sx={{
               mt: 2,
               fontSize: "1.2vh",
-              fontFamily: "Poppins",
-              fontWeight: 300,
-              backgroundColor: "black",
+              fontFamily: "Montserrat",
+              fontWeight: 600,
               letterSpacing: 1,
-              "&:hover": {
-                backgroundColor: "white",
-                color: "black",
-              },
+              transition: "0.2s all ease-out",
               mr: { md: 3 },
             }}
-          >
-            MY PROFILE
-          </Button>
+          />
         </Grid>
       </Grid>
     </Box>

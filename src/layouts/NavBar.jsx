@@ -12,7 +12,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import React, { useCallback, useRef, useState } from "react";
 import logo from "../assets/Global/logo.png";
-import logoblack from "../assets/Global/logoblack.png";
 
 import { getAuth } from "@firebase/auth";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
@@ -141,7 +140,11 @@ function Navbar() {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = (page, pageName) => {
+  const handleCloseNavMenu = (e, page, pageName) => {
+    e.target.classList.add("clickAnimation");
+    setTimeout(() => {
+      e.target.classList.remove("clickAnimation");
+    }, 300);
     if (pageName === "MORE") {
       setIsRotated((prev) => !prev);
       if (anchorEl === null) {
@@ -263,7 +266,7 @@ function Navbar() {
       position="sticky"
       sx={{
         maxWidth: "100%",
-        bgcolor: "#ffe500",
+        bgcolor: "rgba(0,0,0,0)",
         animation:
           scrollTop > window.innerHeight * 0.2 ? "fadein 0.4s forwards" : null,
         animationDirection:
@@ -287,18 +290,13 @@ function Navbar() {
                 p: location.pathname === "/dashboard" ? 1 : 0,
               }}
             >
-              <img
-                src={location.pathname === "/dashboard" ? logo : logoblack}
-                width="267.8"
-                height="32"
-                alt=""
-              />
+              <img src={logo} style={{ maxWidth: "100%" }} height="32" alt="" />
             </Box>
           </a>
 
           <Box sx={{ flexGrow: 0.9, display: { xs: "flex", md: "none" } }}>
             <IconButton
-              sx={{ color: "black" }}
+              sx={{ color: "white" }}
               size="small"
               aria-label="account of current user"
               aria-controls="menu-appbar"
@@ -329,7 +327,7 @@ function Navbar() {
               {pages.map((page) => (
                 <MenuItem
                   key={page}
-                  onClick={() => handleCloseNavMenu(page[4], page[0])}
+                  onClick={(e) => handleCloseNavMenu(e, page[4], page[0])}
                 >
                   <IconButton
                     sx={{
@@ -422,21 +420,40 @@ function Navbar() {
           >
             {pages.map((page) => (
               <MUIButt
-                variant={location.pathname === page[4] ? "contained" : "text"}
+                variant={"text"}
                 color="inherit"
                 key={page}
                 startIcon={page[1]}
-                onClick={() => handleCloseNavMenu(page[4])}
+                onClick={(e) => handleCloseNavMenu(e, page[4])}
                 sx={{
                   fontFamily: "Poppins",
                   my: 2,
                   ml: 3,
                   px: { lg: 1.5 },
-                  color: location.pathname === page[4] ? "white" : "black",
-                  background: location.pathname === page[4] ? "black" : "",
-                  "&:hover": {
-                    background:
-                      location.pathname === page[4] ? "rgba(0,0,0,0.8)" : "",
+                  color: "white",
+                  position: "relative",
+                  "&::after": {
+                    content: "''",
+                    position: "absolute",
+                    width: "100%",
+                    height: "2px",
+                    bottom: 0,
+                    left: 0,
+                    backgroundColor: "orange",
+                    visibility:
+                      location.pathname === page[4] ? "visible" : "hidden",
+                    transform:
+                      location.pathname === page[4] ? "scaleX(1)" : "scaleX(0)",
+                    transition: "all 0.3s ease-in-out",
+                  },
+                  "&:hover::after": {
+                    visibility: "visible",
+                    transform: "scaleX(1)",
+                  },
+                  "&.active::after": {
+                    height: "100%",
+                    borderRadius: "2px",
+                    transformOrigin: "center",
                   },
                   fontSize: 16,
                   fontWeight: 500,
@@ -481,27 +498,49 @@ function Navbar() {
                   key={page[0]}
                 >
                   <MUIButt
-                    variant={
-                      location.pathname === page[4] ? "contained" : "text"
-                    }
+                    variant={"text"}
                     color="inherit"
                     ref={moreRef}
                     key={page}
-                    disabled={page[0] === "MORE" && isRotated}
                     startIcon={page[1]}
-                    onClick={() => handleCloseNavMenu(page[4], page[0])}
+                    onClick={(e) => handleCloseNavMenu(e, page[4], page[0])}
                     sx={{
                       fontFamily: "Poppins",
                       my: 2,
                       px: { lg: 1.5 },
                       ml: page[0] !== "Getting started" ? 2 : 0,
-                      color: location.pathname === page[4] ? "white" : "black",
-                      background: location.pathname === page[4] ? "black" : "",
+                      color: "white",
                       "&:hover": {
                         background:
                           location.pathname === page[4]
                             ? "rgba(0,0,0,0.8)"
                             : "rgba(0,0,0,0.1)",
+                      },
+                      position: "relative",
+                      "&::after": {
+                        content: "''",
+                        position: "absolute",
+                        width: "100%",
+                        height: "2px",
+                        bottom: 0,
+                        left: 0,
+                        backgroundColor: "orange",
+                        visibility:
+                          location.pathname === page[4] ? "visible" : "hidden",
+                        transform:
+                          location.pathname === page[4]
+                            ? "scaleX(1)"
+                            : "scaleX(0)",
+                        transition: "all 0.3s ease-in-out",
+                      },
+                      "&:hover::after": {
+                        visibility: "visible",
+                        transform: "scaleX(1)",
+                      },
+                      "&.active::after": {
+                        height: "100%",
+                        borderRadius: "2px",
+                        transformOrigin: "center",
                       },
                       fontWeight: 500,
                       fontSize: 16,

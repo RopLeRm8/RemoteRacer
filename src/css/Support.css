@@ -1,0 +1,7 @@
+.addBackgroundSupport{
+    background-image: url("../assets/Support/background.png");
+    background-size: 100% 135%;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-color: black;
+}

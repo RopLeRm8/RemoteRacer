@@ -15,12 +15,12 @@ import {
   ListItem,
   Typography,
 } from "@mui/joy";
-import { Button as MUIButton } from "@mui/material";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import background from "../assets/Dashboard/background.png";
 import "../css/Dashboard.css";
+import { CustomButton } from "../features/CustomButton";
 import NavBar from "../layouts/NavBar";
 
 const contacts = [
@@ -87,7 +87,7 @@ export default function Dashboard() {
                 justifyContent: "center",
               }}
             >
-              Welcome Back, {user?.displayName.split(" ")[0]}
+              Welcome Back, {user?.displayName?.split(" ")[0]}
             </Typography>
           </Grid>
           <Box
@@ -130,42 +130,44 @@ export default function Dashboard() {
           </Typography>
           <Grid
             container
-            direction={{ xs: "column", md: "row" }}
+            direction="column"
             alignItems="center"
+            spacing={2}
+            sx={{ mt: 1 }}
           >
             <Grid item>
-              <MUIButton
+              <CustomButton
                 variant="contained"
+                text="PLAY NOW"
                 sx={{
                   fontFamily: "Inter",
-                  fontSize: "2vh",
-                  mr: { md: 4 },
-                  mb: { xs: 4, md: 0 },
+                  fontSize: "1vmax",
+                  border: "2px solid white",
                 }}
-                color="success"
                 startIcon={<VideogameAssetIcon />}
-                onClick={() => navigate("/game")}
-              >
-                PLAY NOW
-              </MUIButton>
+                onClickFunc={() => navigate("/game")}
+              />
             </Grid>
             <Grid item>
-              <MUIButton
+              <CustomButton
                 variant="contained"
-                sx={{ fontFamily: "Inter", fontSize: "2vh" }}
+                text="ABOUT THE WEBSITE"
+                sx={{
+                  fontFamily: "Inter",
+                  fontSize: "1vmax",
+                  border: "2px solid white",
+                }}
                 startIcon={<InfoIcon />}
-                onClick={() => {
+                onClickFunc={() => {
                   navigate("/about");
                   window.scrollTo(0, 0);
                 }}
-              >
-                LEARN ABOUT THE WEBSITE
-              </MUIButton>
+              />
             </Grid>
           </Grid>
           <Typography
             fontFamily="Poppins"
-            sx={{ color: "white", fontSize: "1.5vmax" }}
+            sx={{ color: "white", fontSize: "1.5vmax", mt: 2 }}
           >
             OUR SOCIALS
           </Typography>
@@ -178,7 +180,10 @@ export default function Dashboard() {
                   variant="plain"
                   color="neutral"
                   sx={{
-                    color: cont.color,
+                    color: "white",
+                    "&:hover": {
+                      border: `2px ${cont.color} solid`,
+                    },
                   }}
                   onClick={() => window.open(cont.link)}
                 >

@@ -13,7 +13,7 @@ export default function AboutUsInfo() {
         sx={{
           display: "flex",
           justifyContent: "center",
-          color: "#ffe500",
+          color: "white",
           pt: 10,
           pb: 3,
           fontSize: "3vmax",

@@ -12,12 +12,27 @@
     animation-name: fadein;
     animation-duration: 0.3s;
 }
+.clickAnimation{
+    animation-name: zoomIn;
+    animation-duration: 0.3s;
+}
 @keyframes fadeslideout{
     from{
         opacity:"100%";
     }
     to{
         opacity: "5%";
+    }
+}
+@keyframes zoomIn{
+    0%{
+        transform: scale(1);
+    }
+    50%{
+        transform: scale(20);
+    }
+    100%{
+        transform: scale(1);
     }
 }
 @keyframes rotate {

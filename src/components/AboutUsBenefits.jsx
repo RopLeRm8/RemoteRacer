@@ -1,19 +1,14 @@
 import { Box, Grid, Tooltip, Typography } from "@mui/joy";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import LazyLoad from "react-lazyload";
 import CALENDAR from "../assets/AboutUs/CALENDAR.png";
 import KEYS from "../assets/AboutUs/KEY.png";
 import MAP from "../assets/AboutUs/MAP.png";
 
+import "../css/About.css";
 import { AboutContext } from "../pages/AboutUs";
 export default function AboutUsBenefits() {
   const AnimationContext = useContext(AboutContext);
-  useEffect(() => {
-    document.body.style.backgroundColor = "#ffe500";
-    return () => {
-      document.body.style.backgroundColor = "white";
-    };
-  }, []);
   return (
     <Box sx={{ mt: 5, backgroundColor: "black" }}>
       <Grid container direction="column">
@@ -21,7 +16,7 @@ export default function AboutUsBenefits() {
           <Typography
             fontFamily="Anton"
             sx={{
-              color: "#ffe500",
+              color: "white",
               display: "flex",
               justifyContent: "center",
               textAlign: "center",
@@ -37,7 +32,7 @@ export default function AboutUsBenefits() {
           <Typography
             fontFamily="Anton"
             sx={{
-              color: "#ffe500",
+              color: "white",
               display: "flex",
               justifyContent: "center",
               textAlign: "center",
@@ -49,7 +44,7 @@ export default function AboutUsBenefits() {
           </Typography>
         </AnimationContext>
       </Grid>
-      <AnimationContext animationName="animate__bounceIn">
+      <AnimationContext animationName="animate__fadeInUp">
         <Grid container justifyContent="space-evenly" sx={{ py: 3, pb: 5 }}>
           <Box
             sx={{

@@ -57,7 +57,7 @@
     -webkit-clip-path: polygon(0% 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 0% 100%);
   }
 }
-@keyframes rotationAndZoom {
+/* @keyframes rotationAndZoom {
   0% {
     transform: rotate(0deg);
   }
@@ -67,7 +67,7 @@
   100%{
     transform: scale(1.1);
   }
-}
+} */
 
 .addbg{
     background-image: url("../assets/LoginPageSignUpPage/backgroundSignUp.png");

@@ -6,16 +6,13 @@ Project Description
 
 ### Todo
 
+- [ ] Add ticket history to support page  
+- [ ] Redesign getting started (to be more interesting)  
+- [ ] Add getting started, support to the more tab in medium/large screens to navbar  
 - [ ] Finish game history page  
-- [ ] Finish help page  
-- [ ] Finish support page  
 - [ ] Finish the autocomplete  
-- [ ] (OPTIONALLY) Add displayname required on register  
-- [ ] STYLE IDEAS - In customize + tmuna, paper shape and bigger so it fits box on the left. In footer align bitches logos to left flex start or text align. In leaderboard hide email + place 1 2 3 badges medals icons and replace name icons and do fading animation by place from 3 to 1 toda. Box is shit + do margin  
 - [ ] Redesign leaderboard  
 - [ ] Fix google and github authentication methods  
-- [ ] Combine components to create pages folder  
-- [ ] Create custom mail verification message  
 - [ ] Finish adding custom hooks  
 - [ ] Fix shit stack error  
 - [ ] Add lazy module that optimizes the work of routing  
@@ -25,6 +22,9 @@ Project Description
 
 ### Done ✓
 
+- [x] Finish support page  
+- [x] Finish gettingStarted page  
+- [x] Combine components to create pages folder  
 - [x] Create canvas with a game  
 - [x] Fix ESP Config error that popups in console  
 - [x] In customize, fix so the color shows up and updates immediately  

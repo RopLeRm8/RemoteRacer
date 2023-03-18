@@ -66,7 +66,7 @@ export default function SignUp() {
   const notify = useNotification();
 
   const characters = "0123456789";
-  const sitekey = "6LdtZQwjAAAAAKNmmvSfw7SdiiiMMeq3Ls4q7_zn";
+  const SITEKEY = process.env.REACT_APP_CAPTCHA_SITEKEY;
   const strongRegex = new RegExp(
     "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,})"
   );
@@ -404,7 +404,7 @@ export default function SignUp() {
           <ReCAPTCHA
             ref={captcharef}
             hl={"en"}
-            sitekey={sitekey}
+            sitekey={SITEKEY}
             style={{
               display: captchaFinished ? "none" : "block",
             }}

@@ -1,7 +1,7 @@
 import { Box } from "@mui/joy";
 import { Skeleton } from "@mui/material";
 import "animate.css/animate.min.css";
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import LazyLoad from "react-lazyload";
 import ProfileCenter from "../assets/AboutUs/ProfileCenter.png";
 import AboutUsBenefits from "../components/AboutUsBenefits";
@@ -17,6 +17,12 @@ import Navbar from "../layouts/NavBar";
 export const AboutContext = createContext();
 
 export default function AboutUs() {
+  useEffect(() => {
+    document.body.style.backgroundColor = "black";
+    return () => {
+      document.body.style.backgroundColor = "black";
+    };
+  }, []);
   const [imgLoaded, setimgLoaded] = useState(false);
   return (
     <Box>
