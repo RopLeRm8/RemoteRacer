@@ -3,11 +3,14 @@ import {
   Avatar,
   Badge,
   Box,
+  CircularProgress,
   CssVarsProvider,
   Grid,
+  Modal,
+  ModalDialog,
   Typography,
 } from "@mui/joy";
-import { onValue, ref } from "firebase/database";
+import { get, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 // import trophy from "../assets/Leaderboard/trophy.png";
@@ -17,12 +20,14 @@ import PersonPinIcon from "@mui/icons-material/PersonPin";
 import "../css/Leaderboard.css";
 import LogoMaker from "../features/LogoMaker";
 import ScrollAnimation from "../features/ScrollAnimation";
+import { useNotification } from "../hooks/useNotification";
 import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
 const backColor = "black";
 const secondaryColor = "orange";
 const usersRef = ref(db, "users/");
 let arr = [];
+
 // const ENUM = {
 //   0: "hello",
 //   1: "Yo",
@@ -31,17 +36,29 @@ let arr = [];
 export default function Leaderboard() {
   const [user] = useAuthState(getAuth());
   const [usersData, setusersData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const notify = useNotification();
   useEffect(() => {
-    onValue(usersRef, (snapshot) => {
-      const data = snapshot.val();
-      for (const key in data) {
-        arr.push(data[key].data);
-      }
-      arr = arr.sort((a, b) => b.points - a.points);
-      arr = arr.slice(0, 3);
-      setusersData(arr.map((val, ind) => ({ ...val, index: ind })));
-    });
-  }, [user]);
+    setIsLoading(true);
+    get(usersRef)
+      .then((snapshot) => {
+        const data = snapshot.val();
+        arr = [];
+        for (const key in data) {
+          arr.push(data[key].data);
+        }
+        arr.sort((a, b) => b.points - a.points);
+        arr = arr.slice(0, 3);
+        setusersData(arr.map((val) => ({ ...val })));
+      })
+      .catch(() => {
+        notify("An error happened, try to reload the page");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [user, notify]);
+
   useEffect(() => {
     document.body.classList.add("addbgleaderboard");
     return () => {
@@ -52,59 +69,86 @@ export default function Leaderboard() {
     <>
       <Navbar />
       <CssVarsProvider />
+      <Box sx={{ backgroundColor: "rgba(0,0,0,0)", py: 6 }}>
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            color: "white",
+            fontFamily: "Anton",
+            mb: 2,
+            textAlign: "center",
+            fontSize: { xs: "180%", lg: "280%" },
+            ml: { xs: 2, lg: 0 },
+          }}
+          endDecorator={<LogoMaker />}
+        >
+          Leaderboard
+        </Typography>
+        <Typography
+          level="h6"
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            color: "white",
+            fontFamily: "Inter",
+            textAlign: "center",
+            mb: 1,
+          }}
+        >
+          A place where you can tell your friends you are place number 1
+        </Typography>
+      </Box>
       <Grid
         container
-        spacing={{ md: 2 }}
-        sx={{ py: 6 }}
         direction="column"
         alignItems="center"
-        justifyContent="center"
+        sx={{
+          py: 2,
+          mx: { xs: 2, sm: 5 },
+          display: isLoading ? "none" : "flex",
+        }}
       >
-        <Grid item>
-          <Typography
-            fontWeight={400}
-            sx={{
-              fontSize: "250%",
-              fontFamily: "Anton",
-              color: "white",
-              textAlign: "center",
-              ml: { xs: 4, lg: 0 },
-            }}
-            endDecorator={<LogoMaker />}
-          >
-            LEADERBOARD
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography
-            sx={{
-              fontFamily: "Anton",
-              textAlign: "center",
-              fontSize: "2.2vh",
-              color: "white",
-            }}
-          >
-            Seek for top players that lead the game right now
-          </Typography>
-        </Grid>
-      </Grid>
-      <ScrollAnimation animationName="animate__fadeInTopLeft">
-        <Grid
-          container
-          direction="column"
-          alignItems="center"
-          sx={{ background: "white", py: 2, mx: 5 }}
-        >
-          {usersData &&
-            arr.map((userData) => (
+        <Modal open={isLoading}>
+          <ModalDialog>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <CircularProgress sx={{ mr: 1 }} size="sm" color="warning" />
+              <Typography
+                sx={{
+                  color: "black",
+                  fontSize: "130%",
+                  fontFamily: "Poppins",
+                }}
+              >
+                Loading data...
+              </Typography>
+            </Box>
+          </ModalDialog>
+        </Modal>
+        {usersData?.map((userData) => (
+          <ScrollAnimation animationName="animate__fadeIn" key={userData.name}>
+            <Grid
+              container
+              direction={{ xs: "column", sm: "row" }}
+              alignItems="center"
+              justifyContent="center"
+              sx={{
+                mb: { xs: 1, sm: usersData.indexOf(userData) === 2 ? 0 : 3 },
+                mr: { sm: 5 },
+              }}
+            >
+              <Typography
+                fontFamily="Poppins"
+                sx={{ color: "white", mr: 2, fontSize: "150%" }}
+              >
+                {usersData.indexOf(userData) + 1}
+              </Typography>
               <Box
                 sx={{
                   backgroundColor: secondaryColor,
                   p: 2,
                   borderRadius: "10px",
-                  mb: 2,
                 }}
-                key={userData.name}
               >
                 <Grid
                   container
@@ -121,7 +165,7 @@ export default function Leaderboard() {
                     }}
                     startDecorator={<CasinoIcon />}
                   >
-                    3 points
+                    {Math.round(userData.points)}
                   </Typography>
                   <Badge
                     badgeContent={<PersonPinIcon />}
@@ -170,14 +214,16 @@ export default function Leaderboard() {
                   </Grid>
                 </Grid>
               </Box>
-            ))}
-        </Grid>
-        <Box>
-          <Typography fontSize="Anton">
-            {user.points ? "Your current points are " + user.points : null}
-          </Typography>
-        </Box>
-      </ScrollAnimation>
+            </Grid>
+          </ScrollAnimation>
+        ))}
+      </Grid>
+
+      <Box>
+        <Typography fontSize="Anton">
+          {user.points ? "Your current points are " + user.points : null}
+        </Typography>
+      </Box>
     </>
   );
 }
