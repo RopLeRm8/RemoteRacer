@@ -14,7 +14,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import CasinoIcon from "@mui/icons-material/Casino";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
-import Centered from "../features/Centered";
+import "../css/Leaderboard.css";
+import LogoMaker from "../features/LogoMaker";
 import ScrollAnimation from "../features/ScrollAnimation";
 import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
@@ -41,123 +42,142 @@ export default function Leaderboard() {
       setusersData(arr.map((val, ind) => ({ ...val, index: ind })));
     });
   }, [user]);
-
+  useEffect(() => {
+    document.body.classList.add("addbgleaderboard");
+    return () => {
+      document.body.classList.remove("addbgleaderboard");
+    };
+  }, []);
   return (
-    <Box sx={{ background: backColor }}>
+    <>
       <Navbar />
       <CssVarsProvider />
-      <ScrollAnimation animationName="animate__fadeInTopLeft">
-        <Centered
-          style={{ border: "1px white solid", p: 2, borderRadius: "8px" }}
-        >
+      <Grid
+        container
+        spacing={{ md: 2 }}
+        sx={{ py: 6 }}
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Grid item>
           <Typography
-            fontFamily="Anton"
+            fontWeight={400}
             sx={{
-              display: "flex",
-              justifyContent: "center",
+              fontSize: "250%",
+              fontFamily: "Anton",
               color: "white",
-              fontSize: "3vmax",
+              textAlign: "center",
+              ml: { xs: 4, lg: 0 },
             }}
+            endDecorator={<LogoMaker />}
           >
             LEADERBOARD
           </Typography>
+        </Grid>
+        <Grid item>
           <Typography
-            fontFamily="Inter"
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              color: "white",
+              fontFamily: "Anton",
               textAlign: "center",
-              fontSize: "2vmax",
+              fontSize: "2.2vh",
+              color: "white",
             }}
           >
-            See who leads now on our website
+            Seek for top players that lead the game right now
           </Typography>
-          <Grid container direction="column" alignItems="center">
-            {usersData &&
-              arr.map((userData) => (
-                <Box
-                  sx={{
-                    backgroundColor: secondaryColor,
-                    p: 2,
-                    borderRadius: "10px",
-                    mb: 2,
-                  }}
-                  key={userData.name}
+        </Grid>
+      </Grid>
+      <ScrollAnimation animationName="animate__fadeInTopLeft">
+        <Grid
+          container
+          direction="column"
+          alignItems="center"
+          sx={{ background: "white", py: 2, mx: 5 }}
+        >
+          {usersData &&
+            arr.map((userData) => (
+              <Box
+                sx={{
+                  backgroundColor: secondaryColor,
+                  p: 2,
+                  borderRadius: "10px",
+                  mb: 2,
+                }}
+                key={userData.name}
+              >
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-evenly"
+                  alignItems="center"
                 >
-                  <Grid
-                    container
-                    direction="row"
-                    justifyContent="space-evenly"
-                    alignItems="center"
+                  <Typography
+                    sx={{
+                      color: backColor,
+                      mr: 3,
+                      fontFamily: "Poppins",
+                      fontWeight: 500,
+                    }}
+                    startDecorator={<CasinoIcon />}
                   >
+                    3 points
+                  </Typography>
+                  <Badge
+                    badgeContent={<PersonPinIcon />}
+                    size="sm"
+                    color="warning"
+                    variant="outlined"
+                  >
+                    <Avatar
+                      src={userData.photoURL}
+                      sx={{
+                        "--Avatar-ringSize": "4px",
+                        "--Avatar-size": "52px",
+                      }}
+                    />
+                  </Badge>
+                  <Grid container direction="column">
                     <Typography
+                      key={userData.name}
                       sx={{
                         color: backColor,
-                        mr: 3,
-                        fontFamily: "Poppins",
+                        ml: 3,
+                        fontFamily: "Inter",
                         fontWeight: 500,
                       }}
-                      startDecorator={<CasinoIcon />}
+                      startDecorator={<PersonPinIcon />}
                     >
-                      3 points
+                      {userData.name || "[No name]"}
                     </Typography>
-                    <Badge
-                      badgeContent={<PersonPinIcon />}
-                      size="sm"
-                      color="warning"
-                      variant="outlined"
+                    <Typography
+                      sx={{
+                        color: userData.carColor
+                          ? userData.carColor
+                          : backColor,
+                        ml: 3,
+                        fontFamily: "Inter",
+                        fontWeight: 500,
+                        display: userData.carName ? "flex" : "none",
+                        WebkitTextStroke: "0.2px black",
+                      }}
+                      startDecorator={
+                        <DirectionsCarIcon sx={{ color: backColor }} />
+                      }
                     >
-                      <Avatar
-                        src={userData.photoURL}
-                        sx={{
-                          "--Avatar-ringSize": "4px",
-                          "--Avatar-size": "52px",
-                        }}
-                      />
-                    </Badge>
-                    <Grid container direction="column">
-                      <Typography
-                        key={userData.name}
-                        sx={{
-                          color: backColor,
-                          ml: 3,
-                          fontFamily: "Inter",
-                          fontWeight: 500,
-                        }}
-                        startDecorator={<PersonPinIcon />}
-                      >
-                        {userData.name || "[No name]"}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          color: userData.carColor
-                            ? userData.carColor
-                            : backColor,
-                          ml: 3,
-                          fontFamily: "Inter",
-                          fontWeight: 500,
-                          display: userData.carName ? "flex" : "none",
-                          WebkitTextStroke: "0.2px black",
-                        }}
-                        startDecorator={
-                          <DirectionsCarIcon sx={{ color: backColor }} />
-                        }
-                      >
-                        {userData.carName}
-                      </Typography>
-                    </Grid>
+                      {userData.carName}
+                    </Typography>
                   </Grid>
-                </Box>
-              ))}
-          </Grid>
-          <Box>
-            <Typography fontSize="Anton">
-              {user.points ? "Your current points are " + user.points : null}
-            </Typography>
-          </Box>
-        </Centered>
+                </Grid>
+              </Box>
+            ))}
+        </Grid>
+        <Box>
+          <Typography fontSize="Anton">
+            {user.points ? "Your current points are " + user.points : null}
+          </Typography>
+        </Box>
       </ScrollAnimation>
-    </Box>
+    </>
   );
 }

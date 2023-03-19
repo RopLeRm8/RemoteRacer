@@ -482,7 +482,7 @@ function Navbar() {
             <Box
               sx={{
                 flexGrow: -5,
-                display: { xs: "none", xl: "flex" },
+                display: { xs: "none", lg: "flex" },
                 justifyContent: "center",
                 alignItems: "center",
                 mx: 1,
