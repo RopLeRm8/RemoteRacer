@@ -69,7 +69,13 @@ export default function Leaderboard() {
     <>
       <Navbar />
       <CssVarsProvider />
-      <Box sx={{ backgroundColor: "rgba(0,0,0,0)", py: 6 }}>
+      <Box
+        sx={{
+          backgroundColor: "rgba(0,0,0,0)",
+          pb: { xs: 5, md: 4 },
+          pt: { xs: 5, md: 10 },
+        }}
+      >
         <Typography
           sx={{
             display: "flex",
@@ -83,10 +89,9 @@ export default function Leaderboard() {
           }}
           endDecorator={<LogoMaker />}
         >
-          Leaderboard
+          LEADERBOARD
         </Typography>
         <Typography
-          level="h6"
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -94,9 +99,11 @@ export default function Leaderboard() {
             fontFamily: "Inter",
             textAlign: "center",
             mb: 1,
+            fontSize: "140%",
+            mx: 2,
           }}
         >
-          A place where you can tell your friends you are place number 1
+          A place where you can tell your friends you are place number one
         </Typography>
       </Box>
       <Grid
@@ -126,7 +133,11 @@ export default function Leaderboard() {
           </ModalDialog>
         </Modal>
         {usersData?.map((userData) => (
-          <ScrollAnimation animationName="animate__fadeIn" key={userData.name}>
+          <ScrollAnimation
+            animationName="animate__fadeIn"
+            key={userData.carName + userData.name}
+            sx={{ width: "100%" }}
+          >
             <Grid
               container
               direction={{ xs: "column", sm: "row" }}
@@ -134,28 +145,82 @@ export default function Leaderboard() {
               justifyContent="center"
               sx={{
                 mb: { xs: 1, sm: usersData.indexOf(userData) === 2 ? 0 : 3 },
-                mr: { sm: 5 },
               }}
             >
-              <Typography
-                fontFamily="Poppins"
-                sx={{ color: "white", mr: 2, fontSize: "150%" }}
-              >
-                {usersData.indexOf(userData) + 1}
-              </Typography>
               <Box
                 sx={{
                   backgroundColor: secondaryColor,
                   p: 2,
                   borderRadius: "10px",
+                  width: "35vmax",
                 }}
               >
                 <Grid
                   container
-                  direction="row"
-                  justifyContent="space-evenly"
+                  direction={{ xs: "column", sm: "row" }}
+                  justifyContent={{ xs: "center", sm: "space-between" }}
                   alignItems="center"
+                  spacing={-1}
                 >
+                  <Grid
+                    container
+                    direction={{ xs: "column", sm: "row" }}
+                    alignItems="center"
+                    justifyContent="center"
+                    gap={3}
+                  >
+                    <Typography
+                      fontFamily="Poppins"
+                      sx={{ color: "black", fontSize: "150%" }}
+                    >
+                      {usersData.indexOf(userData) + 1}
+                    </Typography>
+                    <Badge
+                      badgeContent={<PersonPinIcon />}
+                      size="sm"
+                      color="warning"
+                      variant="outlined"
+                    >
+                      <Avatar
+                        src={userData.photoURL}
+                        sx={{
+                          "--Avatar-ringSize": "4px",
+                          "--Avatar-size": "52px",
+                        }}
+                      />
+                    </Badge>
+                    <Grid container direction="column" justifyContent="center">
+                      <Typography
+                        key={userData.name}
+                        sx={{
+                          color: backColor,
+                          ml: { sm: 3 },
+                          fontFamily: "Inter",
+                          fontWeight: 500,
+                        }}
+                        startDecorator={<PersonPinIcon />}
+                      >
+                        {userData.name || "[No name]"}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: userData.carColor
+                            ? userData.carColor
+                            : backColor,
+                          ml: { sm: 3 },
+                          fontFamily: "Inter",
+                          fontWeight: 500,
+                          // display: userData.carName ? "flex" : "none",
+                          WebkitTextStroke: "0.2px black",
+                        }}
+                        startDecorator={
+                          <DirectionsCarIcon sx={{ color: backColor }} />
+                        }
+                      >
+                        {userData.carName ? userData.carName : "[NONE]"}
+                      </Typography>
+                    </Grid>
+                  </Grid>
                   <Typography
                     sx={{
                       color: backColor,
@@ -165,53 +230,8 @@ export default function Leaderboard() {
                     }}
                     startDecorator={<CasinoIcon />}
                   >
-                    {Math.round(userData.points)}
+                    {Math.round(userData.points * 1000)}
                   </Typography>
-                  <Badge
-                    badgeContent={<PersonPinIcon />}
-                    size="sm"
-                    color="warning"
-                    variant="outlined"
-                  >
-                    <Avatar
-                      src={userData.photoURL}
-                      sx={{
-                        "--Avatar-ringSize": "4px",
-                        "--Avatar-size": "52px",
-                      }}
-                    />
-                  </Badge>
-                  <Grid container direction="column">
-                    <Typography
-                      key={userData.name}
-                      sx={{
-                        color: backColor,
-                        ml: 3,
-                        fontFamily: "Inter",
-                        fontWeight: 500,
-                      }}
-                      startDecorator={<PersonPinIcon />}
-                    >
-                      {userData.name || "[No name]"}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: userData.carColor
-                          ? userData.carColor
-                          : backColor,
-                        ml: 3,
-                        fontFamily: "Inter",
-                        fontWeight: 500,
-                        display: userData.carName ? "flex" : "none",
-                        WebkitTextStroke: "0.2px black",
-                      }}
-                      startDecorator={
-                        <DirectionsCarIcon sx={{ color: backColor }} />
-                      }
-                    >
-                      {userData.carName}
-                    </Typography>
-                  </Grid>
                 </Grid>
               </Box>
             </Grid>
@@ -219,11 +239,11 @@ export default function Leaderboard() {
         ))}
       </Grid>
 
-      <Box>
+      {/* <Box>
         <Typography fontSize="Anton">
           {user.points ? "Your current points are " + user.points : null}
         </Typography>
-      </Box>
+      </Box> */}
     </>
   );
 }

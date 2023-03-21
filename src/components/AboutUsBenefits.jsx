@@ -53,6 +53,7 @@ export default function AboutUsBenefits() {
               borderRadius: 15,
               mx: 1,
               mb: { xs: 1, sm: 0 },
+              width: { xs: "50%", md: "18%" },
             }}
           >
             <LazyLoad>
@@ -96,7 +97,8 @@ export default function AboutUsBenefits() {
               p: 5,
               borderRadius: 15,
               mx: 1,
-              mb: { xs: 1, sm: 0 },
+              my: { xs: 4, md: 0 },
+              width: { xs: "50%", md: "18%" },
             }}
           >
             <LazyLoad>
@@ -135,7 +137,13 @@ export default function AboutUsBenefits() {
             </Grid>
           </Box>
           <Box
-            sx={{ backgroundColor: "#103c8c", p: 5, borderRadius: 15, mx: 1 }}
+            sx={{
+              backgroundColor: "#103c8c",
+              p: 5,
+              borderRadius: 15,
+              mx: 1,
+              width: { xs: "50%", md: "18%" },
+            }}
           >
             <LazyLoad>
               <Box

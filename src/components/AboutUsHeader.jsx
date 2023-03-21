@@ -29,7 +29,7 @@ export default function HeeaderAboutUs() {
           <Typography
             fontWeight={400}
             sx={{
-              fontSize: "250%",
+              fontSize: "4vh",
               fontFamily: "Anton",
               color: "white",
               textAlign: "center",
@@ -45,7 +45,7 @@ export default function HeeaderAboutUs() {
             sx={{
               fontFamily: "Anton",
               textAlign: "center",
-              fontSize: "2.2vh",
+              fontSize: "2vh",
               color: "white",
             }}
           >
@@ -58,7 +58,7 @@ export default function HeeaderAboutUs() {
             sx={{
               fontFamily: "Anton",
               textAlign: "center",
-              fontSize: "2.2vh",
+              fontSize: "2vh",
               color: "rgba(255,255,255,0.7)",
             }}
           >

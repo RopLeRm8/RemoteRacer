@@ -1,8 +1,8 @@
-import { Box } from "@mui/joy";
+import { Box, Grid } from "@mui/joy";
 
 export default function LogoMaker() {
   return (
-    <Box sx={{ display: "flex", alignItems: "center" }}>
+    <Grid sx={{ display: "flex", alignItems: "center" }}>
       <Box
         sx={{
           background: "rgb(231,121,23)",
@@ -40,6 +40,6 @@ export default function LogoMaker() {
       >
         g
       </Box>
-    </Box>
+    </Grid>
   );
 }

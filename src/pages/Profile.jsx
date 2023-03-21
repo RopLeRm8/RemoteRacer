@@ -5,10 +5,10 @@ import { CssVarsProvider, Stack } from "@mui/joy";
 import Typography from "@mui/joy/Typography";
 import { Box, Rating } from "@mui/material";
 import { child, get, ref, update } from "firebase/database";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import blackback from "../assets/Profile/blackback.png";
-import blackback2 from "../assets/Profile/blackback2.png";
+import blackback from "../assets/Profile/blackback.svg";
+// import blackback2 from "../assets/Profile/blackback2.svg";
 import dices from "../assets/Profile/dices.png";
 import points from "../assets/Profile/points.png";
 import Medals from "../components/Medals";
@@ -28,7 +28,7 @@ const rateToText = [
   "Good",
   "Very Good",
 ];
-const query = ref(db);
+
 export default function Profile() {
   const [stamProfile, setstamProfile] = useState(false);
   const [user] = useAuthState(getAuth());
@@ -37,20 +37,11 @@ export default function Profile() {
   const userData = `users/${user.uid}/data`;
   const notify = useNotification();
 
-  useEffect(() => {
-    get(child(query, userData))
-      .then((snapshot) => {
-        snapshot && snapshot.val().rating && setValue(snapshot.val().rating);
-      })
-      .catch(() => {
-        useNotification("Couldnt load player's data!", { variant: "error" });
-      });
+  const bodyRef = useRef(document.body);
 
-    document.body.style.backgroundColor = "black";
-    return () => {
-      document.body.style.backgroundColor = "white";
-    };
-  }, [userData]);
+  useEffect(() => {
+    bodyRef.current.style.backgroundColor = "black";
+  }, []);
 
   const handleValueChange = useCallback(
     (_, nValue) => {
@@ -64,6 +55,17 @@ export default function Profile() {
     },
     [userRefData, notify]
   );
+
+  useEffect(() => {
+    const ratingRef = child(ref(db, userData), "rating");
+    get(ratingRef)
+      .then((snapshot) => {
+        snapshot.exists() && setValue(snapshot.val());
+      })
+      .catch(() => {
+        notify("Couldnt load player's data!", { variant: "error" });
+      });
+  }, [userData, notify]);
 
   return (
     <Box>
@@ -83,7 +85,7 @@ export default function Profile() {
       </LazyLoad>
       <Box
         sx={{
-          backgroundImage: `url(${blackback2})`,
+          // backgroundImage: `url(${blackback2})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundAttachment: "fixed",
@@ -108,16 +110,13 @@ export default function Profile() {
             <Stack
               justifyContent="space-around"
               alignItems="center"
-              direction={{ xs: "column", sm: "column", md: "row-reverse" }}
-              spacing={{ xs: 1, sm: 3, md: 0 }}
+              direction={{ xs: "column", md: "row-reverse" }}
+              spacing={{ xs: 3, sm: 3, md: 0 }}
+              sx={{ mt: { xs: 5, md: 10 } }}
             >
               <LazyLoad>
                 <Box
                   sx={{
-                    "@media screen and (min-width: 90em)": {
-                      mt: 10,
-                    },
-
                     borderRadius: "50%",
                     background: "linear-gradient(145deg, #cacaca, #ffffff)",
                     boxShadow: "8px 8px 30px #ffffff,-8px -8px 30px #ffffff",
@@ -150,34 +149,11 @@ export default function Profile() {
             </Stack>
           </ScrollAnimation>
         </Box>
+
         <Box
           sx={{
             width: "100%",
-            height: "5vh",
-            display: "flex",
-            background: "linear-gradient(to bottom, black, transparent)",
-            "&::before": {
-              position: "absolute",
-              bottom: 0,
-              width: "100%",
-              height: "100px",
-            },
-          }}
-        />
-        <Box>
-          <Box
-            sx={{
-              mt: 10,
-              height: "20vh",
-              display: "flex",
-              background: "linear-gradient(to top, black, transparent)",
-            }}
-          />
-        </Box>
-        <Box
-          sx={{
-            width: "100%",
-            height: "45vh",
+            height: "30vh",
             background: "black",
             opacity: 0.9,
           }}
@@ -186,15 +162,12 @@ export default function Profile() {
             <Stack
               justifyContent="space-around"
               alignItems="center"
-              direction={{ xs: "column", sm: "column", md: "row-reverse" }}
-              spacing={{ xs: 1, sm: 3, md: 5 }}
+              direction={{ xs: "column", md: "row-reverse" }}
+              spacing={{ xs: 3, sm: 3, md: 5 }}
             >
               <LazyLoad>
                 <Box
                   sx={{
-                    "@media screen and (min-width: 90em)": {
-                      mt: 10,
-                    },
                     borderRadius: "50%",
                     background: "linear-gradient(145deg, #cacaca, orange)",
                     boxShadow: "8px 8px 30px orange,-8px -8px 30px orange",
@@ -224,21 +197,7 @@ export default function Profile() {
             </Stack>
           </ScrollAnimation>
         </Box>
-        <Box
-          sx={{
-            width: "100%",
-            height: "5vh",
-            display: "flex",
-            background: "linear-gradient(to bottom, black, transparent)",
-            opacity: "80%",
-            "&::before": {
-              position: "absolute",
-              bottom: 0,
-              width: "100%",
-              height: "100px",
-            },
-          }}
-        />
+
         <Stack
           direction="column"
           alignItems="center"

@@ -1,7 +1,10 @@
 .addBackgroundSupport{
-    background-image: url("../assets/Support/background.png");
-    background-size: 100% 135%;
-    background-position: center top;
+    background-image: url("../assets/Support/background.svg");
     background-repeat: no-repeat;
+    background-size: cover;
     background-color: black;
+}
+@keyframes fadeIn {
+    from{opacity: 0%;}
+    to{opacity: 100%;}
 }

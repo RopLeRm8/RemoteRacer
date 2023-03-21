@@ -1,10 +1,12 @@
 import CircleIcon from "@mui/icons-material/Circle";
 import CrisisAlertIcon from "@mui/icons-material/CrisisAlert";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
-import { Box, Divider, Modal, ModalDialog, Typography } from "@mui/joy";
+import { Box, Divider, Typography } from "@mui/joy";
 import { LoadingButton } from "@mui/lab";
+import { Dialog, DialogContent } from "@mui/material";
 import { useContext, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import "../css/Support.css";
 import { CustomButton } from "../features/CustomButton";
 import useSendTicket from "../hooks/useSendTicket";
 import { iconsContext } from "../pages/ContactUs";
@@ -20,24 +22,25 @@ export default function ConfirmModal({ finished, setFinished, formData }) {
   const captchaRef = useRef();
   const eNums = useContext(iconsContext);
   return (
-    <Modal open={finished}>
-      <ModalDialog
+    <Dialog open={finished}>
+      <DialogContent
         sx={{
-          minWidth: { xs: "90%", lg: "22%" },
-          maxWidth: { xs: "90%", lg: "30%" },
+          minWidth: { xs: "90%", lg: "2%" },
           borderRadius: "4px",
+          animation: "fadeIn 0.1s ease-out forwards",
+          zIndex: 1300,
+          wordBreak: "break-word",
         }}
       >
         <Typography
           sx={{
             fontFamily: "Poppins",
-            fontSize: "120%",
+            fontSize: "140%",
             textAlign: "center",
-            fontWeight: 700,
             mb: 2,
           }}
         >
-          Confirm the message
+          New Ticket
         </Typography>
         <Divider sx={{ mx: 0.5, py: 0.1, my: 1, backgroundColor: "black" }} />
         <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
@@ -65,7 +68,6 @@ export default function ConfirmModal({ finished, setFinished, formData }) {
           sx={{
             color: impLevelColors[formData?.severLevel],
             mt: 1.5,
-            fontWeight: 600,
             fontFamily: "Inter",
           }}
         >
@@ -97,18 +99,16 @@ export default function ConfirmModal({ finished, setFinished, formData }) {
               fullWidth
               sx={{ mr: 1 }}
             >
-              Send it
+              Sending
             </LoadingButton>
           ) : (
             <CustomButton
               fullWidth
               variant="contained"
-              text="Send it"
+              text="Send"
               sx={{ mr: 1 }}
               onClickFunc={() => sendEmail(formData, eNums, captchaRef)}
-            >
-              Send it
-            </CustomButton>
+            />
           )}
 
           <CustomButton
@@ -120,7 +120,7 @@ export default function ConfirmModal({ finished, setFinished, formData }) {
             Go back
           </CustomButton>
         </Box>
-      </ModalDialog>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 }

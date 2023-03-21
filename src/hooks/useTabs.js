@@ -1,9 +1,9 @@
 import fifth from "../assets/GettingStarted/fifth.png";
-import first from "../assets/GettingStarted/first.jpg";
+import first from "../assets/GettingStarted/first.png";
 import fourth from "../assets/GettingStarted/fourth.png";
-import second from "../assets/GettingStarted/second.jpg";
+import second from "../assets/GettingStarted/second.png";
 import sixth from "../assets/GettingStarted/sixth.png";
-import third from "../assets/GettingStarted/third.jpg";
+import third from "../assets/GettingStarted/third.png";
 export default function useTabs() {
   return [
     {

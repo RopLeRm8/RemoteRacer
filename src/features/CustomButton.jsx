@@ -5,7 +5,7 @@ const defaultSx = {
   background: "orange",
   color: "black",
   border: "2px solid white",
-  "&:hover": { background: "white" },
+  "&:hover": { background: "white", letterSpacing: "0.05rem" },
 };
 export function CustomButton(props) {
   const { text, onClickFunc, sx = {}, style, ...rest } = props;

@@ -8,6 +8,12 @@ export function useNotification() {
       message = `[${options.variant.toUpperCase()}] ${message}`;
       return enqueueSnackbar(message, {
         ...options,
+        sx: {
+          "& .SnackbarContent-root": {
+            zIndex: 1350,
+            //width: 600
+          },
+        },
         action: (key) => (
           <Button
             onClick={() => closeSnackbar(key)}

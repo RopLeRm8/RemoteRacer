@@ -80,32 +80,39 @@ export default function ContactUsForm({ setFinished, setFormData }) {
   return (
     <Grid container direction="column" alignItems="center">
       <CssVarsProvider />
-      <Box sx={{ background: "rgba(0,0,0,0)", width: "100%" }}>
+      <Box
+        sx={{
+          background: "rgba(0,0,0,0)",
+          width: "100%",
+          pb: { md: 4 },
+          pt: { md: 2 },
+        }}
+      >
         <Typography
           sx={{
             fontFamily: "Anton",
-            fontSize: "5vh",
+            fontSize: "4vh",
             color: "white",
             display: "flex",
             justifyContent: { xs: "center", md: "center" },
-            mt: 4,
             textAlign: "center",
+            mt: 4,
             ml: { xs: 3, lg: 0 },
           }}
           endDecorator={<LogoMaker />}
         >
-          Contact Us
+          CONTACT US
         </Typography>
         <Typography
           sx={{
-            fontFamily: "Poppins",
+            fontFamily: "Anton",
             fontSize: "2vh",
             color: "white",
             display: "flex",
             justifyContent: "center",
             textAlign: "center",
             mb: 6,
-            mx: 1,
+            mx: 2,
           }}
         >
           If you feel you need an assistance with anything on our platform, feel

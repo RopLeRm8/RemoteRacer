@@ -13,7 +13,6 @@ import {
   Typography,
 } from "@mui/material";
 import { child, get, ref } from "firebase/database";
-import { useSnackbar } from "notistack";
 import React, { useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import firstSetup from "../assets/Medals/firstSetup.png";
@@ -23,6 +22,7 @@ import place3 from "../assets/Medals/place3.png";
 import playFirstGame from "../assets/Medals/playFirstGame.png";
 import scoreMoreThan100 from "../assets/Medals/scoreMoreThan100.png";
 import "../css/Medals.css";
+import { useNotification } from "../hooks/useNotification";
 import { db } from "../providers/FirebaseProvider";
 
 const query = ref(db);
@@ -48,7 +48,7 @@ export default function Medals({ stamProfile }) {
   const [user] = useAuthState(getAuth());
   const userRefDB = `users/${user.uid}/achievements`;
   const mainbox = useRef();
-  const { enqueueSnackbar } = useSnackbar();
+  const notify = useNotification();
 
   useEffect(() => {
     get(child(query, userRefDB))
@@ -66,9 +66,9 @@ export default function Medals({ stamProfile }) {
         [totalMedals, medalsList]
       )
       .catch(() => {
-        enqueueSnackbar("Couldn't load medals!", { variant: "error" });
+        notify("Couldn't load medals!", { variant: "error" });
       });
-  }, [medalsList, totalMedals, userRefDB, stamProfile, enqueueSnackbar]);
+  }, [stamProfile]);
 
   return (
     <Grow in={true}>

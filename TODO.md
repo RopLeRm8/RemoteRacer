@@ -6,12 +6,11 @@ Project Description
 
 ### Todo
 
+- [ ] (OPTIONAL) Build own ticket system where you can answer to people's tickets fast. People will see those tickets updated after that  
 - [ ] Add ticket history to support page  
-- [ ] Redesign getting started (to be more interesting)  
 - [ ] Add getting started, support to the more tab in medium/large screens to navbar  
 - [ ] Finish game history page  
 - [ ] Finish the autocomplete  
-- [ ] Redesign leaderboard  
 - [ ] Fix google and github authentication methods  
 - [ ] Finish adding custom hooks  
 - [ ] Fix shit stack error  
@@ -22,6 +21,8 @@ Project Description
 
 ### Done ✓
 
+- [x] Redesign getting started (to be more interesting)  
+- [x] Redesign leaderboard  
 - [x] Finish support page  
 - [x] Finish gettingStarted page  
 - [x] Combine components to create pages folder  

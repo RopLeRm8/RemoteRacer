@@ -17,7 +17,6 @@ import LazyLoad from "react-lazyload";
 import "../css/GettingStarted.css";
 import LogoMaker from "../features/LogoMaker";
 import useAddAnimation from "../hooks/useAddAnimation";
-import useBodyColorChange from "../hooks/useBodyColorChange";
 import useStepHandler from "../hooks/useStepHandler";
 import useTabs from "../hooks/useTabs";
 
@@ -26,25 +25,39 @@ export default function GettingStartedTabs() {
   const [activeStep, setactiveStep] = useState(0);
   const stepHandler = useStepHandler(setactiveStep);
   const animHandler = useAddAnimation();
-  const bodyToBlack = useBodyColorChange();
   const tab = useRef();
   useEffect(() => {
     const handleAnimation = () => {
       animHandler(tab, "animated", 3, tab);
     };
     handleAnimation();
-  }, [activeStep, animHandler, bodyToBlack]);
+  }, [activeStep, animHandler]);
+  useEffect(() => {
+    document.body.classList.add("addBackgroundGettingStarted");
+    return () => {
+      document.body.classList.remove("addBackgroundGettingStarted");
+    };
+  }, []);
   const handleStep = (step) => {
     stepHandler(step);
   };
   return (
-    <Box sx={{ display: "flex", justifyContent: "center" }} ref={tab}>
+    <Box
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      ref={tab}
+    >
       <Grid container direction="column">
-        <Box sx={{ background: "rgba(0,0,0,0)", width: "100%", mb: 7 }}>
+        <Box
+          sx={{
+            background: "rgba(0,0,0,0)",
+            pb: { sm: 4, md: 13, lg: 10, xl: 5 },
+            pt: { md: 2 },
+          }}
+        >
           <Typography
             sx={{
               fontFamily: "Anton",
-              fontSize: "5vh",
+              fontSize: "4vh",
               color: "white",
               display: "flex",
               justifyContent: "center",
@@ -53,11 +66,11 @@ export default function GettingStartedTabs() {
             }}
             endDecorator={<LogoMaker />}
           >
-            Getting started
+            GETTING STARTED
           </Typography>
           <Typography
             sx={{
-              fontFamily: "Poppins",
+              fontFamily: "Anton",
               fontSize: "2vh",
               color: "white",
               display: "flex",
@@ -74,24 +87,26 @@ export default function GettingStartedTabs() {
         <Grid
           container
           justifyContent="center"
+          alignItems="center"
           direction={{ xs: "row", sm: "column" }}
           sx={{
             height: "50vh",
-            my: 5,
+            m: { xs: 1, sm: 3 },
+            mb: { md: 30, lg: 15, xl: 3 },
           }}
         >
-          <Box sx={{ border: "0.5px orange solid", minWidth: "90%" }}>
+          <Box sx={{ border: "0.5px black solid", width: "100%" }}>
             <Grid item>
               <Paper
                 variant="elevation"
                 elevation={1}
-                sx={{ borderRadius: "0px", background: "orange" }}
+                sx={{ borderRadius: "0px", background: "black" }}
               >
                 <Typography
                   textAlign="center"
                   fontFamily="Montserrat"
                   fontWeight={300}
-                  sx={{ fontSize: "200%" }}
+                  sx={{ fontSize: "200%", color: "white" }}
                 >
                   {tabs[activeStep]?.title}
                 </Typography>
@@ -160,8 +175,10 @@ export default function GettingStartedTabs() {
                 position="static"
                 activeStep={activeStep}
                 sx={{
-                  background: "orange",
-                  ".MuiMobileStepper-dot": { backgroundColor: "black" },
+                  background: "black",
+                  ".MuiMobileStepper-dot": {
+                    backgroundColor: "orange",
+                  },
                   ".MuiMobileStepper-dotActive": { backgroundColor: "white" },
                 }}
                 nextButton={
@@ -169,10 +186,15 @@ export default function GettingStartedTabs() {
                     size="small"
                     onClick={() => handleStep("next")}
                     disabled={activeStep === 5}
-                    sx={{ color: "black" }}
+                    sx={{
+                      color: "white",
+                      ":disabled": { color: "rgba(255,255,255,0.6)" },
+                      fontFamily: "Poppins",
+                      fontSize: "120%",
+                    }}
                   >
                     Next
-                    <KeyboardArrowRightIcon sx={{ mb: 0.55 }} />
+                    <KeyboardArrowRightIcon sx={{ mb: 0.2 }} />
                   </Button>
                 }
                 backButton={
@@ -180,9 +202,14 @@ export default function GettingStartedTabs() {
                     size="small"
                     onClick={() => handleStep("prev")}
                     disabled={activeStep === 0}
-                    sx={{ color: "black" }}
+                    sx={{
+                      color: "white",
+                      ":disabled": { color: "rgba(255,255,255,0.6)" },
+                      fontFamily: "Poppins",
+                      fontSize: "120%",
+                    }}
                   >
-                    <KeyboardArrowLeftIcon sx={{ mb: 0.55 }} />
+                    <KeyboardArrowLeftIcon sx={{ mb: 0.2 }} />
                     Back
                   </Button>
                 }

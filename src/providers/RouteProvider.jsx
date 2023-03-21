@@ -25,14 +25,14 @@ import ContactUs from "../pages/ContactUs";
 import GettingStarted from "../pages/GettingStarted";
 
 export default function RouteProvider() {
+  useLoadFonts();
+  const auth = getAuth();
+  const [authUser, authLoading, authError] = useAuthState(auth);
   useEffect(() => {
     if (localStorage.getItem("ip") === null) {
       localStorage.setItem("ip", "192.168.4.1");
     }
   }, []);
-  useLoadFonts();
-  const auth = getAuth();
-  const [authUser, authLoading, authError] = useAuthState(auth);
   if (authError)
     return (
       <Centered>

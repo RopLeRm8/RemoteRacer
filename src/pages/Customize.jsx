@@ -186,28 +186,26 @@ export default function Customize() {
           />
           <Typography
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              color: "white",
               fontFamily: "Anton",
-              mb: 2,
+              fontSize: "4vh",
+              color: "white",
+              display: "flex",
+              justifyContent: { xs: "center", md: "center" },
               textAlign: "center",
-              fontSize: { xs: "180%", lg: "280%" },
-              ml: { xs: 2, lg: 0 },
+              ml: { xs: 3, lg: 0 },
             }}
             endDecorator={<LogoMaker />}
           >
-            Customize Your Dream Car
+            CUSTOMIZE YOUR CAR
           </Typography>
           <Typography
-            level="h6"
             sx={{
+              fontFamily: "Anton",
+              fontSize: "2vh",
+              color: "white",
               display: "flex",
               justifyContent: "center",
-              color: "white",
-              fontFamily: "Inter",
               textAlign: "center",
-              mb: 1,
             }}
             startDecorator={
               <NearbyErrorIcon sx={{ display: { xs: "none", md: "block" } }} />
@@ -221,8 +219,8 @@ export default function Customize() {
       <Divider sx={{ backgroundColor: "white" }} />
       <Grid
         container
-        alignItems="end"
-        justifyContent={{ xs: "center", sm: "space-evenly" }}
+        alignItems="center"
+        justifyContent={{ xs: "center", sm: "space-around" }}
         sx={{ py: { md: 20 }, pb: { xs: 0, md: 10 } }}
       >
         <Grid
@@ -437,7 +435,7 @@ export default function Customize() {
                     textAlign: "center",
                     color: "white",
                     fontFamily: "Anton",
-                    fontSize: 45,
+                    fontSize: "200%",
                     mb: 1,
                     backgroundColor: "black",
                     maxWidth: "100%",
@@ -449,12 +447,18 @@ export default function Customize() {
                   {carName}
                 </Typography>
                 <LazyLoad>
-                  <Box>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
                     <img
                       src={robot}
                       alt=""
                       style={{
-                        width: "40vh",
+                        maxWidth: "23.5vmax",
                         display: "flex",
                         justifyContent: "center",
                         // animation: "rotating 10s linear infinite",

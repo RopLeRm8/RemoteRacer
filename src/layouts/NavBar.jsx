@@ -152,7 +152,8 @@ function Navbar() {
       } else setAnchorEl(null);
     }
     setAnchorElNav(null);
-    if (typeof page === "object" || page === null) return;
+    if (typeof page === "object" || page === null || page === "backdropClick")
+      return;
     navigate(page);
   };
 

@@ -1,10 +1,8 @@
 @keyframes popup {
     from {
-      transform: scale(0.5);
       opacity: 0;
     }
     to {
-      transform: scale(1);
       opacity: 1;
     }
   }
@@ -14,3 +12,14 @@
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
   }
+
+  .addBackgroundGettingStarted {
+    background-image: url("../assets/GettingStarted/background.svg");
+    background-size: cover;
+    background-color: black;
+    background-repeat: unset;
+    background-position: 30%;
+    height:100%;
+    
+  }
+
