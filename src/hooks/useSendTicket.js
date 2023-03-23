@@ -31,7 +31,6 @@ export default function useSendTicket() {
         });
       })
       .catch((error) => {
-        console.log(error);
         notify(error, { variant: "error" });
       })
       .finally(() => {
