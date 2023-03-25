@@ -12,7 +12,6 @@ Project Description
 - [ ] Finish game history page  
 - [ ] Finish the autocomplete  
 - [ ] Fix google and github authentication methods  
-- [ ] Finish adding custom hooks  
 - [ ] Fix shit stack error  
 - [ ] Add lazy module that optimizes the work of routing  
 
@@ -21,6 +20,7 @@ Project Description
 
 ### Done ✓
 
+- [x] Finish adding custom hooks  
 - [x] Redesign getting started (to be more interesting)  
 - [x] Redesign leaderboard  
 - [x] Finish support page  

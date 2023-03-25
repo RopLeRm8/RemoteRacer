@@ -17,6 +17,8 @@ import { child, get, ref } from "firebase/database";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "../css/ProfileInfo.css";
+import LoadingModal from "../features/LoadingModal";
+import { useNotification } from "../hooks/useNotification";
 import { db } from "../providers/FirebaseProvider";
 import FormModal from "./FormModal";
 import FormModalSecond from "./FormModalSecond";
@@ -27,6 +29,8 @@ export default function ProfileInfo({ setstamProfile }) {
   const [stam, setStam] = useState(false);
   const [timeValue, settimeValue] = useState(0);
   const [openEditValues, setopenEditValue] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
+  const [userName, setUserName] = useState(null);
   const [user] = useAuthState(getAuth());
   const userRefDB = `users/${user.uid}/data`;
   const query = ref(db);
@@ -34,18 +38,31 @@ export default function ProfileInfo({ setstamProfile }) {
 
   const avatarRef = useRef();
 
+  const notify = useNotification();
+
   const updateProfileLoad = useCallback(() => {
     setOpen(true);
     setupdateLoading((previous) => !previous);
   }, []);
 
   useEffect(() => {
-    get(child(query, userRefDB)).then((snapshot) => {
-      snapshot.val().lastTime
-        ? settimeValue(snapshot.val().lastTime)
-        : settimeValue(snapshot.val().newTime + " - First Entry!");
-    });
-  }, [query, userRefDB]);
+    setDataLoading(true);
+    get(child(query, userRefDB))
+      .then((snapshot) => {
+        snapshot.val().lastTime
+          ? settimeValue(snapshot.val().lastTime)
+          : settimeValue(snapshot.val().newTime + " - First Entry!");
+        setUserName(snapshot.val().name ? snapshot.val().name : null);
+      })
+      .catch(() => {
+        notify("An error happened while loading player's data", {
+          variant: "error",
+        });
+      })
+      .finally(() => {
+        setDataLoading(false);
+      });
+  }, [query, userRefDB, notify]);
   return (
     <Zoom in={true}>
       <Box
@@ -57,6 +74,7 @@ export default function ProfileInfo({ setstamProfile }) {
           pb: 2,
         }}
       >
+        <LoadingModal isLoading={dataLoading} />
         <Card
           className="Card"
           sx={{
@@ -122,10 +140,10 @@ export default function ProfileInfo({ setstamProfile }) {
             </Tooltip>
             <Grid container direction="row">
               <Grid item>
-                <Stack sx={{ mt: user.displayName ? 2 : 3, ml: 1 }}>
-                  {user.displayName && (
+                <Stack sx={{ mt: userName ? 2 : 3, ml: 1 }}>
+                  {userName && (
                     <Tooltip
-                      title={user.displayName}
+                      title={userName}
                       color="warning"
                       size="md"
                       variant="outlined"
@@ -139,7 +157,7 @@ export default function ProfileInfo({ setstamProfile }) {
                           <PortraitIcon sx={{ my: 0.2, color: "white" }} />
                         }
                       >
-                        {user.displayName}
+                        {userName}
                       </Typography>
                     </Tooltip>
                   )}

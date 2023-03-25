@@ -16,16 +16,23 @@ import {
   Typography,
 } from "@mui/joy";
 import { Drawer } from "@mui/material";
-import { getAuth, updateEmail, updateProfile } from "firebase/auth";
+import { getAuth, updateEmail } from "firebase/auth";
+import { child, get, ref, update } from "firebase/database";
 import { useCallback, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "../css/FormModalSecond.css";
 import { authErrorToTitleCase } from "../helpers";
 import { useNotification } from "../hooks/useNotification";
+import { db } from "../providers/FirebaseProvider";
 
 const engReg = /^[a-zA-Z1-9]+$/;
 const emailReg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 export default function FormModalSecond({ open, setOpen, setStam }) {
+  const [user] = useAuthState(getAuth());
+  const userRefData = ref(db, `users/${user.uid}/data`);
+  const query = ref(db);
+  const userRefDB = `users/${user.uid}`;
+
   const [nameerror, setnameError] = useState("");
   const [lastNameerror, setlastNameerror] = useState("");
   const [emailError, setemailError] = useState("");
@@ -47,8 +54,6 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
   const notify = useNotification();
 
   const auth = getAuth();
-
-  const [user] = useAuthState(getAuth());
 
   useEffect(() => {
     UpdateErrorsFound();
@@ -109,9 +114,13 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
       return;
     }
     setLoading(true);
-    updateProfile(auth.currentUser, {
-      displayName: nameValue + " " + lastnameValue,
-    })
+
+    get(child(query, userRefDB))
+      .then(() => {
+        update(userRefData, {
+          name: nameValue + " " + lastnameValue,
+        });
+      })
       .then(() => {
         notify("Successfully Updated User Information", {
           variant: "success",

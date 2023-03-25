@@ -3,11 +3,8 @@ import {
   Avatar,
   Badge,
   Box,
-  CircularProgress,
   CssVarsProvider,
   Grid,
-  Modal,
-  ModalDialog,
   Typography,
 } from "@mui/joy";
 import { get, ref } from "firebase/database";
@@ -18,6 +15,7 @@ import CasinoIcon from "@mui/icons-material/Casino";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import "../css/Leaderboard.css";
+import LoadingModal from "../features/LoadingModal";
 import LogoMaker from "../features/LogoMaker";
 import ScrollAnimation from "../features/ScrollAnimation";
 import { useNotification } from "../hooks/useNotification";
@@ -36,10 +34,10 @@ let arr = [];
 export default function Leaderboard() {
   const [user] = useAuthState(getAuth());
   const [usersData, setusersData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [dataLoading, setDataLoading] = useState(true);
   const notify = useNotification();
   useEffect(() => {
-    setIsLoading(true);
+    setDataLoading(true);
     get(usersRef)
       .then((snapshot) => {
         const data = snapshot.val();
@@ -55,7 +53,7 @@ export default function Leaderboard() {
         notify("An error happened, try to reload the page");
       })
       .finally(() => {
-        setIsLoading(false);
+        setDataLoading(false);
       });
   }, [user, notify]);
 
@@ -113,25 +111,10 @@ export default function Leaderboard() {
         sx={{
           py: 2,
           mx: { xs: 2, sm: 5 },
-          display: isLoading ? "none" : "flex",
+          display: dataLoading ? "none" : "flex",
         }}
       >
-        <Modal open={isLoading}>
-          <ModalDialog>
-            <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <CircularProgress sx={{ mr: 1 }} size="sm" color="warning" />
-              <Typography
-                sx={{
-                  color: "black",
-                  fontSize: "130%",
-                  fontFamily: "Poppins",
-                }}
-              >
-                Loading data...
-              </Typography>
-            </Box>
-          </ModalDialog>
-        </Modal>
+        <LoadingModal isLoading={dataLoading} />
         {usersData?.map((userData) => (
           <ScrollAnimation
             animationName="animate__fadeIn"

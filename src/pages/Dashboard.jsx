@@ -15,13 +15,17 @@ import {
   ListItem,
   Typography,
 } from "@mui/joy";
-import { useEffect } from "react";
+import { child, get, ref } from "firebase/database";
+import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import background from "../assets/Dashboard/background.png";
 import "../css/Dashboard.css";
 import { CustomButton } from "../features/CustomButton";
+import LoadingModal from "../features/LoadingModal";
+import { useNotification } from "../hooks/useNotification";
 import NavBar from "../layouts/NavBar";
+import { db } from "../providers/FirebaseProvider";
 
 const contacts = [
   {
@@ -49,20 +53,41 @@ const contacts = [
     link: "https://web.whatsapp.com",
   },
 ];
+
 export default function Dashboard() {
+  const [user] = useAuthState(getAuth());
+  const userRefDB = `users/${user.uid}/data`;
+  const query = ref(db);
+  const notify = useNotification();
+  const [userName, setUserName] = useState(null);
+  const [dataLoading, setDataLoading] = useState(false);
   useEffect(() => {
     document.body.classList.add("addbgdashboard");
     return () => {
       document.body.classList.remove("addbgdashboard");
     };
   }, []);
+  useEffect(() => {
+    setDataLoading(true);
+    get(child(query, userRefDB))
+      .then((snapshot) => {
+        setUserName(snapshot.val().name ? snapshot.val().name : null);
+      })
+      .catch(() => {
+        notify("Couldn't connect to database");
+      })
+      .finally(() => {
+        setDataLoading(false);
+      });
+  }, [notify]);
   const navigate = useNavigate();
-  const [user] = useAuthState(getAuth());
+
   return (
     <Box>
       <NavBar />
       <CssVarsProvider />
       <Box>
+        <LoadingModal isLoading={dataLoading} />
         <Grid container alignItems="center" direction="column" spacing={-8}>
           <Grid item>
             <Typography
@@ -75,21 +100,24 @@ export default function Dashboard() {
               REMOTE RACER
             </Typography>
           </Grid>
-          <Grid item>
-            <Typography
-              startDecorator={<EmojiPeopleIcon />}
-              fontFamily="Poppins"
-              sx={{
-                color: "white",
-                fontSize: "1vmax",
-                mb: { md: 7 },
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              Welcome Back, {user?.displayName?.split(" ")[0]}
-            </Typography>
-          </Grid>
+          {userName ? (
+            <Grid item>
+              <Typography
+                startDecorator={<EmojiPeopleIcon />}
+                fontFamily="Poppins"
+                sx={{
+                  color: "white",
+                  fontSize: "1vmax",
+                  mb: { md: 7 },
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                Welcome Back, {userName}
+              </Typography>
+            </Grid>
+          ) : null}
+
           <Box
             sx={{
               display: "flex",

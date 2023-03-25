@@ -32,14 +32,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import StartIcon from "@mui/icons-material/Start";
 import SupportIcon from "@mui/icons-material/Support";
 import WifiOffIcon from "@mui/icons-material/WifiOff";
-import {
-  Button,
-  Chip,
-  CssVarsProvider,
-  Divider,
-  FormControl,
-  FormLabel,
-} from "@mui/joy";
+import { Button, Chip, CssVarsProvider, Divider } from "@mui/joy";
 import {
   Dialog,
   DialogActions,
@@ -556,12 +549,7 @@ function Navbar() {
                           zIndex: 1650,
                         }}
                       >
-                        <FormControl>
-                          <FormLabel sx={{ fontFamily: "Inter" }}>
-                            Search players
-                          </FormLabel>
-                          <PlayerSearch />
-                        </FormControl>
+                        <PlayerSearch />
                       </MenuItem>
                     </Menu>
                   </MUIButt>
