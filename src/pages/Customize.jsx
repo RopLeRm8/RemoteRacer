@@ -31,7 +31,6 @@ import { child, get, ref, update } from "firebase/database";
 import { MuiColorInput } from "mui-color-input";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import CustomizeVideo from "../assets/Customize/Customize2.mp4";
 import robot from "../assets/Customize/robot.png";
 import "../css/Customize.css";
 import ScrollAnimation from "../features/ScrollAnimation";
@@ -94,6 +93,13 @@ export default function Customize() {
         });
       });
   }, [query, userRefData, notify]);
+
+  useEffect(() => {
+    document.body.classList.add("backgroundCustomize");
+    return () => {
+      document.body.classList.remove("backgroundCustomize");
+    };
+  }, []);
 
   const handlechangeName = useCallback((e) => {
     setwriteLength(15 - e.target.value.length);
@@ -177,13 +183,6 @@ export default function Customize() {
       <Navbar />
       <LazyLoad>
         <Box sx={{ backgroundColor: "rgba(0,0,0,0)", py: 6 }}>
-          <video
-            id="customize"
-            src={CustomizeVideo}
-            autoPlay
-            muted
-            ref={videoRef}
-          />
           <Typography
             sx={{
               fontFamily: "Anton",

@@ -27,14 +27,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import NetworkPingIcon from "@mui/icons-material/NetworkPing";
 import RadarIcon from "@mui/icons-material/Radar";
-import SearchIcon from "@mui/icons-material/Search";
 import SensorsIcon from "@mui/icons-material/Sensors";
 import SettingsIcon from "@mui/icons-material/Settings";
 import StartIcon from "@mui/icons-material/Start";
 import SupportIcon from "@mui/icons-material/Support";
 import WifiOffIcon from "@mui/icons-material/WifiOff";
 import {
-  Autocomplete,
   Button,
   Chip,
   CssVarsProvider,
@@ -57,6 +55,7 @@ import {
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
+import PlayerSearch from "../components/PlayerSearch";
 import "../css/NavBar.css";
 import { useNotification } from "../hooks/useNotification";
 import useSignalStrength from "../hooks/useSignalStrength";
@@ -366,31 +365,7 @@ function Navbar() {
                           zIndex: 1650,
                         }}
                       >
-                        <Autocomplete
-                          startDecorator={<SearchIcon />}
-                          color="warning"
-                          placeholder="Search players"
-                          blurOnSelect
-                          clearOnEscape
-                          selectOnFocus
-                          options={[
-                            "Call of Duty",
-                            "Fortnite",
-                            "Overwatch",
-                            "Minecraft",
-                            "League of Legends",
-                          ]}
-                          noOptionsText="No players found"
-                          slotProps={{
-                            listbox: {
-                              sx: {
-                                maxHeight: "200px",
-                                position: "relative",
-                                zIndex: 1850,
-                              },
-                            },
-                          }}
-                        />
+                        <PlayerSearch />
                       </MenuItem>
                     </Menu>
                   </Typography>
@@ -583,33 +558,9 @@ function Navbar() {
                       >
                         <FormControl>
                           <FormLabel sx={{ fontFamily: "Inter" }}>
-                            Seek for new players
+                            Search players
                           </FormLabel>
-                          <Autocomplete
-                            startDecorator={<SearchIcon />}
-                            color="warning"
-                            placeholder="Search players"
-                            blurOnSelect
-                            clearOnEscape
-                            selectOnFocus
-                            options={[
-                              "Call of Duty",
-                              "Fortnite",
-                              "Overwatch",
-                              "Minecraft",
-                              "League of Legends",
-                            ]}
-                            noOptionsText="No players found"
-                            slotProps={{
-                              listbox: {
-                                sx: {
-                                  maxHeight: "200px",
-                                  position: "relative",
-                                  zIndex: 1850,
-                                },
-                              },
-                            }}
-                          />
+                          <PlayerSearch />
                         </FormControl>
                       </MenuItem>
                     </Menu>

@@ -143,6 +143,12 @@ export default function Dashboard() {
                   fontFamily: "Inter",
                   fontSize: "1vmax",
                   border: "2px solid white",
+                  background: "black",
+                  color: "white",
+                  "&:hover": {
+                    color: "orange",
+                    background: "rgba(0,0,0,0)",
+                  },
                 }}
                 startIcon={<VideogameAssetIcon />}
                 onClickFunc={() => navigate("/game")}
@@ -156,6 +162,12 @@ export default function Dashboard() {
                   fontFamily: "Inter",
                   fontSize: "1vmax",
                   border: "2px solid white",
+                  background: "black",
+                  color: "white",
+                  "&:hover": {
+                    color: "orange",
+                    background: "rgba(0,0,0,0)",
+                  },
                 }}
                 startIcon={<InfoIcon />}
                 onClickFunc={() => {

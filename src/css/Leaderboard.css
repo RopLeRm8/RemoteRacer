@@ -1,3 +1,5 @@
 .addbgleaderboard{
-    background-color: black;
+    background-image: url("../assets/Leaderboard/background.svg");
+    background-size: cover;
+    background-position: center center;
 }
