@@ -5,6 +5,7 @@ const defaultSx = {
   background: "orange",
   color: "black",
   border: "2px solid white",
+  fontFamily: "Poppins",
   "&:hover": { background: "white", letterSpacing: "0.05rem" },
 };
 export function CustomButton(props) {

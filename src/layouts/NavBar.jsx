@@ -291,9 +291,6 @@ function Navbar() {
             <IconButton
               sx={{ color: "white" }}
               size="small"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
               onClick={handleOpenNavMenu}
               color="inherit"
             >
@@ -350,14 +347,9 @@ function Navbar() {
                         setAnchorEl(null);
                         setIsRotated(false);
                       }}
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <MenuItem
-                        onClick={(e) => e.stopPropagation()}
-                        disableRipple
-                        sx={{
-                          zIndex: 1650,
-                        }}
-                      >
+                      <MenuItem>
                         <PlayerSearch />
                       </MenuItem>
                     </Menu>
@@ -541,14 +533,9 @@ function Navbar() {
                         setAnchorEl(null);
                         setIsRotated(false);
                       }}
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <MenuItem
-                        onClick={(e) => e.stopPropagation()}
-                        disableRipple
-                        sx={{
-                          zIndex: 1650,
-                        }}
-                      >
+                      <MenuItem>
                         <PlayerSearch />
                       </MenuItem>
                     </Menu>

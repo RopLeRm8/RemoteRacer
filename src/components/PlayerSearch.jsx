@@ -9,21 +9,31 @@ import {
   FormLabel,
   Typography,
 } from "@mui/joy";
-import { useEffect } from "react";
+import { useRef, useState } from "react";
 import useGetOptions from "../hooks/useGetOptions";
+import UserInformationModal from "./UserInformationModal";
 
 export default function PlayerSearch() {
   const { usersData, loading } = useGetOptions();
-  useEffect(() => {
-    console.log(usersData);
-  }, [usersData]);
+  const [userSelected, setUserSelected] = useState(null);
+  const playerSearchRef = useRef();
+  const handleChange = (_, nVal) => {
+    setUserSelected(nVal.value);
+    playerSearchRef.current.getInstance().hideMenu();
+  };
   return (
     <>
+      <UserInformationModal
+        userSelected={userSelected}
+        setUserSelected={setUserSelected}
+      />
       <CssVarsProvider />
       <FormControl>
         <FormLabel sx={{ fontFamily: "Inter" }}></FormLabel>
         <Autocomplete
+          ref={playerSearchRef}
           startDecorator={<SearchIcon />}
+          onChange={handleChange}
           color="warning"
           placeholder="Search players"
           blurOnSelect

@@ -105,7 +105,8 @@ export function AuthProvider({ children }) {
             mail: user.email,
             photoURL: user.photoURL,
             newTime: dateInfo,
-            points: Math.random(100),
+            points: 0,
+            games: 0,
           },
         });
       });
