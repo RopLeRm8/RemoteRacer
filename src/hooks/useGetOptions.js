@@ -17,7 +17,9 @@ export default function useGetOptions() {
         const data = snapshot.val();
         setUsersData([]);
         for (const key in data) {
-          setUsersData((prev) => [...prev, data[key].data]);
+          const user = data[key].data;
+          user.uid = key;
+          setUsersData((prev) => [...prev, user]);
         }
       })
       .catch(() => {

@@ -18,8 +18,8 @@ export default function PlayerSearch() {
   const [userSelected, setUserSelected] = useState(null);
   const playerSearchRef = useRef();
   const handleChange = (_, nVal) => {
-    setUserSelected(nVal.value);
-    playerSearchRef.current.getInstance().hideMenu();
+    setUserSelected(nVal?.value);
+    playerSearchRef?.current?.getInstance?.()?.hideMenu?.();
   };
   return (
     <>
@@ -60,7 +60,7 @@ export default function PlayerSearch() {
                 justifyContent: "space-around",
               }}
             >
-              <Typography {...props} key={option.id}>
+              <Typography {...props} key={option.value.uid}>
                 {option.img && (
                   <Avatar
                     src={option.img}

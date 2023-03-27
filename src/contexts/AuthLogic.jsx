@@ -107,6 +107,8 @@ export function AuthProvider({ children }) {
             newTime: dateInfo,
             points: 0,
             games: 0,
+            friendsRequests: [],
+            friends: [],
           },
         });
       });

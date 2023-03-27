@@ -48,6 +48,7 @@ import {
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
+import FriendRequests from "../components/FriendRequests";
 import PlayerSearch from "../components/PlayerSearch";
 import "../css/NavBar.css";
 import { useNotification } from "../hooks/useNotification";
@@ -349,8 +350,25 @@ function Navbar() {
                       }}
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <MenuItem>
+                      <MenuItem
+                        sx={{
+                          "&:hover": {
+                            bgcolor: "transparent",
+                          },
+                        }}
+                        disableRipple
+                      >
                         <PlayerSearch />
+                      </MenuItem>
+                      <MenuItem
+                        sx={{
+                          "&:hover": {
+                            bgcolor: "transparent",
+                          },
+                        }}
+                        disableRipple
+                      >
+                        <FriendRequests />
                       </MenuItem>
                     </Menu>
                   </Typography>
@@ -535,8 +553,21 @@ function Navbar() {
                       }}
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <MenuItem>
+                      <MenuItem
+                        sx={{
+                          "&:hover": { bgcolor: "transparent" },
+                        }}
+                        disableRipple
+                      >
                         <PlayerSearch />
+                      </MenuItem>
+                      <MenuItem
+                        sx={{
+                          "&:hover": { bgcolor: "transparent" },
+                        }}
+                        disableRipple
+                      >
+                        <FriendRequests />
                       </MenuItem>
                     </Menu>
                   </MUIButt>
