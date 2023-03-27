@@ -1,6 +1,6 @@
 import { getAuth } from "@firebase/auth";
 import { get, ref } from "firebase/database";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNotification } from "../hooks/useNotification";
 import { db } from "../providers/FirebaseProvider";
@@ -48,5 +48,10 @@ export default function useGetRequestData() {
         setDataLoading(false);
       });
   }, [notify]);
+
+  useEffect(() => {
+    loadRequests();
+  }, [loadRequests]);
+
   return { loadRequests, dataLoading, requests };
 }

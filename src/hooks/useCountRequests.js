@@ -1,11 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useGetRequestData from "./useGetRequestData";
 
 export default function useCountRequests() {
   const { requests } = useGetRequestData();
-  const returnLength = requests.length;
+  const [returnLength, setReturnLength] = useState(0);
+
   useEffect(() => {
-    console.log(returnLength);
-  }, [returnLength]);
+    setReturnLength(requests.length);
+  }, [requests]);
+
   return { returnLength };
 }
