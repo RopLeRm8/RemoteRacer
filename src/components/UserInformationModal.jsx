@@ -58,7 +58,7 @@ export default function UserInformationModal({
           background: "orange",
         }}
       >
-        Profile information of the player
+        Player Profile
       </DialogTitle>
       <DialogContent sx={{ background: "black" }}>
         <Divider sx={{ mb: 1 }} />
@@ -134,8 +134,7 @@ export default function UserInformationModal({
                 fullWidth
                 sx={{
                   mt: 1,
-                  background: "red",
-                  color: "white",
+                  color: "black",
                   "&:hover": { color: "orange", background: "black" },
                 }}
                 onClickFunc={() => setUserSelected(null)}

@@ -21,7 +21,7 @@ export default function FriendRequests() {
           onClick={() => setOpenFriendsRequests(true)}
         >
           <Badge
-            badgeContent={returnLength ? returnLength : 0}
+            badgeContent={returnLength ?? 0}
             variant="soft"
             color="danger"
             sx={{ mr: 2 }}
@@ -29,7 +29,7 @@ export default function FriendRequests() {
           >
             <PeopleIcon />
           </Badge>
-          <Typography fontFamily="Poppins">Friends requests</Typography>
+          <Typography fontFamily="Poppins">Friend requests</Typography>
         </Button>
       </Box>
     </>
