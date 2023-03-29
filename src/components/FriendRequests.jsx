@@ -3,22 +3,19 @@ import { Badge, Box, Button } from "@mui/joy";
 import { Typography } from "@mui/material";
 import { useState } from "react";
 import useCountRequests from "../hooks/useCountRequests";
-import FriendsRequestsList from "./FriendsRequestsList";
+import FriendsTab from "./FriendsTab";
 export default function FriendRequests() {
-  const [openFriendsRequests, setOpenFriendsRequests] = useState(false);
+  const [openTab, setOpenTab] = useState(false);
   const { returnLength } = useCountRequests();
   return (
     <>
-      <FriendsRequestsList
-        openFriendsRequests={openFriendsRequests}
-        setOpenFriendsRequests={setOpenFriendsRequests}
-      />
+      <FriendsTab openTab={openTab} setOpenTab={setOpenTab} />
       <Box sx={{ display: "flex" }}>
         <Button
           variant="plain"
           sx={{ color: "black" }}
           color="warning"
-          onClick={() => setOpenFriendsRequests(true)}
+          onClick={() => setOpenTab(true)}
         >
           <Badge
             badgeContent={returnLength ?? 0}

@@ -1,28 +1,25 @@
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
 import {
   Avatar,
   Box,
+  Button,
   CircularProgress,
   Grid,
-  IconButton,
   List,
   ListItem,
   ListItemDecorator,
 } from "@mui/joy";
 import { Typography } from "@mui/material";
 import { useEffect } from "react";
-import { CustomButton } from "../features/CustomButton";
-import useGetRequestData from "../hooks/useGetRequestData";
+import useGetFriendsData from "../hooks/useGetFriendsData";
 
-export default function FriendsRequestsList({ openTab }) {
-  const { loadRequests, dataLoading, requests } = useGetRequestData();
+export default function FriendsList({ openTab }) {
+  const { loadFriends, dataLoading, friends } = useGetFriendsData();
 
   useEffect(() => {
     if (openTab) {
-      loadRequests();
+      loadFriends();
     }
-  }, [openTab, loadRequests]);
+  }, [openTab, loadFriends]);
 
   return (
     <>
@@ -35,7 +32,7 @@ export default function FriendsRequestsList({ openTab }) {
         </Box>
       ) : (
         <List>
-          {requests.map((req) => (
+          {friends.map((req) => (
             <ListItem key={req.mail}>
               <ListItemDecorator sx={{ mr: 2 }}>
                 <Avatar src={req.photoURL} />
@@ -53,19 +50,23 @@ export default function FriendsRequestsList({ openTab }) {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <IconButton variant="plain" color="success" size="sm">
-                    <CheckIcon />
-                  </IconButton>
-                  <IconButton variant="plain" color="danger" size="sm">
-                    <CloseIcon />
-                  </IconButton>
+                  <Button
+                    variant="plain"
+                    color="warning"
+                    sx={{
+                      color: "orange",
+                      fontFamily: "Poppins",
+                      "&:hover": { color: "white", background: "transparent" },
+                    }}
+                  >
+                    Remove
+                  </Button>
                 </Grid>
               </Grid>
             </ListItem>
           ))}
         </List>
       )}
-      <CustomButton sx={{ mt: 1 }} text="Accept all" fullWidth />
     </>
   );
 }
