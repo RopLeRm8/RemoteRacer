@@ -56,7 +56,7 @@ const contacts = [
 
 export default function Dashboard() {
   const [user] = useAuthState(getAuth());
-  const userRefDB = `users/${user.uid}/data`;
+  const userRefDB = `users/${user?.uid}/data`;
   const query = ref(db);
   const notify = useNotification();
   const [userName, setUserName] = useState(null);

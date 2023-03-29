@@ -18,7 +18,6 @@ export default function useGetRequestData() {
         try {
           const friendsRequests = snap?.val()?.friendsRequests;
           if (!friendsRequests) {
-            notify("No friends request found", { variant: "error" });
             return;
           }
           const userRefs = friendsRequests.map((key) =>
@@ -31,7 +30,12 @@ export default function useGetRequestData() {
               )
             )
           );
-          setRequests(userSnapshots.map((snap) => snap.val()));
+          setRequests(
+            userSnapshots.map((snap, ind) => ({
+              ...snap.val(),
+              uid: friendsRequests[ind],
+            }))
+          );
         } catch (err) {
           notify(
             "There was an error with data extract procedure, please report this issue",
@@ -53,5 +57,5 @@ export default function useGetRequestData() {
     loadRequests();
   }, [loadRequests]);
 
-  return { loadRequests, dataLoading, requests };
+  return { loadRequests, dataLoading, requests, setRequests };
 }

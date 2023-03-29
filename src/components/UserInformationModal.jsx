@@ -31,15 +31,29 @@ export default function UserInformationModal({
           friendsRequests.length > 0 &&
           friendsRequests.find((friend) => friend === user.uid);
         if (!isFriend) {
-          update(usersRefData, {
-            friendsRequests: [...snap.val().friendsRequests, user?.uid],
-          });
+          update(
+            usersRefData,
+            {
+              friendsRequests: [...(friendsRequests || []), user?.uid],
+            },
+            {
+              set: true,
+            }
+          )
+            .then(() => {
+              notify("Friend request sent!", { variant: "success" });
+            })
+            .catch(() => {
+              notify("Couldn't send friend request", {
+                variant: "error",
+              });
+            });
         } else {
           notify("Friend request already sent", { variant: "info" });
         }
       })
       .catch(() => {
-        notify("Couldnt send friend request", {
+        notify("Couldn't send friend request", {
           variant: "error",
         });
       })

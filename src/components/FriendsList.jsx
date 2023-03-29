@@ -33,9 +33,12 @@ export default function FriendsList({ openTab }) {
       ) : (
         <List>
           {friends.map((req) => (
-            <ListItem key={req.mail}>
+            <ListItem
+              key={req?.mail}
+              sx={{ display: req?.uid !== "hello" ? "flex" : "none" }}
+            >
               <ListItemDecorator sx={{ mr: 2 }}>
-                <Avatar src={req.photoURL} />
+                <Avatar src={req?.photoURL} />
               </ListItemDecorator>
               <Grid
                 container
@@ -46,7 +49,7 @@ export default function FriendsList({ openTab }) {
               >
                 <Grid item>
                   <Typography fontFamily="Poppins" sx={{ color: "white" }}>
-                    {req.name}
+                    {req?.name}
                   </Typography>
                 </Grid>
                 <Grid item>
