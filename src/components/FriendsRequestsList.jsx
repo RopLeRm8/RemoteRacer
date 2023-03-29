@@ -34,6 +34,7 @@ export default function FriendsRequestsList({ openTab }) {
   }, [openTab, loadRequests]);
   const handleClick = (uid, action) => {
     const updatedRequests = requests.filter((obj) => obj.uid !== uid);
+    const otherUserRef = ref(db, `users/${uid}/data`);
     if (action === "deny") {
       get(localRef)
         .then((snap) => {
@@ -75,7 +76,8 @@ export default function FriendsRequestsList({ openTab }) {
                 });
                 setRequests(updatedRequests);
               })
-              .catch(() => {
+              .catch((err) => {
+                console.log(err);
                 notify("Couldn't accept request", { variant: "error" });
               });
           }
@@ -84,6 +86,25 @@ export default function FriendsRequestsList({ openTab }) {
           console.log(err);
           notify("Error when tried to get data", { variant: "error" });
         });
+      get(otherUserRef)
+        .then((othersnap) => {
+          if (othersnap.exists()) {
+            const otherUpdatedData = {
+              ...othersnap?.val(),
+              friends: [...(othersnap.val().friends ?? []), user.uid],
+            };
+            update(otherUserRef, otherUpdatedData).catch(() => {
+              notify("Couldn't update the requested user's data", {
+                variant: "error",
+              });
+            });
+          }
+        })
+        .catch(() =>
+          notify("Error when tried to get other user's data", {
+            variant: "error",
+          })
+        );
     }
   };
   const handleAddAll = () => {
@@ -140,12 +161,14 @@ export default function FriendsRequestsList({ openTab }) {
           ))}
         </List>
       )}
-      <CustomButton
-        sx={{ mt: 1 }}
-        text="Accept all"
-        fullWidth
-        onClickFunc={handleAddAll}
-      />
+      {requests.length > 0 ? (
+        <CustomButton
+          sx={{ mt: 1 }}
+          text="Accept all"
+          fullWidth
+          onClickFunc={handleAddAll}
+        />
+      ) : null}
     </>
   );
 }
