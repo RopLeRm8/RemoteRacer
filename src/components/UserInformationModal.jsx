@@ -26,11 +26,16 @@ export default function UserInformationModal({
     get(usersRefData)
       .then((snap) => {
         const friendsRequests = snap?.val()?.friendsRequests;
-        const isFriend =
+        const friends = snap?.val()?.friends;
+        const isRequested =
           Array.isArray(friendsRequests) &&
           friendsRequests.length > 0 &&
           friendsRequests.find((friend) => friend === user.uid);
-        if (!isFriend) {
+        const isFriend =
+          Array.isArray(friends) &&
+          friends.length > 0 &&
+          friends.find((friend) => friend === user.uid);
+        if (!isRequested && !isFriend) {
           update(
             usersRefData,
             {
@@ -49,7 +54,10 @@ export default function UserInformationModal({
               });
             });
         } else {
-          notify("Friend request already sent", { variant: "info" });
+          notify(
+            "Friend request already sent or the user is already a friend",
+            { variant: "info" }
+          );
         }
       })
       .catch(() => {
