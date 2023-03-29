@@ -21,7 +21,8 @@ import { useNotification } from "../hooks/useNotification";
 import { db } from "../providers/FirebaseProvider";
 
 export default function FriendsRequestsList({ openTab }) {
-  const { loadRequests, dataLoading, requests } = useGetRequestData();
+  const { loadRequests, dataLoading, requests, setRequests } =
+    useGetRequestData();
   const [user] = useAuthState(getAuth());
   const localRef = ref(db, `users/${user?.uid}/data`);
   const notify = useNotification();
@@ -32,7 +33,7 @@ export default function FriendsRequestsList({ openTab }) {
     }
   }, [openTab, loadRequests]);
   const handleClick = (uid, action) => {
-    console.log(uid);
+    const updatedRequests = requests.filter((obj) => obj.uid !== uid);
     if (action === "deny") {
       get(localRef)
         .then((snap) => {
@@ -46,6 +47,7 @@ export default function FriendsRequestsList({ openTab }) {
             update(localRef, updatedData)
               .then(() => {
                 notify("Request denied successfully", { variant: "success" });
+                setRequests(updatedRequests);
               })
               .catch(() => {
                 notify("Couldn't deny request", { variant: "error" });
@@ -60,27 +62,32 @@ export default function FriendsRequestsList({ openTab }) {
         .then((snap) => {
           if (snap.exists()) {
             const updatedData = {
-              ...snap.val(),
+              ...snap?.val(),
               friendsRequests: snap
                 .val()
                 .friendsRequests.filter((friendUid) => friendUid !== uid),
-              friends: [...snap.val().friends, snap.val().friendsRequests],
+              friends: [...(snap.val().friends ?? []), uid],
             };
             update(localRef, updatedData)
               .then(() => {
                 notify("Request acccepted successfully", {
                   variant: "success",
                 });
+                setRequests(updatedRequests);
               })
               .catch(() => {
                 notify("Couldn't accept request", { variant: "error" });
               });
           }
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
           notify("Error when tried to get data", { variant: "error" });
         });
     }
+  };
+  const handleAddAll = () => {
+    console.log("added all");
   };
   return (
     <>
@@ -133,7 +140,12 @@ export default function FriendsRequestsList({ openTab }) {
           ))}
         </List>
       )}
-      <CustomButton sx={{ mt: 1 }} text="Accept all" fullWidth />
+      <CustomButton
+        sx={{ mt: 1 }}
+        text="Accept all"
+        fullWidth
+        onClickFunc={handleAddAll}
+      />
     </>
   );
 }

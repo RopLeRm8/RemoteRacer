@@ -1,3 +1,4 @@
+import { getAuth } from "@firebase/auth";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   Autocomplete,
@@ -10,12 +11,14 @@ import {
   Typography,
 } from "@mui/joy";
 import { useRef, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import useGetOptions from "../hooks/useGetOptions";
 import UserInformationModal from "./UserInformationModal";
 
 export default function PlayerSearch() {
   const { usersData, loading } = useGetOptions();
   const [userSelected, setUserSelected] = useState(null);
+  const [user] = useAuthState(getAuth());
   const playerSearchRef = useRef();
   const handleChange = (_, nVal) => {
     setUserSelected(nVal?.value);
@@ -56,7 +59,7 @@ export default function PlayerSearch() {
               sx={{
                 my: 0.3,
                 mx: 1,
-                display: "flex",
+                display: option.value.uid !== user.uid ? "flex" : "none",
                 justifyContent: "space-around",
               }}
             >
