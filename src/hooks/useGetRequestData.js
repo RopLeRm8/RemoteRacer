@@ -21,7 +21,7 @@ export default function useGetRequestData() {
             return;
           }
           const userRefs = friendsRequests.map((key) =>
-            ref(db, `users/${key}/data`)
+            ref(db, `users/${key[0]}/data`)
           );
           const userSnapshots = await Promise.all(
             userRefs.map((refer) =>
@@ -33,7 +33,8 @@ export default function useGetRequestData() {
           setRequests(
             userSnapshots.map((snap, ind) => ({
               ...snap.val(),
-              uid: friendsRequests[ind],
+              uid: friendsRequests[ind][0],
+              date: friendsRequests[ind][1],
             }))
           );
         } catch (err) {

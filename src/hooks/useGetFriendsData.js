@@ -29,7 +29,12 @@ export default function useGetFriendsData() {
               )
             )
           );
-          setFriends(userSnapshots.map((snap) => snap.val()));
+          setFriends(
+            userSnapshots.map((snap, ind) => ({
+              ...snap.val(),
+              uid: friends[ind],
+            }))
+          );
         } catch (err) {
           notify(
             "There was an error with data extract procedure, please report this issue",
@@ -51,5 +56,5 @@ export default function useGetFriendsData() {
     loadFriends();
   }, [loadFriends]);
 
-  return { loadFriends, dataLoading, friends };
+  return { loadFriends, dataLoading, friends, setFriends };
 }

@@ -1,6 +1,7 @@
 import { getAuth } from "@firebase/auth";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 import {
   Avatar,
   Box,
@@ -10,12 +11,11 @@ import {
   List,
   ListItem,
   ListItemDecorator,
+  Typography,
 } from "@mui/joy";
-import { Typography } from "@mui/material";
 import { get, ref, update } from "firebase/database";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { CustomButton } from "../features/CustomButton";
 import useGetRequestData from "../hooks/useGetRequestData";
 import { useNotification } from "../hooks/useNotification";
 import { db } from "../providers/FirebaseProvider";
@@ -43,7 +43,7 @@ export default function FriendsRequestsList({ openTab }) {
               ...snap.val(),
               friendsRequests: snap
                 .val()
-                .friendsRequests.filter((friendUid) => friendUid !== uid),
+                .friendsRequests.filter((friendUid) => friendUid[0] !== uid),
             };
             update(localRef, updatedData)
               .then(() => {
@@ -66,7 +66,7 @@ export default function FriendsRequestsList({ openTab }) {
               ...snap?.val(),
               friendsRequests: snap
                 .val()
-                .friendsRequests.filter((friendUid) => friendUid !== uid),
+                .friendsRequests.filter((friendUid) => friendUid[0] !== uid),
               friends: [...(snap.val().friends ?? []), uid],
             };
             update(localRef, updatedData)
@@ -107,9 +107,6 @@ export default function FriendsRequestsList({ openTab }) {
         );
     }
   };
-  const handleAddAll = () => {
-    console.log("added all");
-  };
   return (
     <>
       {dataLoading ? (
@@ -121,6 +118,15 @@ export default function FriendsRequestsList({ openTab }) {
         </Box>
       ) : (
         <List>
+          {requests.length === 0 ? (
+            <Typography
+              textAlign="center"
+              fontFamily="Poppins"
+              sx={{ color: "white" }}
+            >
+              Nothing here
+            </Typography>
+          ) : null}
           {requests.map((req) => (
             <ListItem key={req?.mail}>
               <ListItemDecorator sx={{ mr: 2 }}>
@@ -136,6 +142,15 @@ export default function FriendsRequestsList({ openTab }) {
                 <Grid item>
                   <Typography fontFamily="Poppins" sx={{ color: "white" }}>
                     {req?.name}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography
+                    fontFamily="Poppins"
+                    sx={{ color: "white" }}
+                    startDecorator={<HistoryToggleOffIcon />}
+                  >
+                    {req?.date ?? "Unknown"}
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -161,14 +176,6 @@ export default function FriendsRequestsList({ openTab }) {
           ))}
         </List>
       )}
-      {requests.length > 0 ? (
-        <CustomButton
-          sx={{ mt: 1 }}
-          text="Accept all"
-          fullWidth
-          onClickFunc={handleAddAll}
-        />
-      ) : null}
     </>
   );
 }

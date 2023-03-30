@@ -95,6 +95,7 @@ export default function Dashboard() {
               sx={{
                 color: "white",
                 fontSize: "2vmax",
+                mb: userName ? 0 : { md: 7 },
               }}
             >
               REMOTE RACER

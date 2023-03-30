@@ -52,7 +52,7 @@ export default function ProfileInfo({ setstamProfile }) {
         snapshot.val().lastTime
           ? settimeValue(snapshot.val().lastTime)
           : settimeValue(snapshot.val().newTime + " - First Entry!");
-        setUserName(snapshot.val().name ? snapshot.val().name : null);
+        setUserName(snapshot.val().name ?? null);
       })
       .catch(() => {
         notify("An error happened while loading player's data", {
@@ -263,6 +263,7 @@ export default function ProfileInfo({ setstamProfile }) {
             open={openEditValues}
             setOpen={setopenEditValue}
             setStam={setStam}
+            setUserName={setUserName}
           />
         </Card>
       </Box>

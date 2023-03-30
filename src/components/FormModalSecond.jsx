@@ -27,7 +27,12 @@ import { db } from "../providers/FirebaseProvider";
 
 const engReg = /^[a-zA-Z1-9]+$/;
 const emailReg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-export default function FormModalSecond({ open, setOpen, setStam }) {
+export default function FormModalSecond({
+  open,
+  setOpen,
+  setStam,
+  setUserName,
+}) {
   const [user] = useAuthState(getAuth());
   const userRefData = ref(db, `users/${user.uid}/data`);
   const query = ref(db);
@@ -120,12 +125,12 @@ export default function FormModalSecond({ open, setOpen, setStam }) {
         update(userRefData, {
           name: nameValue + " " + lastnameValue,
         });
+        setUserName(nameValue + " " + lastnameValue);
       })
       .then(() => {
         notify("Successfully Updated User Information", {
           variant: "success",
         });
-        setStam((prev) => !prev);
         if (!emailValue) {
           setLoading(false);
           return;
