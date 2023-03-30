@@ -333,25 +333,32 @@ export default function ContactInfo({
         </Grid>
 
         <Grid item>
-          <CustomButton
-            variant="contained"
-            color="warning"
-            text="SUBMIT A TICKET"
-            onClickFunc={handleSubmitForm}
-            sx={{ fontFamily: "Poppins" }}
-          />
-          <CustomButton
-            variant="contained"
-            color="warning"
-            text="TICKET HISTORY"
-            onClickFunc={() => setViewHistory(true)}
+          <Box
             sx={{
-              fontFamily: "Poppins",
-              ml: 2,
-              background: "transparent",
-              border: "2px solid black",
+              display: "flex",
+              justifyContent: { xs: "space-evenly", sm: "start" },
             }}
-          />
+          >
+            <CustomButton
+              variant="contained"
+              color="warning"
+              text="SUBMIT A TICKET"
+              onClickFunc={handleSubmitForm}
+              sx={{ fontFamily: "Poppins" }}
+            />
+            <CustomButton
+              variant="contained"
+              color="warning"
+              text="TICKET HISTORY"
+              onClickFunc={() => setViewHistory(true)}
+              sx={{
+                fontFamily: "Poppins",
+                ml: { xs: 1, sm: 2 },
+                background: "transparent",
+                border: "2px solid black",
+              }}
+            />
+          </Box>
         </Grid>
       </Grid>
     </Box>

@@ -44,7 +44,6 @@ export default function ContactUsForm({ setFinished, setFormData }) {
         sx={{
           background: "rgba(0,0,0,0)",
           width: "100%",
-          pb: { md: 4 },
           pt: { md: 2 },
         }}
       >
@@ -71,7 +70,7 @@ export default function ContactUsForm({ setFinished, setFormData }) {
             display: "flex",
             justifyContent: "center",
             textAlign: "center",
-            mb: 6,
+            mb: viewHistory ? 0 : 6,
             mx: 2,
           }}
         >

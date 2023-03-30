@@ -18,7 +18,6 @@ export default function useGetFriendsData() {
         try {
           const friends = snap?.val()?.friends;
           if (!friends) {
-            notify("No friends found", { variant: "error" });
             return;
           }
           const userRefs = friends.map((key) => ref(db, `users/${key}/data`));

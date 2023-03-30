@@ -7,10 +7,8 @@ Project Description
 ### Todo
 
 - [ ] (OPTIONAL) Build own ticket system where you can answer to people's tickets fast. People will see those tickets updated after that  
-- [ ] Add ticket history to support page  
 - [ ] Add getting started, support to the more tab in medium/large screens to navbar  
 - [ ] Finish game history page  
-- [ ] Finish the autocomplete  
 - [ ] Fix google and github authentication methods  
 - [ ] Fix shit stack error  
 - [ ] Add lazy module that optimizes the work of routing  
@@ -20,6 +18,8 @@ Project Description
 
 ### Done ✓
 
+- [x] Finish the autocomplete  
+- [x] Add ticket history to support page  
 - [x] Finish adding custom hooks  
 - [x] Redesign getting started (to be more interesting)  
 - [x] Redesign leaderboard  

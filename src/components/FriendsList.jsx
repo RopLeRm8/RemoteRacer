@@ -33,6 +33,15 @@ export default function FriendsList({ openTab }) {
         </Box>
       ) : (
         <List>
+          {friends.length === 0 ? (
+            <Typography
+              textAlign="center"
+              fontFamily="Poppins"
+              sx={{ color: "white" }}
+            >
+              Nothing here
+            </Typography>
+          ) : null}
           {friends.map((req) => (
             <ListItem
               key={req?.mail}

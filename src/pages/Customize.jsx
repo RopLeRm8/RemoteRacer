@@ -219,7 +219,7 @@ export default function Customize() {
       <Grid
         container
         alignItems="center"
-        justifyContent={{ xs: "center", sm: "space-around" }}
+        justifyContent={{ xs: "center", sm: "space-evenly" }}
         sx={{ py: { md: 20 }, pb: { xs: 0, md: 10 } }}
       >
         <Grid

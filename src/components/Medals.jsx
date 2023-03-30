@@ -119,8 +119,6 @@ export default function Medals({ stamProfile }) {
                   alignItems: "center",
                   color: "white",
                   letterSpacing: { sm: 5 },
-                  animation:
-                    "tracking-in-expand 1s cubic-bezier(.215,.61,.355,1.000) both",
                 }}
               >
                 <EmojiEventsIcon
@@ -151,8 +149,6 @@ export default function Medals({ stamProfile }) {
                     sx={{
                       mx: 0.5,
                       my: { xs: 5, sm: 0 },
-                      animation:
-                        "swing-in-top-fwd 3s cubic-bezier(.175,.885,.32,1.275) both",
                     }}
                     key={medal[4]}
                   >

@@ -94,13 +94,11 @@ export default function ConfirmModal({ finished, setFinished, formData }) {
           {loading ? (
             <LoadingButton
               loading
-              loadingPosition="end"
+              loadingPosition="center"
               variant="outlined"
               fullWidth
               sx={{ mr: 1 }}
-            >
-              Sending
-            </LoadingButton>
+            />
           ) : (
             <CustomButton
               fullWidth
