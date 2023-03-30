@@ -39,7 +39,6 @@ export default function useRemoveFriend({ friends, setFriends }) {
             ...snap?.val(),
             friends: friends.filter((friend) => friend !== user.uid),
           };
-          console.log(updatedData);
           update(otherRef, updatedData).catch(() =>
             notify("There was an error updating the requested user's data", {
               variant: "error",
