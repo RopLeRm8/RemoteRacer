@@ -80,7 +80,7 @@ export default function ContactUsForm({ setFinished, setFormData }) {
         </Typography>
       </Box>
       {viewHistory ? (
-        <TicketHistory />
+        <TicketHistory setViewHistory={setViewHistory} />
       ) : (
         <ContactInfo
           subject={subject}

@@ -343,9 +343,14 @@ export default function ContactInfo({
           <CustomButton
             variant="contained"
             color="warning"
-            text="VIEW HISTORY"
+            text="TICKET HISTORY"
             onClickFunc={() => setViewHistory(true)}
-            sx={{ fontFamily: "Poppins", ml: 2 }}
+            sx={{
+              fontFamily: "Poppins",
+              ml: 2,
+              background: "transparent",
+              border: "2px solid black",
+            }}
           />
         </Grid>
       </Grid>
