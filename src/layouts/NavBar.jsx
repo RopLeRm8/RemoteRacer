@@ -48,7 +48,7 @@ import {
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
-import FriendRequests from "../components/FriendRequests";
+import FriendRequestsBadge from "../components/FriendRequestsBadge";
 import PlayerSearch from "../components/PlayerSearch";
 import "../css/NavBar.css";
 import { useNotification } from "../hooks/useNotification";
@@ -368,7 +368,7 @@ function Navbar() {
                         }}
                         disableRipple
                       >
-                        <FriendRequests />
+                        <FriendRequestsBadge />
                       </MenuItem>
                     </Menu>
                   </Typography>
@@ -567,7 +567,7 @@ function Navbar() {
                         }}
                         disableRipple
                       >
-                        <FriendRequests />
+                        <FriendRequestsBadge />
                       </MenuItem>
                     </Menu>
                   </MUIButt>

@@ -4,7 +4,7 @@ import { Typography } from "@mui/material";
 import { useState } from "react";
 import useCountRequests from "../hooks/useCountRequests";
 import FriendsTab from "./FriendsTab";
-export default function FriendRequests() {
+export default function FriendRequestsBadge() {
   const [openTab, setOpenTab] = useState(false);
   const { returnLength } = useCountRequests();
   return (
