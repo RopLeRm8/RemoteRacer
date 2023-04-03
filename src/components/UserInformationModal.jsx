@@ -107,10 +107,15 @@ export default function UserInformationModal({
               {userSelected?.games ? userSelected?.games : 0}
             </Typography>
           </Grid>
-          <Grid item sx={{ flexWrap: "nowrap" }}>
-            <Grid container direction="row">
+          <Grid item>
+            <Grid
+              container
+              direction="row"
+              justifyContent="center"
+              sx={{ whiteSpace: "pre-wrap", flexWrap: "nowrap" }}
+            >
               {medalsList?.map((medal) => (
-                <Grid item key={medal.id}>
+                <Grid item key={medal.id} sx={{ my: 2, mx: { sm: 1 } }}>
                   <Tooltip
                     title={medal.tooltip}
                     size="sm"
@@ -122,7 +127,7 @@ export default function UserInformationModal({
                       src={medalIdToImg[medal?.id]}
                       alt=""
                       style={{
-                        maxWidth: "5%",
+                        maxWidth: "2.5rem",
                         filter: medal?.earned ? "" : "blur(5px)",
                       }}
                     />

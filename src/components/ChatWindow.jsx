@@ -39,7 +39,12 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
 
   return (
     <>
-      <Dialog open={openChat} onClose={() => setOpenChat(false)} fullScreen>
+      <Dialog
+        open={openChat}
+        onClose={() => setOpenChat(false)}
+        fullWidth
+        maxWidth="sm"
+      >
         <DialogTitle sx={{ fontFamily: "Poppins" }}>
           Chat with {chatWith?.name ?? "[No name set]"}
         </DialogTitle>
