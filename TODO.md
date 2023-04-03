@@ -7,16 +7,16 @@ Project Description
 ### Todo
 
 - [ ] (OPTIONAL) Add the website on host  
-- [ ] (OPTIONAL) Add chat between friends  
-- [ ] Add getting started, support to the more tab in medium/large screens to navbar  
-- [ ] Finish game history page  
-- [ ] Fix google and github authentication methods  
 
 ### In Progress
 
+- [ ] Fix google and github authentication methods  
+- [ ] Finish game history page  
+- [ ] Add getting started, support to the more tab in medium/large screens to navbar  
 
 ### Done ✓
 
+- [x] (OPTIONAL) Add chat between friends  
 - [x] Add lazy module that optimizes the work of routing  
 - [x] Fix shit stack error  
 - [x] Finish the autocomplete  
