@@ -8,8 +8,8 @@ export default function useSendRequest({ setRequestSend, userSelected }) {
   const [user] = useAuthState(getAuth());
   const localUserRef = ref(db, `users/${user?.uid}/data`);
   const usersRefData = ref(db, `users/${userSelected?.uid}/data`);
-
   const notify = useNotification();
+
   const addFriend = () => {
     setRequestSend(true);
     get(usersRefData)
@@ -20,12 +20,10 @@ export default function useSendRequest({ setRequestSend, userSelected }) {
           Array.isArray(friendsRequests) &&
           friendsRequests.length > 0 &&
           friendsRequests.find((friendReq) => friendReq[0] === user.uid);
-
         const isFriend =
           Array.isArray(friends) &&
           friends.length > 0 &&
           friends.find((friend) => friend === user.uid);
-
         get(localUserRef).then((snap) => {
           if (snap.exists()) {
             const friendsRequestsOther = snap?.val()?.friendsRequests;

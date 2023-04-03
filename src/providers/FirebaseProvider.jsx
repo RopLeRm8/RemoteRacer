@@ -1,7 +1,6 @@
 import {
   GithubAuthProvider,
   GoogleAuthProvider,
-  getAuth,
   signInWithPopup,
 } from "@firebase/auth";
 import firebase from "firebase/compat/app";
@@ -29,20 +28,17 @@ const gitprovider = new GithubAuthProvider();
 
 // Google authentication
 export const googleauth = () => {
-  const authProviders = getAuth(app);
-  signInWithPopup(authProviders, provider)
+  signInWithPopup(auth, provider)
     .then(() => {
       console.log("hi");
     })
     .catch((err) => {
-      console.log(err.code);
-      console.log(err.message);
+      console.log(err);
     });
 };
 // git Authentication
 export const gitauth = () => {
-  const authProviders = getAuth(app);
-  signInWithPopup(authProviders, gitprovider)
+  signInWithPopup(auth, gitprovider)
     .then(() => {})
     .catch(() => {
       //  const errorCode = authErrorToTitleCase(error.code);

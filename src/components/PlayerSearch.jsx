@@ -24,6 +24,10 @@ export default function PlayerSearch() {
     setUserSelected(nVal?.value);
     playerSearchRef?.current?.getInstance?.()?.hideMenu?.();
   };
+  const optionValueIsEqual = (option, value) => {
+    return option.value.uid === value.value.uid;
+  };
+
   return (
     <>
       <UserInformationModal
@@ -52,6 +56,7 @@ export default function PlayerSearch() {
             value: user,
             img: user.photoURL ? user.photoURL : "Remy Sharp",
           }))}
+          isOptionEqualToValue={optionValueIsEqual}
           renderOption={(props, option) => (
             <Button
               variant="outlined"
@@ -63,7 +68,7 @@ export default function PlayerSearch() {
                 justifyContent: "space-around",
               }}
             >
-              <Typography {...props} key={option.value.uid}>
+              <Typography {...props} key={option?.value?.uid}>
                 {option.img && (
                   <Avatar
                     src={option.img}

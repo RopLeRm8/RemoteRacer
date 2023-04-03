@@ -1,20 +1,30 @@
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import CasinoIcon from "@mui/icons-material/Casino";
+import PeopleIcon from "@mui/icons-material/People";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PortraitIcon from "@mui/icons-material/Portrait";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import { Avatar, Box, Divider, Grid, Typography } from "@mui/joy";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CustomButton } from "../features/CustomButton";
+import useIsFriend from "../hooks/useIsFriend";
 import useSendRequest from "../hooks/useSendRequest";
-
 export default function UserInformationModal({
   userSelected,
   setUserSelected,
 }) {
   const [requestSend, setRequestSend] = useState(false);
-  const { addFriend } = useSendRequest({ setRequestSend, userSelected });
+  const { addFriend } = useSendRequest({
+    setRequestSend,
+    userSelected,
+  });
+  const { checkIfFriend, isFriend } = useIsFriend({ userSelected });
+  useEffect(() => {
+    if (userSelected) {
+      checkIfFriend();
+    }
+  }, [userSelected, checkIfFriend]);
   return (
     <Dialog open={!!userSelected} onClose={() => setUserSelected(null)}>
       <DialogTitle
@@ -83,18 +93,21 @@ export default function UserInformationModal({
           <Grid item>
             <Box sx={{ display: "flex" }}>
               <CustomButton
-                text="Add friend"
-                disabled={requestSend}
+                text={isFriend ? "Your friend" : "Add friend"}
+                disabled={requestSend || isFriend}
                 fullWidth
                 sx={{
                   mt: 1,
                   mr: 1,
                   background: "rgba(0,0,0,0)",
                   color: "white",
+                  "&.Mui-disabled": {
+                    color: "rgba(255,255,255,0.7)",
+                  },
                   "&:hover": { color: "orange", background: "black" },
                 }}
                 onClickFunc={addFriend}
-                startIcon={<PersonAddIcon />}
+                startIcon={isFriend ? <PeopleIcon /> : <PersonAddIcon />}
               />
 
               <CustomButton

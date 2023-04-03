@@ -85,7 +85,7 @@ export default function FriendsTab({ openTab, setOpenTab }) {
         {currentList === "Requests" ? (
           <FriendsRequestsList openTab={openTab} />
         ) : (
-          <FriendsList openTab={openTab} />
+          <FriendsList openTab={openTab}/>
         )}
       </DialogContent>
     </Dialog>

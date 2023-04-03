@@ -215,8 +215,7 @@ export default function Game() {
             display: error ? "flex" : "none",
           }}
         >
-          Errors Found. Please make sure you fixed them all before refreshing
-          the page
+          Errors Found. Please make sure you fix them before refreshing the page
         </Chip>
       </Centered>
     </Box>
