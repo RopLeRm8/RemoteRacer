@@ -1,5 +1,5 @@
 import { getAuth } from "@firebase/auth";
-import { get, ref } from "firebase/database";
+import { get, off, onChildAdded, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { db } from "../providers/FirebaseProvider";
@@ -10,29 +10,35 @@ export default function useLoadChat({ chatWith, openChat }) {
   const [isLoading, setIsLoading] = useState(false);
   const [chatData, setChatData] = useState([]);
   const otherUserref = ref(db, `users/${chatWith?.uid}/data`);
+  const otherUserRefChat = ref(db, `users/${chatWith?.uid}/data/chat/messages`);
   const notify = useNotification();
   useEffect(() => {
     if (!openChat) return;
     setIsLoading(true);
+    const chatListener = onChildAdded(otherUserRefChat, (snapshot) => {
+      const newMessage = snapshot.val();
+      newMessage.uid = chatWith?.uid;
+      setChatData((prevChatData) => [...prevChatData, newMessage]);
+    });
     Promise.allSettled([
       get(localUserRef).then((snap) => snap.val()?.chat.messages ?? []),
       get(otherUserref).then((snap) => snap.val()?.chat.messages ?? []),
     ])
       .then(([localChat, otherChat]) => {
-        if (localChat.status === "rejected") {
-          notify("Couldn't get local user's data, contact administrator", {
-            variant: "error",
-          });
-          setChatData([]);
-          return;
-        }
-        if (otherChat.status === "rejected") {
-          notify("Couldn't get other user's data, contact administrator", {
-            variant: "error",
-          });
-          setChatData([]);
-          return;
-        }
+        // if (localChat.status === "rejected" && !localChat.value) {
+        //   notify("Couldn't get local user's data, contact administrator", {
+        //     variant: "error",
+        //   });
+        //   setChatData([]);
+        //   return;
+        // }
+        // if (otherChat.status === "rejected") {
+        //   notify("Couldn't get other user's data, contact administrator", {
+        //     variant: "error",
+        //   });
+        //   setChatData([]);
+        //   return;
+        // }
         const combinedChat = [];
         for (const key in localChat.value) {
           combinedChat.push({
@@ -61,6 +67,9 @@ export default function useLoadChat({ chatWith, openChat }) {
       .finally(() => {
         setIsLoading(false);
       });
+    return () => {
+      off(otherUserRefChat, chatListener);
+    };
   }, [chatWith, notify, openChat]);
 
   return { chatData, isLoading, setChatData };
