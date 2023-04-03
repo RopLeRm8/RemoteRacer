@@ -31,12 +31,12 @@ export default function useSaveMessage({ chatWith, setChatData }) {
         const newMessage = {
           msgContent: message,
           time: dateString,
+          oppositeUid: chatWith?.uid,
         };
         const updatedData = {
           ...userData,
           chat: {
             ...chat,
-            ["uid"]: chatWith?.uid,
             messages: [...messages, newMessage],
           },
         };

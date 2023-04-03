@@ -61,7 +61,11 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                 item
                 key={chatData.indexOf(msg)}
                 sx={{
-                  display: "flex",
+                  display:
+                    msg.oppositeUid === chatWith?.uid ||
+                    msg.oppositeUid === user.uid
+                      ? "flex"
+                      : "none",
                   justifyContent: msg.uid === user.uid ? "start" : "end",
                 }}
               >
@@ -81,7 +85,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                   onMouseLeave={() => setMessageHover(null)}
                 >
                   {msg.uid === user?.uid ? (
-                    <Avatar src={chatWith?.photoURL} sx={{ mr: 3 }} />
+                    <Avatar src={user?.photoURL} sx={{ mr: 3 }} />
                   ) : null}
 
                   <Grid container direction="column">
@@ -160,7 +164,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
             <Grid item sx={{ mt: 2 }}>
               <Input
                 autoFocus
-                sx={{ width: "100%" }}
+                sx={{ width: "20rem" }}
                 ref={inputRef}
                 value={message}
                 placeholder="New message"
