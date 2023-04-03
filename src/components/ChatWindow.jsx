@@ -41,7 +41,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
     <>
       <Dialog open={openChat} onClose={() => setOpenChat(false)} fullScreen>
         <DialogTitle sx={{ fontFamily: "Poppins" }}>
-          Chat with {chatWith?.name}
+          Chat with {chatWith?.name ?? "[No name set]"}
         </DialogTitle>
         <DialogContent>
           {isLoading ? <Typography>Loading..</Typography> : null}
