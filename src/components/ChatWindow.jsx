@@ -1,8 +1,11 @@
 import { getAuth } from "@firebase/auth";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 import { Avatar, Box, Chip, Grid, IconButton, Input } from "@mui/joy";
+import { useMediaQuery } from "@mui/material";
+
 import {
   CircularProgress,
   Dialog,
@@ -36,6 +39,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
     saveMessage(message);
     setMessage("");
   };
+  const isXsScreen = useMediaQuery("(max-width:500px)");
 
   return (
     <>
@@ -43,6 +47,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
         open={openChat}
         onClose={() => setOpenChat(false)}
         fullWidth
+        fullScreen={isXsScreen}
         maxWidth="sm"
       >
         <DialogTitle sx={{ fontFamily: "Poppins" }}>
@@ -99,7 +104,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                       sx={{
                         color: "black",
                         wordBreak: "break-word",
-                        maxWidth: "100%",
+                        maxWidth: { xs: "85%", sm: "100%" },
                       }}
                     >
                       {msg.msgContent}
@@ -161,12 +166,15 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                     </Box>
                   </Grid>
                   {msg.uid !== user?.uid ? (
-                    <Avatar src={chatWith?.photoURL} sx={{ ml: { sm: 3 } }} />
+                    <Avatar
+                      src={chatWith?.photoURL}
+                      sx={{ ml: { sm: 3 }, mr: { xs: 5, sm: 0 } }}
+                    />
                   ) : null}
                 </Box>
               </Grid>
             ))}
-            <Grid item sx={{ mt: 2 }}>
+            <Grid item sx={{ mt: 2, display: "flex" }}>
               <Input
                 autoFocus
                 sx={{ width: "20rem" }}
@@ -192,6 +200,16 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                   </>
                 }
               />
+              <IconButton
+                component="label"
+                variant="outlined"
+                color="neutral"
+                sx={{ ml: 1 }}
+                size="sm"
+              >
+                <AttachFileIcon />
+                <input hidden accept="image/*" multiple type="file" />
+              </IconButton>
             </Grid>
             <Grid item>
               <CustomButton
