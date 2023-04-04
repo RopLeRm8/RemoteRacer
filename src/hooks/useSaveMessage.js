@@ -10,7 +10,7 @@ export default function useSaveMessage({ chatWith, setChatData }) {
   const userRef = ref(db, `users/${user?.uid}/data`);
   const [sendLoading, setSendLoading] = useState(false);
   const notify = useNotification();
-  const saveMessage = (message) => {
+  const saveMessage = (message, fileURL) => {
     setSendLoading(true);
     get(userRef)
       .then((snap) => {
@@ -32,6 +32,7 @@ export default function useSaveMessage({ chatWith, setChatData }) {
           msgContent: message,
           time: dateString,
           oppositeUid: chatWith?.uid,
+          file: fileURL,
         };
         const updatedData = {
           ...userData,

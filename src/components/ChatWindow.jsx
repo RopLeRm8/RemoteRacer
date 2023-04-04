@@ -3,7 +3,15 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
-import { Avatar, Box, Chip, Grid, IconButton, Input } from "@mui/joy";
+import {
+  Avatar,
+  Box,
+  Chip,
+  Grid,
+  IconButton,
+  Input,
+  LinearProgress,
+} from "@mui/joy";
 import { useMediaQuery } from "@mui/material";
 
 import {
@@ -18,6 +26,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { CustomButton } from "../features/CustomButton";
 import useLoadChat from "../hooks/useLoadChat";
 import useSaveMessage from "../hooks/useSaveMessage";
+import useUploadFile from "../hooks/useUploadFile";
 export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
   const { chatData, isLoading, setChatData } = useLoadChat({
     chatWith,
@@ -36,10 +45,33 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
   };
   const inputRef = useRef();
   const handleMessageSend = () => {
-    saveMessage(message);
+    saveMessage(message, file);
     setMessage("");
+    setFile(null);
+    setFileName(null);
+  };
+  const handleFileSave = async (e) => {
+    setFileLoading(true);
+    setFile(null);
+    setFileName(null);
+    const file = e.target.files[0];
+    const { useUploadFileFunc } = useUploadFile();
+    const downloadUrl = await useUploadFileFunc(file, user?.uid);
+    if (!downloadUrl) {
+      return;
+    }
+    setFileName(file.name);
+    setFileLoading(false);
+    setFile(downloadUrl);
+  };
+  const handleEmptyFile = () => {
+    setFile(null);
+    setFileName(null);
   };
   const isXsScreen = useMediaQuery("(max-width:500px)");
+  const [file, setFile] = useState(null);
+  const [fileLoading, setFileLoading] = useState(false);
+  const [fileName, setFileName] = useState(null);
 
   return (
     <>
@@ -99,6 +131,14 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                   ) : null}
 
                   <Grid container direction="column">
+                    <img
+                      src={msg?.file}
+                      alt=""
+                      onClick={() => window.open(msg?.file)}
+                      style={{
+                        maxWidth: "100%",
+                      }}
+                    />
                     <Typography
                       fontFamily="Poppins"
                       sx={{
@@ -192,24 +232,52 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                         variant="plain"
                         color="neutral"
                         onClick={handleMessageSend}
-                        disabled={sendLoading}
+                        disabled={sendLoading || fileLoading}
                       >
                         <SendIcon />
                       </IconButton>
                     )}
+                    <IconButton
+                      component="label"
+                      variant="outlined"
+                      color="neutral"
+                      sx={{ ml: 1 }}
+                      size="sm"
+                    >
+                      <AttachFileIcon />
+                      <input
+                        hidden
+                        accept="image/*"
+                        multiple
+                        type="file"
+                        onChange={(e) => handleFileSave(e)}
+                      />
+                    </IconButton>
                   </>
                 }
               />
-              <IconButton
-                component="label"
-                variant="outlined"
-                color="neutral"
-                sx={{ ml: 1 }}
-                size="sm"
-              >
-                <AttachFileIcon />
-                <input hidden accept="image/*" multiple type="file" />
-              </IconButton>
+            </Grid>
+            <Grid item>
+              {fileLoading ? (
+                <LinearProgress
+                  variant="outlined"
+                  color="warning"
+                  sx={{ width: "20rem" }}
+                />
+              ) : (
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Typography>{fileName ?? null}</Typography>
+                  <IconButton
+                    size="sm"
+                    variant="plain"
+                    color="warning"
+                    onClick={handleEmptyFile}
+                    sx={{ display: fileName ? "flex" : "none" }}
+                  >
+                    X
+                  </IconButton>
+                </Box>
+              )}
             </Grid>
             <Grid item>
               <CustomButton

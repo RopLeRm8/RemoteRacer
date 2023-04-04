@@ -43,6 +43,7 @@ export default function useLoadChat({ chatWith, openChat }) {
         for (const key in localChat.value) {
           combinedChat.push({
             uid: user?.uid,
+            file: localChat.value[key].file,
             oppositeUid: localChat.value[key].oppositeUid,
             msgContent: localChat.value[key].msgContent,
             time: localChat.value[key].time,
@@ -52,6 +53,7 @@ export default function useLoadChat({ chatWith, openChat }) {
         for (const key in otherChat.value) {
           combinedChat.push({
             uid: chatWith?.uid,
+            file: otherChat.value[key].file,
             oppositeUid: otherChat.value[key].oppositeUid,
             msgContent: otherChat.value[key].msgContent,
             time: otherChat.value[key].time,
