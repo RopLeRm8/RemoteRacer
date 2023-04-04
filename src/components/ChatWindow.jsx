@@ -206,10 +206,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                     </Box>
                   </Grid>
                   {msg.uid !== user?.uid ? (
-                    <Avatar
-                      src={chatWith?.photoURL}
-                      sx={{ ml: { sm: 3 }, mr: { xs: 5, sm: 0 } }}
-                    />
+                    <Avatar src={chatWith?.photoURL} sx={{ ml: { xs: 3 } }} />
                   ) : null}
                 </Box>
               </Grid>
