@@ -173,6 +173,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
   useEffect(() => {
     localStorage.setItem("themeColorChat", themeColor);
   }, [themeColor]);
+
   const isXsScreen = useMediaQuery("(max-width:500px)");
   const [file, setFile] = useState(null);
   const [fileLoading, setFileLoading] = useState(false);
@@ -185,7 +186,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
         onClose={() => setOpenChat(false)}
         fullWidth
         fullScreen={isXsScreen}
-        maxWidth="sm"
+        maxWidth="md"
       >
         <DialogTitle
           sx={{
@@ -255,12 +256,24 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
           sx={{
             background: themeColors[themeColor],
             color: textTheme[themeColor],
-            "::-webkit-scrollbar-track": {
-              backgroundColor: "blue",
+            overflowY: "scroll",
+            "&::-webkit-scrollbar": {
+              width: "8px",
+              backgroundColor: themeColors[themeColor],
+              borderRadius: "2px",
             },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: textTheme[themeColor],
+              borderRadius: "2px",
+            },
+            scrollBehavior: "smooth",
           }}
         >
-          {isLoading ? <Typography>Loading..</Typography> : null}
+          {isLoading ? (
+            <Typography sx={{ color: textTheme[themeColor] }}>
+              Loading..
+            </Typography>
+          ) : null}
           {chatData.length === 0 ? (
             <Chip sx={{ fontFamily: "Poppins" }} variant="soft" color="warning">
               No chat messages yet, start the conversation!
@@ -346,7 +359,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                       >
                         {formatMessageDate(msg)}
                       </Typography>
-                      {messageHover === msg ? (
+                      {messageHover === msg + msg.uid ? (
                         <Box sx={{ display: "flex" }}>
                           <IconButton
                             size="sm"
@@ -409,7 +422,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
 
             <Grid item sx={{ mt: 2, display: "flex" }}>
               <Input
-                autoFocus
+                size="lg"
                 sx={{
                   width: "100%",
                   background: inputTheme[themeColor],
