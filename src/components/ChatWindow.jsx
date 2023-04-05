@@ -27,7 +27,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import useLoadChat from "../hooks/useLoadChat";
 import useSaveMessage from "../hooks/useSaveMessage";
@@ -44,6 +44,10 @@ const themeColors = {
 const textTheme = {
   dark: "white",
   light: "black",
+};
+const inputTheme = {
+  dark: "#403c44",
+  light: "white",
 };
 export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
   const { chatData, isLoading, setChatData } = useLoadChat({
@@ -66,6 +70,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
   };
   const inputRef = useRef();
   const handleMessageSend = () => {
+    if (message.length < 1 && !file) return;
     saveMessage(message, file);
     setMessage("");
     setFile(null);
@@ -164,6 +169,10 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
     }
     return false;
   };
+
+  useEffect(() => {
+    localStorage.setItem("themeColorChat", themeColor);
+  }, [themeColor]);
   const isXsScreen = useMediaQuery("(max-width:500px)");
   const [file, setFile] = useState(null);
   const [fileLoading, setFileLoading] = useState(false);
@@ -184,24 +193,73 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
             background: themeColors[themeColor],
           }}
         >
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography
-              fontFamily="Poppins"
-              startDecorator={<ChatIcon />}
-              sx={{ color: textTheme[themeColor] }}
-            >
-              Chat with {chatWith?.name ?? "[No name set]"}
-            </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: { xs: "start", sm: "space-between" },
+            }}
+          >
+            <Box sx={{ display: "flex" }}>
+              <Typography
+                fontFamily="Poppins"
+                startDecorator={<ChatIcon />}
+                sx={{ color: textTheme[themeColor], mr: 1 }}
+              >
+                Chat with {chatWith?.name ?? "[No name set]"}
+              </Typography>
+              <Switch
+                variant="solid"
+                color="neutral"
+                slotProps={{
+                  thumb: {
+                    children:
+                      themeColor === "dark" ? (
+                        <DarkModeIcon />
+                      ) : (
+                        <LightModeIcon />
+                      ),
+                  },
+                }}
+                sx={{
+                  "--Switch-thumbSize": "28px",
+                  "	.MuiSwitch-track": {
+                    border: "1px solid",
+                    borderColor: textTheme[themeColor],
+                    background: themeColors[themeColor],
+                  },
+                  "	.MuiSwitch-thumb": {
+                    color: "black",
+                    border: "1px solid black",
+                  },
+                  display: "initial",
+                  mr: { xs: 2, sm: 0 },
+                }}
+                size="lg"
+                onChange={() => {
+                  setThemeColor((prev) => (prev === "dark" ? "light" : "dark"));
+                }}
+              />
+            </Box>
             <IconButton
               onClick={() => setOpenChat(false)}
-              color="warning"
+              color="neutral"
+              variant="plain"
               size="sm"
+              sx={{ color: textTheme[themeColor] }}
             >
               <CloseIcon />
             </IconButton>
           </Box>
         </DialogTitle>
-        <DialogContent>
+        <DialogContent
+          sx={{
+            background: themeColors[themeColor],
+            color: textTheme[themeColor],
+            "::-webkit-scrollbar-track": {
+              backgroundColor: "blue",
+            },
+          }}
+        >
           {isLoading ? <Typography>Loading..</Typography> : null}
           {chatData.length === 0 ? (
             <Chip sx={{ fontFamily: "Poppins" }} variant="soft" color="warning">
@@ -272,7 +330,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                       <Typography
                         fontFamily="Poppins"
                         sx={{
-                          color: "black",
+                          color: textTheme[themeColor],
                           wordBreak: "break-word",
                           maxWidth: "100%",
                         }}
@@ -282,8 +340,8 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                       <Typography
                         fontFamily="Poppins"
                         sx={{
+                          color: textTheme[themeColor],
                           fontSize: "75%",
-                          color: "rgba(0,0,0,0.5)",
                         }}
                       >
                         {formatMessageDate(msg)}
@@ -352,11 +410,16 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
             <Grid item sx={{ mt: 2, display: "flex" }}>
               <Input
                 autoFocus
-                sx={{ width: "20rem" }}
+                sx={{
+                  width: "100%",
+                  background: inputTheme[themeColor],
+                  color: textTheme[themeColor],
+                  border: themeColor === "dark" ? "0px solid" : "1px solid",
+                }}
                 ref={inputRef}
+                color="info"
                 value={message}
                 placeholder="New message"
-                color="warning"
                 onChange={(e) => setMessage(e.target.value)}
                 endDecorator={
                   <>
@@ -366,6 +429,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                       <IconButton
                         variant="plain"
                         color="neutral"
+                        sx={{ color: textTheme[themeColor] }}
                         onClick={handleMessageSend}
                         disabled={sendLoading || fileLoading}
                       >
@@ -374,9 +438,9 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                     )}
                     <IconButton
                       component="label"
-                      variant="outlined"
+                      variant="plain"
                       color="neutral"
-                      sx={{ ml: 1 }}
+                      sx={{ ml: 1, color: textTheme[themeColor] }}
                       size="sm"
                     >
                       <AttachFileIcon />
@@ -392,47 +456,29 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
               />
             </Grid>
             <Grid item>
-              <Switch
-                variant="soft"
-                slotProps={{
-                  thumb: {
-                    children:
-                      themeColor === "dark" ? (
-                        <DarkModeIcon />
-                      ) : (
-                        <LightModeIcon />
-                      ),
-                  },
-                }}
-                sx={{
-                  "--Switch-thumbSize": "28px",
-                  "	.MuiSwitch-track": {
-                    border: "1px solid black",
-                    background: themeColors[themeColor],
-                  },
-                }}
-                size="lg"
-                onChange={() =>
-                  setThemeColor((prev) => (prev === "dark" ? "light" : "dark"))
-                }
-              />
-            </Grid>
-            <Grid item>
               {fileLoading ? (
                 <LinearProgress
-                  variant="outlined"
-                  color="warning"
-                  sx={{ width: "20rem" }}
+                  variant="soft"
+                  color="neutral"
+                  sx={{ width: "100%" }}
                 />
               ) : (
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography>{fileName ?? null}</Typography>
+                  <Typography sx={{ color: textTheme[themeColor] }}>
+                    {fileName ?? null}
+                  </Typography>
                   <IconButton
                     size="sm"
                     variant="plain"
-                    color="warning"
+                    color="neutral"
                     onClick={handleEmptyFile}
-                    sx={{ display: fileName ? "flex" : "none" }}
+                    sx={{
+                      display: fileName ? "flex" : "none",
+                      color: textTheme[themeColor],
+                      "&:hover": {
+                        background: themeColor === "dark" && "transparent",
+                      },
+                    }}
                   >
                     X
                   </IconButton>
