@@ -70,7 +70,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
   };
   const inputRef = useRef();
   const handleMessageSend = () => {
-    if (message.length < 1 && !file) return;
+    if (message?.length < 1 && !file) return;
     saveMessage(message, file);
     setMessage("");
     setFile(null);
@@ -186,7 +186,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
         onClose={() => setOpenChat(false)}
         fullWidth
         fullScreen={isXsScreen}
-        maxWidth="md"
+        maxWidth="lg"
       >
         <DialogTitle
           sx={{
@@ -296,7 +296,13 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                         ? "flex"
                         : "none",
                     justifyContent: msg.uid === user.uid ? "start" : "end",
+                    "&:hover": {
+                      cursor: "pointer",
+                      background: "rgba(0,0,0,0.1)",
+                    },
                   }}
+                  onMouseOver={() => setMessageHover(msg)}
+                  onMouseLeave={() => setMessageHover(null)}
                 >
                   <Box
                     sx={{
@@ -305,13 +311,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                       alignItems: "center",
                       p: 1,
                       borderRadius: "10px",
-                      "&:hover": {
-                        cursor: "pointer",
-                        background: "rgba(0,0,0,0.1)",
-                      },
                     }}
-                    onMouseOver={() => setMessageHover(msg)}
-                    onMouseLeave={() => setMessageHover(null)}
                   >
                     {msg.uid === user?.uid ? (
                       <Avatar src={user?.photoURL} sx={{ mr: 3 }} />
@@ -326,7 +326,9 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                           alt=""
                           controls
                           style={{
-                            maxWidth: "100%",
+                            width: "40%",
+                            alignSelf:
+                              msg.uid === user.uid ? "flex-start" : "flex-end",
                           }}
                         />
                       ) : (
@@ -335,7 +337,9 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                           alt=""
                           onClick={() => window.open(msg?.file)}
                           style={{
-                            maxWidth: "100%",
+                            width: "40%",
+                            alignSelf:
+                              msg.uid === user.uid ? "flex-start" : "flex-end",
                           }}
                         />
                       )}
@@ -346,6 +350,8 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                           color: textTheme[themeColor],
                           wordBreak: "break-word",
                           maxWidth: "100%",
+                          alignSelf:
+                            msg.uid === user.uid ? "flex-start" : "flex-end",
                         }}
                       >
                         {msg?.msgContent}
@@ -355,6 +361,8 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                         sx={{
                           color: textTheme[themeColor],
                           fontSize: "75%",
+                          alignSelf:
+                            msg.uid === user.uid ? "flex-start" : "flex-end",
                         }}
                       >
                         {formatMessageDate(msg)}
