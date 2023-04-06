@@ -326,7 +326,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                           alt=""
                           controls
                           style={{
-                            width: "40%",
+                            width: "50%",
                             alignSelf:
                               msg.uid === user.uid ? "flex-start" : "flex-end",
                           }}
@@ -337,7 +337,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                           alt=""
                           onClick={() => window.open(msg?.file)}
                           style={{
-                            width: "40%",
+                            width: "50%",
                             alignSelf:
                               msg.uid === user.uid ? "flex-start" : "flex-end",
                           }}
