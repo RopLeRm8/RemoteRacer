@@ -62,7 +62,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
   const [message, setMessage] = useState(null);
   const [messageHover, setMessageHover] = useState(null);
   const [themeColor, setThemeColor] = useState(
-    localStorage.getItem("themeColorChat") ?? "dark"
+    localStorage.getItem("themeColorChat") ?? "dark",
   );
   const reactionsToIcons = {
     happy: <SentimentSatisfiedAltIcon />,
@@ -95,21 +95,28 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
     setFileName(null);
   };
   const formatMessageDate = (msg) => {
+    console.log(msg.time);
     const now = new Date();
-    const [day, month, year, hours, minutes, seconds] = msg.time.split(/[/: ]/);
-    const msgTime = new Date(year, month - 1, day, hours, minutes, seconds);
+    const msgTime = new Date(msg.time);
+
+    // Swap day and month values
+    const day = msgTime.getDate();
+    const month = msgTime.getMonth() + 1;
+    const year = msgTime.getFullYear();
+    const hours = msgTime.getHours();
+    const minutes = msgTime.getMinutes();
 
     const isToday =
-      msgTime.getDate() === now.getDate() &&
-      msgTime.getMonth() === now.getMonth() &&
-      msgTime.getFullYear() === now.getFullYear();
+      day === now.getDate() &&
+      month === now.getMonth() + 1 &&
+      year === now.getFullYear();
 
     const yesterday = new Date();
     yesterday.setDate(now.getDate() - 1);
     const isYesterday =
-      msgTime.getDate() === yesterday.getDate() &&
-      msgTime.getMonth() === yesterday.getMonth() &&
-      msgTime.getFullYear() === yesterday.getFullYear();
+      day === yesterday.getDate() &&
+      month === yesterday.getMonth() + 1 &&
+      year === yesterday.getFullYear();
 
     let output;
 
@@ -118,7 +125,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
         hour: "numeric",
         minute: "numeric",
       };
-      const timeString = msgTime.toLocaleTimeString("en-US", options);
+      const timeString = msgTime.toLocaleString(undefined, options);
 
       output = (isToday ? "Today, " : "Yesterday, ") + timeString;
     } else {
@@ -128,7 +135,13 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
         hour: "numeric",
         minute: "numeric",
       };
-      const dateString = msgTime.toLocaleDateString("en-US", options);
+      const dateString = new Date(
+        year,
+        day - 1,
+        month,
+        hours,
+        minutes,
+      ).toLocaleString("en-GB", options);
       output = dateString;
     }
 
@@ -137,35 +150,22 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
 
   const checkIfNewDate = (msg, msgnext) => {
     if (!msgnext) return false;
-    const [day, month, year, hours, minutes, seconds] = msg.time.split(/[/: ]/);
-    const msgTime = new Date(year, month - 1, day, hours, minutes, seconds);
+    const msgTime = new Date(msg.time);
 
-    const [daynext, monthnext, yearnext, hoursnext, minutesnext, secondsnext] =
-      msgnext.time.split(/[/: ]/);
-    const msgNextTime = new Date(
-      yearnext,
-      monthnext - 1,
-      daynext,
-      hoursnext,
-      minutesnext,
-      secondsnext
-    );
-
+    const msgNextTime = new Date(msgnext.time);
     const newDay =
       msgTime.getDate() < msgNextTime.getDate() ||
       msgTime.getMonth() < msgNextTime.getMonth();
 
     if (newDay) {
-      const monthName = msgNextTime.toLocaleString("default", {
+      const newDate = new Date();
+      newDate.setMonth(msgNextTime.getDate() - 1);
+      const monthName = newDate.toLocaleString("en-GB", {
         month: "long",
       });
-      return (
-        msgNextTime.getDate() +
-        " " +
-        monthName +
-        " " +
-        msgNextTime.getFullYear()
-      );
+      return `${
+        msgNextTime.getMonth() + 1
+      } ${monthName} ${msgNextTime.getFullYear()}`;
     }
     return false;
   };

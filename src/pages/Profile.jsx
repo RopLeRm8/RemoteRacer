@@ -18,6 +18,8 @@ import ScrollAnimation from "../features/ScrollAnimation";
 import { useNotification } from "../hooks/useNotification";
 // import Footer from "../layouts/Footer";
 import LazyLoad from "react-lazyload";
+import LoadingModal from "../features/LoadingModal";
+import useLoadPointsGames from "../hooks/useLoadPointsGames";
 import Navbar from "../layouts/NavBar";
 import { db } from "../providers/FirebaseProvider";
 
@@ -53,7 +55,7 @@ export default function Profile() {
         rating: nValue,
       });
     },
-    [userRefData, notify]
+    [userRefData, notify],
   );
 
   useEffect(() => {
@@ -66,11 +68,12 @@ export default function Profile() {
         notify("Couldnt load player's data!", { variant: "error" });
       });
   }, [userData, notify]);
-
+  const { dataLoading, pointsVal, gamesVal } = useLoadPointsGames();
   return (
     <Box>
       <CssVarsProvider />
       <Navbar />
+      <LoadingModal isLoading={dataLoading} />
       <LazyLoad>
         <Box
           sx={{
@@ -134,7 +137,7 @@ export default function Profile() {
                     textAlign: "center",
                   }}
                 >
-                  Games Played : 5
+                  Games played: {gamesVal ?? 0}
                 </Typography>
                 <Typography
                   level="h6"
@@ -185,7 +188,7 @@ export default function Profile() {
                     textAlign: "center",
                   }}
                 >
-                  Points Count : 600
+                  Points earned: {pointsVal ?? 0}
                 </Typography>
                 <Typography
                   level="h6"

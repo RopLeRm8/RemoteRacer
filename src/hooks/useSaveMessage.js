@@ -19,13 +19,13 @@ export default function useSaveMessage({ chatWith, setChatData }) {
         const messages = chat.messages || [];
         const currentDate = new Date();
 
-        const day = currentDate.getDate();
-        const month = currentDate.getMonth() + 1;
-        const year = currentDate.getFullYear();
+        const day = currentDate.getUTCDate();
+        const month = currentDate.getUTCMonth() + 1;
+        const year = currentDate.getUTCFullYear();
 
-        const hours = currentDate.getHours();
-        const minutes = currentDate.getMinutes();
-        const seconds = currentDate.getSeconds();
+        const hours = currentDate.getUTCHours();
+        const minutes = currentDate.getUTCMinutes();
+        const seconds = currentDate.getUTCSeconds();
 
         const dateString = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
         const newMessage = {
@@ -43,7 +43,17 @@ export default function useSaveMessage({ chatWith, setChatData }) {
         };
 
         update(userRef, updatedData).then(() => {
+          const msgTime = new Date(newMessage.time);
+          const options = {
+            year: "numeric",
+            day: "numeric",
+            month: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+          };
+          const timeString = msgTime.toLocaleString("en-US", options);
           newMessage.uid = user?.uid;
+          newMessage.time = timeString + " UTC";
           setChatData((prev) => [...prev, newMessage]);
         });
       })

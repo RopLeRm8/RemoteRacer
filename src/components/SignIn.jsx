@@ -62,7 +62,7 @@ export default function LoginPage() {
     return sendPasswordResetEmail(auth, userEmail)
       .then(() => {
         setResetSuccess(
-          "Email Successfully Sent, Make Sure To Check Spam Folder Too"
+          "Email Successfully Sent, Make Sure To Check Spam Folder Too",
         );
         setResetError(null);
       })
@@ -101,7 +101,7 @@ export default function LoginPage() {
         localStorage.setItem("firstTime", "true");
       })
       .catch(({ code }) =>
-        setError(authErrorToTitleCase(code) || "Unknown login error")
+        setError(authErrorToTitleCase(code) || "Unknown login error"),
       )
       .finally(() => setLoading(false));
   };
@@ -110,7 +110,7 @@ export default function LoginPage() {
     document?.addEventListener("keyup", function (event) {
       if (event.keyCode === 13) {
         if (showPanel) return;
-        gifAnimCont?.current.click();
+        gifAnimCont?.current?.click();
       }
     });
   }, []);

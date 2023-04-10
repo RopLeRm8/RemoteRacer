@@ -41,22 +41,40 @@ export default function useLoadChat({ chatWith, openChat }) {
         // }
         const combinedChat = [];
         for (const key in localChat.value) {
+          const msgTime = new Date(localChat.value[key].time);
+          const options = {
+            year: "numeric",
+            day: "numeric",
+            month: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+          };
+          const timeString = msgTime.toLocaleString("en-US", options);
           combinedChat.push({
             uid: user?.uid,
             file: localChat.value[key].file,
             oppositeUid: localChat.value[key].oppositeUid,
             msgContent: localChat.value[key].msgContent,
-            time: localChat.value[key].time,
+            time: timeString + " UTC",
             reactions: localChat.value[key].reactions,
           });
         }
         for (const key in otherChat.value) {
+          const msgTime = new Date(otherChat.value[key].time);
+          const options = {
+            year: "numeric",
+            day: "numeric",
+            month: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+          };
+          const timeString = msgTime.toLocaleString("en-US", options);
           combinedChat.push({
             uid: chatWith?.uid,
             file: otherChat.value[key].file,
             oppositeUid: otherChat.value[key].oppositeUid,
             msgContent: otherChat.value[key].msgContent,
-            time: otherChat.value[key].time,
+            time: timeString + " UTC",
             reactions: otherChat.value[key].reactions,
           });
         }

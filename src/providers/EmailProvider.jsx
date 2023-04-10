@@ -1,31 +1,24 @@
+import { functions } from "./FirebaseProvider";
+const sendVerificationEmail = functions.httpsCallable("sendVerification");
+const sendSuccessEmail = functions.httpsCallable("sendSuccess");
+
 export const sendEmail = (emailaddr, code, setloadingEmail, setMailError) => {
-  fetch("http://localhost:6969/send-verification", {
-    method: "POST",
-    body: JSON.stringify({
-      email: emailaddr,
-      codemessage: code,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => console.log(data.result === "ok"))
-    .catch(() => setMailError("Too many requests, try again in 15 minutes"))
+  sendVerificationEmail({ email: emailaddr, codemessage: code })
+    .then((result) => {
+      console.log(result.data);
+      console.log(result.data === "ok");
+    })
+    .catch((err) => {
+      console.log(err);
+      setMailError("Too many requests, try again in 15 minutes");
+    })
     .finally(() => {
       setloadingEmail(false);
     });
 };
-export const sendSuccessEmail = (emailaddr) => {
-  fetch("http://localhost:6969/send-success", {
-    method: "POST",
-    body: JSON.stringify({
-      email: emailaddr,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+
+export const sendSuccess = (emailaddr) => {
+  sendSuccessEmail({ email: emailaddr })
     .then(() => {
       console.log("ok");
     })

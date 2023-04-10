@@ -74,7 +74,7 @@ export default function Dashboard() {
         setUserName(snapshot.val().name ? snapshot.val().name : null);
       })
       .catch(() => {
-        notify("Couldn't connect to database");
+        notify("Couldn't connect to database", { variant: "error" });
       })
       .finally(() => {
         setDataLoading(false);

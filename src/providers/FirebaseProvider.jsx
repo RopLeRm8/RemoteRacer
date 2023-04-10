@@ -5,6 +5,7 @@ import {
 } from "@firebase/auth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
+import "firebase/compat/functions";
 import { getDatabase } from "firebase/database";
 import { getStorage } from "firebase/storage";
 
@@ -22,6 +23,7 @@ const app = firebase.initializeApp({
 export const auth = app.auth();
 export const storage = getStorage(app);
 export const db = getDatabase(app);
+export const functions = app.functions();
 
 const provider = new GoogleAuthProvider();
 const gitprovider = new GithubAuthProvider();

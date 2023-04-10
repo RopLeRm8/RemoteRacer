@@ -6,7 +6,6 @@ Project Description
 
 ### Todo
 
-- [ ] (OPTIONAL) Add the website on host  
 
 ### In Progress
 
@@ -16,6 +15,7 @@ Project Description
 
 ### Done ✓
 
+- [x] (OPTIONAL) Add the website on host  
 - [x] (OPTIONAL) Add chat between friends  
 - [x] Add lazy module that optimizes the work of routing  
 - [x] Fix shit stack error  
