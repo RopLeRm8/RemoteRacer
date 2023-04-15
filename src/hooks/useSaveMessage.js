@@ -43,15 +43,22 @@ export default function useSaveMessage({ chatWith, setChatData }) {
         };
 
         update(userRef, updatedData).then(() => {
-          const msgTime = new Date(newMessage.time);
+          const msgTime = newMessage.time;
+          const [day, month, year, hours, minutes, seconds] =
+            msgTime.split(/[/: ]/);
+          const date = new Date(
+            Date.UTC(year, month - 1, day, hours, minutes, seconds),
+          );
           const options = {
             year: "numeric",
             day: "numeric",
             month: "numeric",
             hour: "numeric",
             minute: "numeric",
+            second: "numeric",
+            timeZone: "UTC",
           };
-          const timeString = msgTime.toLocaleString("en-US", options);
+          const timeString = date.toLocaleString("en-US", options);
           newMessage.uid = user?.uid;
           newMessage.time = timeString + " UTC";
           setChatData((prev) => [...prev, newMessage]);

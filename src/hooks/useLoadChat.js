@@ -17,7 +17,24 @@ export default function useLoadChat({ chatWith, openChat }) {
     setIsLoading(true);
     const chatListener = onChildAdded(otherUserRefChat, (snapshot) => {
       const newMessage = snapshot.val();
+      const msgTime = newMessage.time;
+      const [day, month, year, hours, minutes, seconds] =
+        msgTime.split(/[/: ]/);
+      const date = new Date(
+        Date.UTC(year, month - 1, day, hours, minutes, seconds),
+      );
+      const options = {
+        year: "numeric",
+        day: "numeric",
+        month: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        timeZone: "UTC",
+      };
+      const timeString = date.toLocaleString("en-US", options);
       newMessage.uid = chatWith?.uid;
+      newMessage.time = timeString + " UTC";
       setChatData((prevChatData) => [...prevChatData, newMessage]);
     });
     Promise.allSettled([
@@ -41,15 +58,22 @@ export default function useLoadChat({ chatWith, openChat }) {
         // }
         const combinedChat = [];
         for (const key in localChat.value) {
-          const msgTime = new Date(localChat.value[key].time);
+          const msgTime = localChat.value[key].time;
+          const [day, month, year, hours, minutes, seconds] =
+            msgTime.split(/[/: ]/);
+          const date = new Date(
+            Date.UTC(year, month - 1, day, hours, minutes, seconds),
+          );
           const options = {
             year: "numeric",
             day: "numeric",
             month: "numeric",
             hour: "numeric",
             minute: "numeric",
+            second: "numeric",
+            timeZone: "UTC",
           };
-          const timeString = msgTime.toLocaleString("en-US", options);
+          const timeString = date.toLocaleString("en-US", options);
           combinedChat.push({
             uid: user?.uid,
             file: localChat.value[key].file,
@@ -60,15 +84,22 @@ export default function useLoadChat({ chatWith, openChat }) {
           });
         }
         for (const key in otherChat.value) {
-          const msgTime = new Date(otherChat.value[key].time);
+          const msgTime = otherChat.value[key].time;
+          const [day, month, year, hours, minutes, seconds] =
+            msgTime.split(/[/: ]/);
+          const date = new Date(
+            Date.UTC(year, month - 1, day, hours, minutes, seconds),
+          );
           const options = {
             year: "numeric",
             day: "numeric",
             month: "numeric",
             hour: "numeric",
             minute: "numeric",
+            second: "numeric",
+            timeZone: "UTC",
           };
-          const timeString = msgTime.toLocaleString("en-US", options);
+          const timeString = date.toLocaleString("en-US", options);
           combinedChat.push({
             uid: chatWith?.uid,
             file: otherChat.value[key].file,
@@ -81,6 +112,7 @@ export default function useLoadChat({ chatWith, openChat }) {
         const sortedChat = combinedChat
           .sort((a, b) => new Date(b.time) - new Date(a.time))
           .reverse();
+        console.log(combinedChat);
         setChatData(sortedChat);
       })
       .catch(() => {

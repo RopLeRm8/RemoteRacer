@@ -1,4 +1,3 @@
-import { getAuth } from "@firebase/auth";
 import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InfoIcon from "@mui/icons-material/Info";
@@ -15,18 +14,14 @@ import {
   ListItem,
   Typography,
 } from "@mui/joy";
-import { child, get, ref } from "firebase/database";
-import { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import background from "../assets/Dashboard/background.png";
 import "../css/Dashboard.css";
 import { CustomButton } from "../features/CustomButton";
 import LoadingModal from "../features/LoadingModal";
-import { useNotification } from "../hooks/useNotification";
+import useGetUserName from "../hooks/useGetUserName";
 import NavBar from "../layouts/NavBar";
-import { db } from "../providers/FirebaseProvider";
-
 const contacts = [
   {
     Name: "Facebook",
@@ -55,31 +50,13 @@ const contacts = [
 ];
 
 export default function Dashboard() {
-  const [user] = useAuthState(getAuth());
-  const userRefDB = `users/${user?.uid}/data`;
-  const query = ref(db);
-  const notify = useNotification();
-  const [userName, setUserName] = useState(null);
-  const [dataLoading, setDataLoading] = useState(false);
+  const { userName, dataLoading } = useGetUserName();
   useEffect(() => {
     document.body.classList.add("addbgdashboard");
     return () => {
       document.body.classList.remove("addbgdashboard");
     };
   }, []);
-  useEffect(() => {
-    setDataLoading(true);
-    get(child(query, userRefDB))
-      .then((snapshot) => {
-        setUserName(snapshot.val().name ? snapshot.val().name : null);
-      })
-      .catch(() => {
-        notify("Couldn't connect to database", { variant: "error" });
-      })
-      .finally(() => {
-        setDataLoading(false);
-      });
-  }, [notify]);
   const navigate = useNavigate();
 
   return (

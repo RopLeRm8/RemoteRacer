@@ -10,7 +10,13 @@ export default function LoadingModal({ isLoading }) {
   return (
     <Modal open={isLoading}>
       <ModalDialog>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <CircularProgress sx={{ mr: 1 }} size="sm" color="warning" />
           <Typography
             sx={{

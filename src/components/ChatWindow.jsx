@@ -95,7 +95,6 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
     setFileName(null);
   };
   const formatMessageDate = (msg) => {
-    console.log(msg.time);
     const now = new Date();
     const msgTime = new Date(msg.time);
 
@@ -125,7 +124,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
         hour: "numeric",
         minute: "numeric",
       };
-      const timeString = msgTime.toLocaleString(undefined, options);
+      const timeString = msgTime.toLocaleString("en-GB", options);
 
       output = (isToday ? "Today, " : "Yesterday, ") + timeString;
     } else {
@@ -156,16 +155,12 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
     const newDay =
       msgTime.getDate() < msgNextTime.getDate() ||
       msgTime.getMonth() < msgNextTime.getMonth();
-
     if (newDay) {
       const newDate = new Date();
-      newDate.setMonth(msgNextTime.getDate() - 1);
       const monthName = newDate.toLocaleString("en-GB", {
         month: "long",
       });
-      return `${
-        msgNextTime.getMonth() + 1
-      } ${monthName} ${msgNextTime.getFullYear()}`;
+      return `${msgNextTime.getDate()} ${monthName} ${msgNextTime.getFullYear()}`;
     }
     return false;
   };
@@ -173,6 +168,21 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
   useEffect(() => {
     localStorage.setItem("themeColorChat", themeColor);
   }, [themeColor]);
+
+  // useEffect(() => {
+  //   const handleKeyDown = (event) => {
+  //     const keyPressed = event.which;
+  //     if (keyPressed === 13) {
+  //       handleMessageSend();
+  //     }
+  //   };
+
+  //   document.addEventListener("keydown", handleKeyDown);
+
+  //   return () => {
+  //     document.removeEventListener("keydown", handleKeyDown);
+  //   };
+  // }, []);
 
   const isXsScreen = useMediaQuery("(max-width:500px)");
   const [file, setFile] = useState(null);
@@ -350,6 +360,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                           color: textTheme[themeColor],
                           wordBreak: "break-word",
                           maxWidth: "100%",
+                          fontFamily: "Poppins",
                           alignSelf:
                             msg.uid === user.uid ? "flex-start" : "flex-end",
                         }}
