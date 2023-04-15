@@ -112,7 +112,6 @@ export default function useLoadChat({ chatWith, openChat }) {
         const sortedChat = combinedChat
           .sort((a, b) => new Date(b.time) - new Date(a.time))
           .reverse();
-        console.log(combinedChat);
         setChatData(sortedChat);
       })
       .catch(() => {

@@ -99,22 +99,22 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
     const msgTime = new Date(msg.time);
 
     // Swap day and month values
-    const day = msgTime.getDate();
-    const month = msgTime.getMonth() + 1;
+    const day = msgTime.getMonth() + 1;
+    const month = msgTime.getDate();
     const year = msgTime.getFullYear();
     const hours = msgTime.getHours();
     const minutes = msgTime.getMinutes();
 
     const isToday =
-      day === now.getDate() &&
-      month === now.getMonth() + 1 &&
+      day === now.getMonth() + 1 &&
+      month === now.getDate() &&
       year === now.getFullYear();
 
     const yesterday = new Date();
     yesterday.setDate(now.getDate() - 1);
     const isYesterday =
-      day === yesterday.getDate() &&
-      month === yesterday.getMonth() + 1 &&
+      day === yesterday.getMonth() + 1 &&
+      month === yesterday.getDate() &&
       year === yesterday.getFullYear();
 
     let output;
@@ -141,6 +141,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
         hours,
         minutes,
       ).toLocaleString("en-GB", options);
+
       output = dateString;
     }
 
@@ -285,7 +286,11 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
             </Typography>
           ) : null}
           {chatData.length === 0 ? (
-            <Chip sx={{ fontFamily: "Poppins" }} variant="soft" color="warning">
+            <Chip
+              sx={{ fontFamily: "Poppins", my: 2 }}
+              variant="soft"
+              color="warning"
+            >
               No chat messages yet, start the conversation!
             </Chip>
           ) : null}

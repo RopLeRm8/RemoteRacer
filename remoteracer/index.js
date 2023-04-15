@@ -22,9 +22,7 @@ exports.sendVerification = functions.https.onRequest((req, res) => {
       text: "hello",
       html: `<div style = "background-color:#ffe500; padding-top:25px; padding-bottom: 25px"> <h1 style = "color:black; text-align:center;"> REMOTE RACER </h1> <h2 style = "color:black; text-align:center;"> Hello, ${data.email}, here is a verification code in order to finish the sign up step - ${data.codemessage}</h2></div>`,
     };
-    sgMail.setApiKey(
-      "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",
-    );
+    sgMail.setApiKey(process.env.SG_API_KEY);
     sgMail
       .send(msg)
       .then(() => {
@@ -48,9 +46,7 @@ exports.sendSuccess = functions.https.onRequest((req, res) => {
       text: "hello",
       html: `<div style = "border-radius:10px; background-color:#ffe500; padding-top:25px; padding-bottom:25px;"> <h1 style = "color:black; margin: 5px auto;"> Hello dear customer! Thanks for signing up on our website! </h1> <h2 style = "color:black;margin: 5px auto;"> Registered with ${data.email} </h2> </div>`,
     };
-    sgMail.setApiKey(
-      "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",
-    );
+    sgMail.setApiKey(process.env.SG_API_KEY);
     sgMail
       .send(msgSuccess)
       .then(() => {
