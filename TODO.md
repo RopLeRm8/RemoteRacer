@@ -9,6 +9,7 @@ Project Description
 
 ### In Progress
 
+- [ ] Cant fetch ESP via host (because host is https and esp is http)  
 - [ ] Fix google and github authentication methods  
 - [ ] Add getting started, support to the more tab in medium/large screens to navbar  
 
