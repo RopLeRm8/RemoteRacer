@@ -170,20 +170,20 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
     localStorage.setItem("themeColorChat", themeColor);
   }, [themeColor]);
 
-  // useEffect(() => {
-  //   const handleKeyDown = (event) => {
-  //     const keyPressed = event.which;
-  //     if (keyPressed === 13) {
-  //       handleMessageSend();
-  //     }
-  //   };
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const keyPressed = event.key;
+      if (keyPressed === "Enter") {
+        handleMessageSend();
+      }
+    };
 
-  //   document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
 
-  //   return () => {
-  //     document.removeEventListener("keydown", handleKeyDown);
-  //   };
-  // }, []);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleMessageSend]);
 
   const isXsScreen = useMediaQuery("(max-width:500px)");
   const [file, setFile] = useState(null);

@@ -10,7 +10,6 @@ Project Description
 ### In Progress
 
 - [ ] Fix google and github authentication methods  
-- [ ] Finish game history page  
 - [ ] Add getting started, support to the more tab in medium/large screens to navbar  
 
 ### Done ✓

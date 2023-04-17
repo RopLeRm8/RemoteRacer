@@ -1,11 +1,6 @@
-import FormatBoldIcon from "@mui/icons-material/FormatBold";
-import FormatUnderlinedIcon from "@mui/icons-material/FormatUnderlined";
-import SwitchLeftIcon from "@mui/icons-material/SwitchLeft";
-import SwitchRightIcon from "@mui/icons-material/SwitchRight";
 import { Box, Grid, Radio, RadioGroup, Slider, Typography } from "@mui/joy";
 import {
   FormControl,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -42,10 +37,6 @@ export default function ContactInfo({
   setSeverLevel,
   setIssueDesc,
 }) {
-  const [textBold, setTextBold] = useState(false);
-  const [textUpper, setTextUpper] = useState(false);
-  const [boldIndex, setBoldIndex] = useState(0);
-  const [leftToRight, setLeftToRight] = useState(true);
   const [fieldFocus, setFieldFocus] = useState(false);
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -141,9 +132,6 @@ export default function ContactInfo({
           <TextField
             onChange={(e) => {
               setIssueDesc(e.target.value);
-              if (textBold) {
-                setBoldIndex(e.target.value.length);
-              }
             }}
             onFocus={() => setFieldFocus(true)}
             onBlur={() => setFieldFocus(false)}
@@ -164,9 +152,7 @@ export default function ContactInfo({
             inputProps={{
               maxLength: 400,
               style: {
-                direction: leftToRight ? "ltr" : "rtl",
                 fontFamily: "Poppins",
-                fontWeight: (index) => (index < boldIndex ? "bold" : "normal"),
               },
             }}
             helperText={
@@ -182,64 +168,6 @@ export default function ContactInfo({
                 >
                   {issueDesc.length}/400
                 </Typography>
-                <Box
-                  sx={{
-                    minWidth: "100%",
-                    borderRadius: "5px",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  {leftToRight ? (
-                    <IconButton
-                      color="inherit"
-                      onClick={() => setLeftToRight(false)}
-                    >
-                      <SwitchRightIcon />
-                    </IconButton>
-                  ) : (
-                    <IconButton
-                      color="inherit"
-                      onClick={() => setLeftToRight(true)}
-                    >
-                      <SwitchLeftIcon />
-                    </IconButton>
-                  )}
-                  {textBold ? (
-                    <IconButton
-                      sx={{ mt: 0.1 }}
-                      color="inherit"
-                      onClick={() => setTextBold(false)}
-                    >
-                      <FormatBoldIcon />
-                    </IconButton>
-                  ) : (
-                    <IconButton
-                      sx={{ mt: 0.1 }}
-                      color="inherit"
-                      onClick={() => setTextBold(true)}
-                    >
-                      <FormatBoldIcon />
-                    </IconButton>
-                  )}
-                  {textUpper ? (
-                    <IconButton
-                      sx={{ mt: 0.4 }}
-                      color="inherit"
-                      onClick={() => setTextUpper(false)}
-                    >
-                      <FormatUnderlinedIcon />
-                    </IconButton>
-                  ) : (
-                    <IconButton
-                      sx={{ mt: 0.4 }}
-                      color="inherit"
-                      onClick={() => setTextUpper(true)}
-                    >
-                      <FormatUnderlinedIcon />
-                    </IconButton>
-                  )}
-                </Box>
               </>
             }
           />
@@ -258,13 +186,13 @@ export default function ContactInfo({
             </RadioGroup>
           </Grid>
         ) : null}
-        <Grid item>
+        <Grid item sx={{ mt: 3 }}>
           <Typography fontFamily="Inter"> Severity of the issue </Typography>
           <Box sx={{ width: "100%" }}>
             <Slider
               onChange={(_, nVal) =>
                 setSeverLevel(
-                  impLevel.find((level) => level.value === nVal).label
+                  impLevel.find((level) => level.value === nVal).label,
                 )
               }
               color="warning"
@@ -279,7 +207,6 @@ export default function ContactInfo({
               orientation="horizontal"
               marks={impLevel}
               sx={{
-                my: 2,
                 mb: 3,
                 display: { xs: "flex", md: "none" },
                 "	.MuiSlider-markLabel": { display: "none" },
@@ -298,7 +225,7 @@ export default function ContactInfo({
             <Slider
               onChange={(_, nVal) =>
                 setSeverLevel(
-                  impLevel.find((level) => level.value === nVal)?.label
+                  impLevel.find((level) => level.value === nVal)?.label,
                 )
               }
               size="lg"

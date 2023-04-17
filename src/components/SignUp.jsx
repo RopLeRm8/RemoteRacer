@@ -68,7 +68,7 @@ export default function SignUp() {
   const characters = "0123456789";
   const SITEKEY = process.env.REACT_APP_CAPTCHA_SITEKEY;
   const strongRegex = new RegExp(
-    "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,})"
+    "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,})",
   );
   const emailReg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -98,7 +98,7 @@ export default function SignUp() {
       setLoading(false);
     }
   }
-  async function handleSubmit(e) {
+   function handleSubmit(e) {
     e.preventDefault();
 
     if (emailValue.length < 1) return setError("Please enter valid email");
@@ -110,7 +110,7 @@ export default function SignUp() {
     }
     if (!strongRegex.test(passValue)) {
       return setError(
-        "Password must contain special symbols, numbers, and capital letters"
+        "Password must contain special symbols, numbers, and capital letters",
       );
     }
 
@@ -135,7 +135,7 @@ export default function SignUp() {
     document?.addEventListener("keyup", function (event) {
       if (event.keyCode === 13) {
         if (showPanel) return;
-        gifAnimCont.current.click();
+        gifAnimCont?.current?.click();
       }
     });
   }, []);

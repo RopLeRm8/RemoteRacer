@@ -18,7 +18,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import BrushIcon from "@mui/icons-material/Brush";
 import CheckIcon from "@mui/icons-material/Check";
-import HistoryIcon from "@mui/icons-material/History";
+// import HistoryIcon from "@mui/icons-material/History";
 import InfoIcon from "@mui/icons-material/Info";
 import KeyIcon from "@mui/icons-material/Key";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
@@ -95,7 +95,7 @@ const pages = [
 ];
 const settings = [
   ["Profile", <AccountBoxIcon key="accountBox" />],
-  ["Game History", <HistoryIcon key="history" />],
+  // ["Game History", <HistoryIcon key="history" />],
   [
     "ESP Settings",
     <SettingsIcon
@@ -153,6 +153,7 @@ function Navbar() {
   const handleCloseUserMenu = (setting) => {
     setting && setting === "Sign Out" ? auth.signOut() : null;
     setting && setting === "Profile" ? navigate("/profile") : null;
+    setting && setting === "Game History" ? navigate("/gamehistory") : null;
     setting && setting === "ESP Settings" ? setopenModal(true) : null;
 
     return setAnchorElUser(null);
@@ -215,9 +216,9 @@ function Navbar() {
           passwordEntry[ssid] = false;
           notify(
             `Successfully connected to AP ${ssid}! IP Address: ${data.substring(
-              3
+              3,
             )}`,
-            { variant: "success", autoHideDuration: 10000 }
+            { variant: "success", autoHideDuration: 10000 },
           );
         } else {
           notify("Wrong password provided", { variant: "error" });
@@ -890,10 +891,7 @@ function Navbar() {
                                     variant="contained"
                                     color="success"
                                     onClick={() =>
-                                      handleConnectToWifi(
-                                        network.ssid,
-                                        "blabla"
-                                      )
+                                      handleConnectToWifi(network.ssid)
                                     }
                                   >
                                     CONNECT
@@ -905,7 +903,7 @@ function Navbar() {
                         </Grid>
                       </ListItem>
                     </Box>
-                  ))
+                  )),
                 )}
               </List>
             </Grid>

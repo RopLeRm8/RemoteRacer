@@ -22,6 +22,7 @@ import "../css/LoginPage.css";
 import "../css/RouteProvider.css";
 import { useLoadFonts } from "../hooks/useLoadFonts";
 import ContactUs from "../pages/ContactUs";
+import GameHistory from "../pages/GameHistory";
 import GettingStarted from "../pages/GettingStarted";
 
 export default function RouteProvider() {
@@ -74,6 +75,7 @@ export default function RouteProvider() {
               <Route path="game" element={<Game />} />
               <Route path="contact" element={<ContactUs />} />
               <Route path="gettingstarted" element={<GettingStarted />} />
+              <Route path="gamehistory" element={<GameHistory />} />
             </Routes>
           </SnackbarProvider>
         </Box>
@@ -89,6 +91,7 @@ export default function RouteProvider() {
             <Route path="leaderboard" element={<Navigate to="/" />} />
             <Route path="contact" element={<Navigate to="/" />} />
             <Route path="gettingstarted" element={<Navigate to="/" />} />
+            <Route path="gamehistory" element={<Navigate to="/" />} />
             <Route path="game" element={<Navigate to="/" />} />
             <Route path="welcomepage" element={<WelcomePage />} />
             <Route path="login" element={<LoginPage />} />

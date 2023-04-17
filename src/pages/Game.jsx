@@ -19,6 +19,7 @@ import {
 import coin from "../assets/Game/coin.png";
 import "../css/Game.css";
 import Centered from "../features/Centered";
+import { CustomButton } from "../features/CustomButton";
 import { useNotification } from "../hooks/useNotification";
 export default function Game() {
   const canvas = useRef();
@@ -32,7 +33,7 @@ export default function Game() {
     document.body.classList.add("nooverflow");
     if (ip === "192.168.4.1") {
       setError(
-        "ESP needs to have an access to the internet in order to play this game"
+        "ESP needs to have an access to the internet in order to play this game",
       );
       return () => {
         document.body.classList.remove("nooverflow");
@@ -49,10 +50,10 @@ export default function Game() {
           camera.position.z += 10;
           break;
         case 65:
-          camera.position.x += 10;
+          camera.position.y -= 10;
           break;
         case 68:
-          camera.position.x -= 10;
+          camera.position.y += 10;
           break;
         default:
           break;
@@ -65,11 +66,11 @@ export default function Game() {
       75,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      1000,
     );
 
     const renderer = new WebGLRenderer();
-    renderer.setSize(window.innerWidth * 0.9, window.innerHeight * 0.85);
+    renderer.setSize(window.innerWidth * 0.85, window.innerHeight * 0.9);
     canvas.current.appendChild(renderer.domElement);
 
     const texture = new TextureLoader().load(
@@ -82,7 +83,7 @@ export default function Game() {
         });
         setimgLoading(false);
         setError("Failed to load stream, refresh the page to try again");
-      }
+      },
     );
     const textUpdate = setInterval(() => {
       texture.needsUpdate = true;
@@ -93,7 +94,11 @@ export default function Game() {
 
     const coinTexture = new TextureLoader().load(coin);
     const coinGeometry = new PlaneGeometry(60, 60);
-    const coinMaterial = new MeshBasicMaterial({ map: coinTexture });
+    const coinMaterial = new MeshBasicMaterial({
+      map: coinTexture,
+      transparent: true,
+      alphaTest: 0.5,
+    });
     const coins = [];
     const maxCoins = 20;
 
@@ -101,8 +106,8 @@ export default function Game() {
       if (coins.length >= maxCoins) return;
 
       const coin = new Mesh(coinGeometry, coinMaterial);
-      coin.position.x = Math.random() * 3500 - 360;
-      coin.position.y = -5;
+      coin.position.x = 10;
+      coin.position.y = Math.random() * 3500 - 360;
       coin.position.z = Math.random() * 970;
       scene.add(coin);
       coins.push(coin);
@@ -110,7 +115,7 @@ export default function Game() {
 
     setInterval(() => {
       addCoin();
-    }, 1000);
+    }, 3000);
 
     const updateCoins = () => {
       for (const coin of coins) {
@@ -161,6 +166,7 @@ export default function Game() {
               variant="outlined"
               sx={{ mb: error ? 1 : 0 }}
               onClick={() => navigate("/")}
+              size="small"
             >
               Return to main page
             </Button>
@@ -170,7 +176,7 @@ export default function Game() {
             <Typography>{points}</Typography>
           </Grid>
           <Grid item sx={{ display: error ? "none" : "flex" }}>
-            <Typography>{points}</Typography>
+            <CustomButton text="Finish the game" />
           </Grid>
         </Grid>
         <Grid container justifyContent="center" direction="column">
@@ -201,6 +207,7 @@ export default function Game() {
           sx={{
             display: error ? "flex" : "none",
             justifyContent: "center",
+            fontSize: "1.1vh",
           }}
         >
           {error}
@@ -209,13 +216,16 @@ export default function Game() {
           startDecorator={<ErrorIcon />}
           color="danger"
           variant="soft"
-          size="lg"
           sx={{
             mb: imgLoading ? 0 : 5,
             display: error ? "flex" : "none",
+            p: 1,
           }}
         >
-          Errors Found. Please make sure you fix them before refreshing the page
+          <Typography sx={{ fontSize: "0.9rem" }}>Errors Found.</Typography>
+          <Typography sx={{ fontSize: "0.9rem" }}>
+            Please make sure you fix them before refreshing
+          </Typography>
         </Chip>
       </Centered>
     </Box>
