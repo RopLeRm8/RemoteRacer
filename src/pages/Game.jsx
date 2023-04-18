@@ -3,6 +3,7 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import SportsScoreIcon from "@mui/icons-material/SportsScore";
 import { Box, Chip, CssVarsProvider, Grid } from "@mui/joy";
 import { Button, LinearProgress, Typography } from "@mui/material";
+import { ref, set } from "firebase/database";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -21,6 +22,7 @@ import "../css/Game.css";
 import Centered from "../features/Centered";
 import { CustomButton } from "../features/CustomButton";
 import { useNotification } from "../hooks/useNotification";
+import { db } from "../providers/FirebaseProvider";
 export default function Game() {
   const canvas = useRef();
   const notify = useNotification();
@@ -29,6 +31,7 @@ export default function Game() {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
   const ip = localStorage.getItem("ip");
+  const espRef = ref(db, "esp/direction");
   useEffect(() => {
     document.body.classList.add("nooverflow");
     if (ip === "192.168.4.1") {
@@ -45,22 +48,41 @@ export default function Game() {
       switch (keyCode) {
         case 87:
           camera.position.z -= 10;
+          set(espRef, "back");
           break;
         case 83:
           camera.position.z += 10;
+          set(espRef, "forward");
           break;
         case 65:
           camera.position.y -= 10;
+          set(espRef, "right");
           break;
         case 68:
           camera.position.y += 10;
+          set(espRef, "left");
+          break;
+        default:
+          set(espRef, "nothing");
+          break;
+      }
+    };
+    document.addEventListener("keydown", onDocumentKeyDown, false);
+    const onDocumentKeyUp = (event) => {
+      if (camera === undefined) return;
+      const keyCode = event.which;
+      switch (keyCode) {
+        case 87:
+        case 83:
+        case 65:
+        case 68:
+          set(espRef, "nothing");
           break;
         default:
           break;
       }
     };
-    document.addEventListener("keydown", onDocumentKeyDown, false);
-
+    document.addEventListener("keyup", onDocumentKeyUp, false);
     const scene = new Scene();
     const camera = new PerspectiveCamera(
       75,

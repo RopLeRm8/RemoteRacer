@@ -153,7 +153,7 @@ function Navbar() {
   const handleCloseUserMenu = (setting) => {
     setting && setting === "Sign Out" ? auth.signOut() : null;
     setting && setting === "Profile" ? navigate("/profile") : null;
-    setting && setting === "Game History" ? navigate("/gamehistory") : null;
+    // setting && setting === "Game History" ? navigate("/gamehistory") : null;
     setting && setting === "ESP Settings" ? setopenModal(true) : null;
 
     return setAnchorElUser(null);
