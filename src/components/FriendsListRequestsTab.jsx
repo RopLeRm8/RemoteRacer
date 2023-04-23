@@ -1,12 +1,12 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import FriendsList from "./FriendsList";
+import FriendsRequestsList from "./FriendsRequestsList";
 
-export default function FriendsTab({ openTab, setOpenTab }) {
+export default function FriendsListRequestsTab({ openTab, setOpenTab }) {
   return (
     <Dialog open={openTab} onClose={() => setOpenTab(false)} fullWidth>
       <DialogTitle sx={{ background: "black" }}></DialogTitle>
       <DialogContent sx={{ background: "black" }}>
-        <FriendsList openTab={openTab} />
+        <FriendsRequestsList openTab={openTab} />
       </DialogContent>
     </Dialog>
   );

@@ -47,20 +47,24 @@ export default function Game() {
       const keyCode = event.which;
       switch (keyCode) {
         case 87:
-          camera.position.z -= 10;
-          set(espRef, "back");
+          set(espRef, "back").then(() => {
+            camera.position.z -= 30;
+          });
           break;
         case 83:
-          camera.position.z += 10;
-          set(espRef, "forward");
+          set(espRef, "forward").then(() => {
+            camera.position.z += 30;
+          });
           break;
         case 65:
-          camera.position.y -= 10;
-          set(espRef, "right");
+          set(espRef, "left").then(() => {
+            camera.position.y -= 30;
+          });
           break;
         case 68:
-          camera.position.y += 10;
-          set(espRef, "left");
+          set(espRef, "right").then(() => {
+            camera.position.y += 30;
+          });
           break;
         default:
           set(espRef, "nothing");
@@ -92,7 +96,7 @@ export default function Game() {
     );
 
     const renderer = new WebGLRenderer();
-    renderer.setSize(window.innerWidth * 0.85, window.innerHeight * 0.9);
+    renderer.setSize(window.innerWidth * 0.9, window.innerHeight * 0.9);
     canvas.current.appendChild(renderer.domElement);
 
     const texture = new TextureLoader().load(
@@ -109,13 +113,13 @@ export default function Game() {
     );
     const textUpdate = setInterval(() => {
       texture.needsUpdate = true;
-    }, 100);
+    }, 50);
     scene.background = texture;
 
     camera.position.z = 1000;
 
     const coinTexture = new TextureLoader().load(coin);
-    const coinGeometry = new PlaneGeometry(60, 60);
+    const coinGeometry = new PlaneGeometry(100, 100);
     const coinMaterial = new MeshBasicMaterial({
       map: coinTexture,
       transparent: true,
@@ -131,6 +135,7 @@ export default function Game() {
       coin.position.x = 10;
       coin.position.y = Math.random() * 3500 - 360;
       coin.position.z = Math.random() * 970;
+      coin.scale = Math.random() * (3 - 0.5) + 0.5;
       scene.add(coin);
       coins.push(coin);
     };
@@ -219,6 +224,7 @@ export default function Game() {
           <Box
             ref={canvas}
             sx={{
+              // transform: "rotate(90deg)",
               mb: imgLoading ? 0 : 5,
               display: error ? "none" : "flex",
             }}

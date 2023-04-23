@@ -8,7 +8,6 @@ import "firebase/compat/auth";
 import "firebase/compat/functions";
 import { getDatabase } from "firebase/database";
 import { getStorage } from "firebase/storage";
-
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
@@ -19,7 +18,6 @@ const app = firebase.initializeApp({
   appId: process.env.REACT_APP_FIREBASE_appID,
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREID,
 });
-
 export const auth = app.auth();
 export const storage = getStorage(app);
 export const db = getDatabase(app);

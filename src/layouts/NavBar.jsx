@@ -49,6 +49,7 @@ import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import FriendRequestsBadge from "../components/FriendRequestsBadge";
+import FriendsBadge from "../components/FriendsBadge";
 import PlayerSearch from "../components/PlayerSearch";
 import "../css/NavBar.css";
 import { useNotification } from "../hooks/useNotification";
@@ -569,6 +570,14 @@ function Navbar() {
                         disableRipple
                       >
                         <FriendRequestsBadge />
+                      </MenuItem>
+                      <MenuItem
+                        sx={{
+                          "&:hover": { bgcolor: "transparent" },
+                        }}
+                        disableRipple
+                      >
+                        <FriendsBadge />
                       </MenuItem>
                     </Menu>
                   </MUIButt>

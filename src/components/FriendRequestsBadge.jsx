@@ -1,15 +1,15 @@
-import PeopleIcon from "@mui/icons-material/People";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { Badge, Box, Button } from "@mui/joy";
 import { Typography } from "@mui/material";
 import { useState } from "react";
 import useCountRequests from "../hooks/useCountRequests";
-import FriendsTab from "./FriendsTab";
+import FriendsListRequestsTab from "./FriendsListRequestsTab";
 export default function FriendRequestsBadge() {
   const [openTab, setOpenTab] = useState(false);
   const { returnLength } = useCountRequests();
   return (
     <>
-      <FriendsTab openTab={openTab} setOpenTab={setOpenTab} />
+      <FriendsListRequestsTab openTab={openTab} setOpenTab={setOpenTab} />
       <Box sx={{ display: "flex" }}>
         <Button
           variant="plain"
@@ -24,7 +24,7 @@ export default function FriendRequestsBadge() {
             sx={{ mr: 2 }}
             size="sm"
           >
-            <PeopleIcon />
+            <GroupAddIcon />
           </Badge>
           <Typography fontFamily="Poppins">Friend requests</Typography>
         </Button>

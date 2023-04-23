@@ -6,15 +6,18 @@ Project Description
 
 ### Todo
 
+- [ ] Add timer, and add 4 buttons (WASD) for players that cant use keyboard (phones and shit)  
+- [ ] Move coins accordingly to car speed (faster than it is now)  
+- [ ] Upgrade esp cam quality and speed!!!  
 
 ### In Progress
 
-- [ ] Cant fetch ESP via host (because host is https and esp is http)  
 - [ ] Fix google and github authentication methods  
-- [ ] Add getting started, support to the more tab in medium/large screens to navbar  
 
 ### Done ✓
 
+- [x] Do friends and friends requests in different tabs  
+- [x] Cant fetch ESP via host (because host is https and esp is http)  
 - [x] (OPTIONAL) Add the website on host  
 - [x] (OPTIONAL) Add chat between friends  
 - [x] Add lazy module that optimizes the work of routing  
