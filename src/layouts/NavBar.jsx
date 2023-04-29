@@ -264,9 +264,9 @@ function Navbar() {
         maxWidth: "100%",
         bgcolor: "rgba(0,0,0,0)",
         animation:
-          scrollTop > window.innerHeight * 0.2 ? "fadein 0.4s forwards" : null,
+          scrollTop > window.innerHeight * 0.1 ? "fadein 0.4s forwards" : null,
         animationDirection:
-          scrollTop > window.innerHeight * 0.2 ? "reverse" : "normal",
+          scrollTop > window.innerHeight * 0.1 ? "reverse" : "normal",
       }}
     >
       <Container maxWidth="xl">
