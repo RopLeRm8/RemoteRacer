@@ -27,7 +27,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import useLoadChat from "../hooks/useLoadChat";
 import useSaveMessage from "../hooks/useSaveMessage";
@@ -69,13 +69,13 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
     angry: <SentimentVeryDissatisfiedIcon />,
   };
   const inputRef = useRef();
-  const handleMessageSend = () => {
+  const handleMessageSend = useCallback(() => {
     if (message?.length < 1 && !file) return;
     saveMessage(message, file);
     setMessage("");
     setFile(null);
     setFileName(null);
-  };
+  }, [saveMessage]);
   const handleFileSave = async (e) => {
     setFileLoading(true);
     setFile(null);
@@ -148,7 +148,7 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
     return output;
   };
 
-  const checkIfNewDate = (msg, msgnext) => {
+  const checkIfNewDate = useCallback((msg, msgnext) => {
     if (!msgnext) return false;
     const msgTime = new Date(msg.time);
 
@@ -157,14 +157,13 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
       msgTime.getDate() < msgNextTime.getDate() ||
       msgTime.getMonth() < msgNextTime.getMonth();
     if (newDay) {
-      const newDate = new Date();
-      const monthName = newDate.toLocaleString("en-GB", {
+      const monthName = msgNextTime.toLocaleString("en-GB", {
         month: "long",
       });
       return `${msgNextTime.getDate()} ${monthName} ${msgNextTime.getFullYear()}`;
     }
     return false;
-  };
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("themeColorChat", themeColor);
@@ -435,10 +434,27 @@ export default function ChatWindow({ openChat, setOpenChat, chatWith }) {
                     ) : null}
                   </Box>
                 </Grid>
-                {checkIfNewDate(msg, chatData[chatData.indexOf(msg) + 1]) !==
-                false ? (
-                  <Divider>
-                    {checkIfNewDate(msg, chatData[chatData.indexOf(msg) + 1])}
+                {checkIfNewDate(
+                  msg,
+                  chatData[chatData.indexOf(msg) + 1],
+                  chatWith,
+                  msg.oppositeUid,
+                ) ? (
+                  <Divider
+                    sx={{
+                      display:
+                        msg.oppositeUid === chatWith?.uid ||
+                        msg.oppositeUid === user.uid
+                          ? "flex"
+                          : "none",
+                    }}
+                  >
+                    {checkIfNewDate(
+                      msg,
+                      chatData[chatData.indexOf(msg) + 1],
+                      chatWith,
+                      msg.oppositeUid,
+                    )}
                   </Divider>
                 ) : null}
               </Box>

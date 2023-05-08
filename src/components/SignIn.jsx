@@ -1,6 +1,7 @@
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import CheckIcon from "@mui/icons-material/Check";
 import EmailIcon from "@mui/icons-material/Email";
+import EventBusyIcon from "@mui/icons-material/EventBusy";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
 import HomeIcon from "@mui/icons-material/Home";
@@ -393,6 +394,7 @@ export default function LoginPage() {
             color="danger"
             variant="outlined"
             onClick={googleauth}
+            disabled
             sx={{
               "--IconButton-size": "60px",
               mr: 10,
@@ -401,6 +403,7 @@ export default function LoginPage() {
             }}
           >
             <GoogleIcon />
+            <EventBusyIcon sx={{ ml: 2 }} />
           </IconButton>
         </Grid>
         <Grid item>
@@ -408,6 +411,7 @@ export default function LoginPage() {
             color="neutral"
             variant="outlined"
             onClick={gitauth}
+            disabled
             sx={{
               "--IconButton-size": "60px",
               mr: 10,
@@ -416,6 +420,7 @@ export default function LoginPage() {
             }}
           >
             <GitHubIcon />
+            <EventBusyIcon sx={{ ml: 2 }} />
           </IconButton>
         </Grid>
       </Grid>

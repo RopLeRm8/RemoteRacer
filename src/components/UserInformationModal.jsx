@@ -95,7 +95,7 @@ export default function UserInformationModal({
               fontFamily="Poppins"
               startDecorator={<CasinoIcon sx={{ color: "white" }} />}
             >
-              {Math.round(userSelected?.points * 1000)}
+              {userSelected?.points}
             </Typography>
           </Grid>
           <Grid item>

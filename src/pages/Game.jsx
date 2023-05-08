@@ -1,10 +1,16 @@
+import { getAuth } from "@firebase/auth";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ErrorIcon from "@mui/icons-material/Error";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import SportsScoreIcon from "@mui/icons-material/SportsScore";
 import { Box, Chip, CssVarsProvider, Grid } from "@mui/joy";
-import { Button, LinearProgress, Typography } from "@mui/material";
-import { ref, set } from "firebase/database";
+import { Button, IconButton, LinearProgress, Typography } from "@mui/material";
+import { get, ref, set, update } from "firebase/database";
 import { useEffect, useRef, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import {
   // BoxGeometry,
@@ -27,11 +33,76 @@ export default function Game() {
   const canvas = useRef();
   const notify = useNotification();
   const [imgLoading, setimgLoading] = useState(true);
-  const [points, setPoints] = useState(0);
+  const [pointsCount, setPoints] = useState(0);
   const [error, setError] = useState(false);
   const navigate = useNavigate();
   const ip = localStorage.getItem("ip");
   const espRef = ref(db, "esp/direction");
+  const [cameraVal, setCamera] = useState(null);
+  const [user] = useAuthState(getAuth());
+  const userRef = ref(db, `users/${user?.uid}/data`);
+  const handleSubmitClick = () => {
+    if (pointsCount === 0) {
+      notify("Earn more points!", { variant: "error" });
+      return;
+    }
+    get(userRef).then((snap) => {
+      const userData = snap.val();
+      const points = snap.val()?.points ?? 0;
+      const games = snap.val()?.games ?? 0;
+      const updatedData = {
+        ...userData,
+        points: points + pointsCount,
+        games: games + 1,
+      };
+      update(userRef, updatedData)
+        .then(() => {
+          notify("Successfully finished the game", { variant: "success" });
+          navigate("/dashboard");
+        })
+        .catch(() =>
+          notify("There was an error finishing the game", { variant: "error" }),
+        );
+    });
+  };
+  const handleMove = (side) => {
+    console.log(side);
+    switch (side) {
+      case "left":
+        set(espRef, "left").then(() => {
+          cameraVal.position.y -= 50;
+        });
+        setTimeout(() => {
+          set(espRef, "nothing");
+        }, 1000);
+        break;
+      case "right":
+        set(espRef, "right").then(() => {
+          cameraVal.position.y += 50;
+        });
+        setTimeout(() => {
+          set(espRef, "nothing");
+        }, 1000);
+        break;
+      case "back":
+        set(espRef, "back").then(() => {
+          cameraVal.position.z -= 50;
+        });
+        setTimeout(() => {
+          set(espRef, "nothing");
+        }, 1000);
+        break;
+      case "forward":
+        set(espRef, "forward").then(() => {
+          cameraVal.position.z += 50;
+        });
+        setTimeout(() => {
+          set(espRef, "nothing");
+        }, 1000);
+        break;
+    }
+  };
+
   useEffect(() => {
     document.body.classList.add("nooverflow");
     if (ip === "192.168.4.1") {
@@ -48,22 +119,22 @@ export default function Game() {
       switch (keyCode) {
         case 87:
           set(espRef, "back").then(() => {
-            camera.position.z -= 30;
+            camera.position.z -= 50;
           });
           break;
         case 83:
           set(espRef, "forward").then(() => {
-            camera.position.z += 30;
+            camera.position.z += 50;
           });
           break;
         case 65:
           set(espRef, "left").then(() => {
-            camera.position.y -= 30;
+            camera.position.y -= 50;
           });
           break;
         case 68:
           set(espRef, "right").then(() => {
-            camera.position.y += 30;
+            camera.position.y += 50;
           });
           break;
         default:
@@ -94,9 +165,10 @@ export default function Game() {
       0.1,
       1000,
     );
+    setCamera(camera);
 
     const renderer = new WebGLRenderer();
-    renderer.setSize(window.innerWidth * 0.9, window.innerHeight * 0.9);
+    renderer.setSize(window.innerWidth * 0.45, window.innerHeight);
     canvas.current.appendChild(renderer.domElement);
 
     const texture = new TextureLoader().load(
@@ -134,8 +206,8 @@ export default function Game() {
       const coin = new Mesh(coinGeometry, coinMaterial);
       coin.position.x = 10;
       coin.position.y = Math.random() * 3500 - 360;
-      coin.position.z = Math.random() * 970;
-      coin.scale = Math.random() * (3 - 0.5) + 0.5;
+      coin.position.z = camera.position.z - 500 + Math.random() * 1000;
+      coin.frustumCulled = false;
       scene.add(coin);
       coins.push(coin);
     };
@@ -146,10 +218,10 @@ export default function Game() {
 
     const updateCoins = () => {
       for (const coin of coins) {
-        if (camera.position.distanceTo(coin.position) < 20) {
-          coin.scale.x += 0.01;
-          coin.scale.y += 0.01;
-          coin.scale.z += 0.01;
+        if (camera.position.distanceTo(coin.position) < 50) {
+          coin.scale.x += 0.02;
+          coin.scale.y += 0.02;
+          coin.scale.z += 0.02;
 
           if (coin.scale.x >= 2) {
             scene.remove(coin);
@@ -200,10 +272,13 @@ export default function Game() {
           </Grid>
           <Grid item sx={{ display: error ? "none" : "flex" }}>
             <SportsScoreIcon />
-            <Typography>{points}</Typography>
+            <Typography>{pointsCount}</Typography>
           </Grid>
           <Grid item sx={{ display: error ? "none" : "flex" }}>
-            <CustomButton text="Finish the game" />
+            <CustomButton
+              text="Finish the game"
+              onClickFunc={handleSubmitClick}
+            />
           </Grid>
         </Grid>
         <Grid container justifyContent="center" direction="column">
@@ -221,10 +296,29 @@ export default function Game() {
               <LinearProgress color="warning" sx={{ mb: imgLoading ? 2 : 0 }} />
             </Box>
           ) : null}
+
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <Box sx={{ display: "block" }}>
+              <IconButton onClick={() => handleMove("forward")}>
+                <ArrowUpwardIcon />
+              </IconButton>
+              <IconButton onClick={() => handleMove("back")}>
+                <ArrowDownwardIcon />
+              </IconButton>
+            </Box>
+            <Box sx={{ display: "block" }}>
+              <IconButton onClick={() => handleMove("left")}>
+                <ArrowBackIcon />
+              </IconButton>
+              <IconButton onClick={() => handleMove("right")}>
+                <ArrowForwardIcon />
+              </IconButton>
+            </Box>
+          </Box>
           <Box
             ref={canvas}
             sx={{
-              // transform: "rotate(90deg)",
+              transform: "rotate(90deg)",
               mb: imgLoading ? 0 : 5,
               display: error ? "none" : "flex",
             }}

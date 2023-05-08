@@ -6,16 +6,16 @@ Project Description
 
 ### Todo
 
-- [ ] Reverse cam feed on website  
-- [ ] Add timer, and add 4 buttons (WASD) for players that cant use keyboard (phones and shit)  
-- [ ] Move coins accordingly to car speed (faster than it is now)  
 
 ### In Progress
 
-- [ ] Fix google and github authentication methods  
 
 ### Done ✓
 
+- [x] Reverse cam feed on esp32  
+- [x] Add timer, and add 4 buttons (WASD) for players that cant use keyboard (phones and shit)  
+- [x] Move coins accordingly to car speed (faster than it is now)  
+- [x] Fix google and github authentication methods  
 - [x] Upgrade esp cam quality and speed!!!  
 - [x] Do friends and friends requests in different tabs  
 - [x] Cant fetch ESP via host (because host is https and esp is http)  

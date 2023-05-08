@@ -213,7 +213,7 @@ export default function Leaderboard() {
                     }}
                     startDecorator={<CasinoIcon />}
                   >
-                    {Math.round(userData.points * 1000)}
+                    {userData.points}
                   </Typography>
                 </Grid>
               </Box>
@@ -221,7 +221,6 @@ export default function Leaderboard() {
           </ScrollAnimation>
         ))}
       </Grid>
-
       {/* <Box>
         <Typography fontSize="Anton">
           {user.points ? "Your current points are " + user.points : null}
